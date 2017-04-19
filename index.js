@@ -17,9 +17,9 @@ var app = express();
 
 var config = {
     user: 'mb_admin',
-    password: 'smiths1001',
+    password: 'mb_admin_pwd1',
     server: 'localhost', // You can use 'localhost\\instance' to connect to named instance
-    database: 'Lola'
+    database: 'LolaLocal'
 }
 
 var secret = '29dj9h2ieIJjoAWDJA'
@@ -29,7 +29,7 @@ var jwtCheck = jwt({
 });
 
 function createToken(user) {
-  return jwt_generator.sign(_.omit(user, 'password'), secret, { expiresIn: 60*60*100 });
+  return jwt_generator.sign(_.omit(user, 'password'), secret, { expiresIn: 60*60*1000000 });
 }
 
 app.use(bodyParser.json());
@@ -46,6 +46,13 @@ app.use(function(err, req, res, next) {
 //   app.use(logger('dev'));
 //   app.use(errorhandler())
 // }
+
+app.get('/api/v1/test', function(req, res) {
+	res.type('json').status(200).send(JSON.stringify({
+	  data: "hello world"
+	}));
+})
+
 
 app.post('/api/v1/login', function(req, res) {
   console.log(req.url)
@@ -221,6 +228,6 @@ app.get('/api/v1/user/:userID/profile', function(req, res) {
 var port = process.env.PORT || 3002;
 
 http.createServer(app).listen(port, function (err) {
-  console.log('listening in http://localhost:' + port);
+  console.log('listening on http://localhost:' + port);
 });
 
