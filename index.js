@@ -1,4 +1,4 @@
-var logger          = require('morgan'),
+var morgan          = require('morgan'),
     cors            = require('cors'),
     http            = require('http'),
     express         = require('express'),
@@ -9,24 +9,38 @@ var logger          = require('morgan'),
     mssql           = require('mssql'),
     _               = require('underscore'),
     jwt_generator   = require('jsonwebtoken'),
-    sql             = require('mssql');
+    sql             = require('mssql'),
+    path 			= require('path'),
+    fs 				= require('fs'),
+    rfs 			= require('rotating-file-stream')
+
+dotenv.config(); // loads environment variables from .env file at the same level as this file
 
 var app = express();
 
-// dotenv.load();
+var logDirectory = path.join(__dirname, 'log')
+// ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+
+// create a rotating write stream
+var accessLogStream = rfs('access.log', {
+  interval: '1d', // rotate daily
+  path: logDirectory
+})
+
+// setup the logger
+app.use(morgan('combined', {stream: accessLogStream}))
 
 var config = {
-    user: 'mb_admin',
-    password: 'mb_admin_pwd1',
-    server: 'localhost', // You can use 'localhost\\instance' to connect to named instance
-    database: 'LolaLocal'
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    server: process.env.localhost, // You can use 'localhost\\instance' to connect to named instance
+    database: process.env.DB_DATABASE
 }
 
-var secret = '29dj9h2ieIJjoAWDJA'
+var secret = process.env.JWT_SECRET
 
-var jwtCheck = jwt({
-  secret: secret
-});
+var jwtCheck = jwt({secret: secret});
 
 function createToken(user) {
   return jwt_generator.sign(_.omit(user, 'password'), secret, { expiresIn: 60*60*1000000 });
@@ -81,7 +95,7 @@ app.post('/api/v1/login', function(req, res) {
     request.input('email', email );
     request.input('password', password);
     request.query(
-        `SELECT id FROM users WHERE email=@email AND password=@password`
+		`SELECT id FROM users WHERE email=@email AND password=dbo.udf_CalculateHash(@password + salt) AND status IN (0, 1)`
     )
     .then(function(recordset) {
     	if (recordset[0]) {
