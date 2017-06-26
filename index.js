@@ -1,5 +1,4 @@
 var dotenv      = require('dotenv-safe'),
-    jsonparser  = require('body-parser').json(),
     http        = require('http'),
     app         = require('express')();
 
@@ -15,7 +14,7 @@ if (logging.ravenHandler) {
 app.use(logging.accessLogger);
 
 // JSON parser
-app.use(jsonparser);
+app.use(require('body-parser').json());
 
 // App
 app.use('/api/v2', require('./app'));
@@ -28,5 +27,5 @@ if (logging.errorHandler) {
 const port = process.env.PORT || 3002;
 const host = process.env.HOST || 'localhost';
 http.createServer(app).listen(port, host, function (err) {
-  console.log('Listening for requests on ' + host + ':' + port);
+  console.log('Listening for requests on http://' + host + ':' + port);
 });
