@@ -1,6 +1,6 @@
 {
-  "name": "lola_app_api",
-  "version": "1.0.0",
+  "name": "ephemera",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,15 +12,11 @@
     "body-parser": "^1.17.1",
     "cors": "^2.8.1",
     "dotenv-safe": "^4.0.4",
-    "errorhandler": "^1.5.0",
     "express": "^4.15.2",
     "express-jwt": "^5.1.0",
-    "http": "0.0.0",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
-    "mssql": "^3.3.0",
     "raven": "^2.1.0",
-    "rotating-file-stream": "^1.2.2",
-    "underscore": "^1.8.3"
+    "rotating-file-stream": "^1.2.2"
   }
 }
