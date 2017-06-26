@@ -1,17 +1,11 @@
-var dotenv      = require('dotenv-safe'),
-    http        = require('http'),
-    app         = require('express')();
-
-var logging = require('./middleware/logging');
+var logging = require('./middleware/logging'),
+    app     = require('express')();
 
 // Import config into process.env
-dotenv.config();
+require('dotenv-safe').config();
 
 // Logging
-if (logging.ravenHandler) {
-  app.use(logging.ravenHandler);
-}
-app.use(logging.accessLogger);
+app.use(logging.before);
 
 // JSON parser
 app.use(require('body-parser').json());
@@ -20,12 +14,10 @@ app.use(require('body-parser').json());
 app.use('/api/v2', require('./app'));
 
 // Error handling
-if (logging.errorHandler) {
-  app.use(logging.errorHandler);
-}
+app.use(logging.after);
 
 const port = process.env.PORT || 3002;
 const host = process.env.HOST || 'localhost';
-http.createServer(app).listen(port, host, function (err) {
+require('http').createServer(app).listen(port, host, function (err) {
   console.log('Listening for requests on http://' + host + ':' + port);
 });
