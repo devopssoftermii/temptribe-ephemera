@@ -6,7 +6,6 @@ var logging = require('./middleware/logging'),
     app     = require('express')();
 
 app.locals = Object.assign({}, app.locals, require('./data'));
-console.log(app.locals.models);
 
 // Pre-request logging
 logging.before.forEach(function(middleware) {
