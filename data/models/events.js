@@ -132,9 +132,9 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	events.associate = function(models) {
-		events.belongsTo(models.clients);
-		events.belongsTo(models.users);
-		events.belongsTo(models.venues);
+		events.belongsTo(models.clients, { as: 'client' });
+		events.belongsTo(models.users, { as: 'clientContact' });
+		events.belongsTo(models.venues, { as: 'venue' });
 		events.hasMany(models.eventShifts);
 	}
 	return events;

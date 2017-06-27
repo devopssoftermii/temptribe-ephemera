@@ -45,7 +45,7 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	userPhotos.associate = function(models) {
-		userPhotos.belongsTo(models.users);
+		userPhotos.belongsTo(models.users, { as: 'user' });
 	}
 	return userPhotos;
 };

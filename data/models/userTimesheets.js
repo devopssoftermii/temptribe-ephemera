@@ -92,8 +92,8 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	userTimesheets.associate = function(models) {
-		userTimesheets.belongsTo(models.users);
-		userTimesheets.belongsTo(models.eventShifts);
+		userTimesheets.belongsTo(models.users, { as: 'user' });
+		userTimesheets.belongsTo(models.eventShifts, { as: 'eventShift' });
 	}
 	return userTimesheets;
 };

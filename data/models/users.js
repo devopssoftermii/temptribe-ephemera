@@ -283,7 +283,7 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	users.associate = function(models) {
-		users.belongsTo(models.venues);
+		users.belongsTo(models.venues, { as: 'venue' });
 		users.hasMany(models.events);
 		users.hasMany(models.userPhotos);
 		users.hasMany(models.userTimesheets);

@@ -95,9 +95,9 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	eventShifts.associate = function(models) {
-		eventShifts.belongsTo(models.events);
-		eventShifts.belongsTo(models.jobRoles);
-		eventShifts.belongsTo(models.dressCodes);
+		eventShifts.belongsTo(models.events, { as: 'event' });
+		eventShifts.belongsTo(models.jobRoles, { as: 'jobRole' });
+		eventShifts.belongsTo(models.dressCodes, { as: 'dressCode' });
 		eventShifts.hasMany(models.userTimesheets);
 	}
 	return eventShifts;
