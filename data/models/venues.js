@@ -91,8 +91,6 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	venues.associate = function(models) {
-		venues.hasMany(models.events);
-		venues.hasMany(models.users);
 	}
 	return venues;
 };

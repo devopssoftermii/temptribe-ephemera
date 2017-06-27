@@ -17,7 +17,7 @@ fs.readdirSync(__dirname + '/models').forEach(function(filename) {
 });
 
 Object.keys(models).forEach(function(modelName) {
-  if ("associate" in models[modelName]) {
+  if ('associate' in models[modelName]) {
     models[modelName].associate(models);
   }
 });

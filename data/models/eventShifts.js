@@ -98,7 +98,6 @@ module.exports = function(sequelize, DataTypes) {
 		eventShifts.belongsTo(models.events, { as: 'event' });
 		eventShifts.belongsTo(models.jobRoles, { as: 'jobRole' });
 		eventShifts.belongsTo(models.dressCodes, { as: 'dressCode' });
-		eventShifts.hasMany(models.userTimesheets);
 	}
 	return eventShifts;
 };

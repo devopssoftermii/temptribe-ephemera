@@ -119,8 +119,5 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
-	clients.associate = function(models) {
-		clients.hasMany(models.events);
-	}
 	return clients;
 };
