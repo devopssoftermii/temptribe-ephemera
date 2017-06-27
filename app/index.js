@@ -1,9 +1,14 @@
-var router  = require('express').Router(),
-    auth    = require('./middleware/auth'),
-    private = require('./routes/private'),
-    public  = require('./routes/public');
+var router    = require('express').Router(),
+    path      = require('path'),
+    fs        = require('fs');
 
-router.use('/public', public);
-router.use('/private', auth, private);
+fs.readdirSync(`${__dirname}/routes`).forEach(function(filename) {
+  var route = path.basename(filename, '.js');
+  router.use('/' + route, require(`${__dirname}/routes/${route}`));
+});
+
+router.use('/', function(req, res, next) {
+  res.status(404).end();
+});
 
 module.exports = router;

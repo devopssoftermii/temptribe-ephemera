@@ -1,6 +1,9 @@
 var router    = require('express').Router(),
+    auth      = require('../../middleware/auth'),
     path      = require('path'),
     fs        = require('fs');
+
+router.use(auth);
 
 fs.readdirSync(__dirname).forEach(function(filename) {
   var route = path.basename(filename, '.js');
