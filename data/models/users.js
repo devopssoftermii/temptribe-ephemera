@@ -284,6 +284,9 @@ module.exports = function(sequelize, DataTypes) {
 	});
 	users.associate = function(models) {
 		users.belongsTo(models.venues, { as: 'venue' });
+		users.hasMany(models.events, { sourceKey: 'clientContactID' });
+		users.hasMany(models.userPhotos, { sourceKey: 'userID' });
+		users.hasMany(models.userTimesheets, { sourceKey: 'userID' });
 	}
 	return users;
 };

@@ -91,6 +91,8 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	venues.associate = function(models) {
+		venues.hasMany(models.events, { sourceKey: 'venueID' });
+		venues.hasMany(models.users, { sourceKey: 'venueID' });
 	}
 	return venues;
 };

@@ -51,5 +51,8 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	jobRoles.associate = function(models) {
+		jobRoles.hasMany(models.eventShifts, { sourceKey: 'jobRoleID' });
+	}
 	return jobRoles;
 };

@@ -36,5 +36,8 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	dressCodes.associate = function(models) {
+		dressCodes.hasMany(models.eventShifts, { sourceKey: 'dressCodeID' });
+	}
 	return dressCodes;
 };
