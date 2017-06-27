@@ -1,7 +1,7 @@
 var router  = require('express').Router(),
     auth    = require('./middleware/auth'),
-    private = require('./endpoints/private'),
-    public  = require('./endpoints/public');
+    private = require('./routes/private'),
+    public  = require('./routes/public');
 
 router.use('/public', public);
 router.use('/private', auth, private);

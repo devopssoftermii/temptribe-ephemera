@@ -1,6 +1,7 @@
-const Sequelize = require('sequelize');
+var Sequelize = require('sequelize'),
+    fs = require('fs');
 
-const connection = new Sequelize({
+var sequelize = new Sequelize({
   dialect: process.env.DB_DIALECT,
   database: process.env.DB_DATABASE,
   host: process.env.DB_HOST,
@@ -8,4 +9,20 @@ const connection = new Sequelize({
   password: process.env.DB_PASSWORD,
 });
 
-module.exports = connection;
+var models = {};
+
+fs.readdirSync(__dirname + '/models').forEach(function(filename) {
+  var model = sequelize.import(`${__dirname}/models/${filename}`);
+  models[model.name] = model;
+});
+
+Object.keys(models).forEach(function(modelName) {
+  if ("associate" in models[modelName]) {
+    models[modelName].associate(models);
+  }
+});
+
+module.exports = {
+  sequelize,
+  models
+}
