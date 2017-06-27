@@ -120,7 +120,7 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	clients.associate = function(models) {
-		clients.hasMany(models.events, { sourceKey: 'clientID' });
+		clients.hasMany(models.events, { foreignKey: 'clientID' });
 	}
 	return clients;
 };
