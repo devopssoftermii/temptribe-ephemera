@@ -4,6 +4,6 @@ module.exports = function(req, res, next) {
       model: req.app.locals.models.eventShifts
     }]
   }).then(function(result) {
-    res.json(result);
+    res.json(result.eventShifts);
   });
 }
