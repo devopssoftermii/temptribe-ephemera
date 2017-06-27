@@ -4,7 +4,7 @@ require('dotenv-safe').config({
 });
 var SequelizeAuto = require('sequelize-auto');
 
-var auto = new SequelizeAuto(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
+var auto = new SequelizeAuto(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
     directory: `${__dirname}/models`, // prevents the program from writing to disk
