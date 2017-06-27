@@ -1,4 +1,7 @@
-require('dotenv-safe').config({ path: '../.env' });
+require('dotenv-safe').config({
+  path: '../.env',
+  sample: '../.env.example'
+});
 var SequelizeAuto = require('sequelize-auto');
 
 var auto = new SequelizeAuto(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
