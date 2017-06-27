@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('clients', {
+	var clients = sequelize.define('clients', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -119,4 +119,8 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	clients.associate = function(models) {
+		clients.hasMany(models.events);
+	}
+	return clients;
 };

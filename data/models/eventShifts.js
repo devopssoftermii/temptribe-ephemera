@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('eventShifts', {
+	var eventShifts = sequelize.define('eventShifts', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -10,16 +10,26 @@ module.exports = function(sequelize, DataTypes) {
 		eventID: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
-			primaryKey: true
+			references: {
+				model: 'events',
+				key: 'id'
+			}
 		},
 		jobRoleID: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
-			primaryKey: true
+			references: {
+				model: 'jobRoles',
+				key: 'id'
+			}
 		},
 		dressCodeID: {
 			type: DataTypes.INTEGER,
-			allowNull: true
+			allowNull: true,
+			references: {
+				model: 'dressCodes',
+				key: 'id'
+			}
 		},
 		hourlyRate: {
 			type: "MONEY",
@@ -84,4 +94,11 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	eventShifts.associate = function(models) {
+		eventShifts.belongsTo(models.events);
+		eventShifts.belongsTo(models.jobRoles);
+		eventShifts.belongsTo(models.dressCodes);
+		eventShifts.hasMany(models.userTimesheets);
+	}
+	return eventShifts;
 };

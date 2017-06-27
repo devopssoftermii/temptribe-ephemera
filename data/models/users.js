@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('users', {
+	var users = sequelize.define('users', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -14,7 +14,11 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		venueID: {
 			type: DataTypes.INTEGER,
-			allowNull: true
+			allowNull: true,
+			references: {
+				model: 'venues',
+				key: 'id'
+			}
 		},
 		gender: {
 			type: DataTypes.CHAR,
@@ -278,4 +282,11 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	users.associate = function(models) {
+		users.belongsTo(models.venues);
+		users.hasMany(models.events);
+		users.hasMany(models.userPhotos);
+		users.hasMany(models.userTimesheets);
+	}
+	return users;
 };

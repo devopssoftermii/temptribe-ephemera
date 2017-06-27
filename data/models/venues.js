@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('venues', {
+	var venues = sequelize.define('venues', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -90,4 +90,9 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	venues.associate = function(models) {
+		venues.hasMany(models.events);
+		venues.hasMany(models.users);
+	}
+	return venues;
 };

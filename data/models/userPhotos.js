@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('userPhotos', {
+	var userPhotos = sequelize.define('userPhotos', {
 		ID: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -9,7 +9,11 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		UserID: {
 			type: DataTypes.INTEGER,
-			allowNull: true
+			allowNull: true,
+			references: {
+				model: 'users',
+				key: 'id'
+			}
 		},
 		FileName: {
 			type: DataTypes.STRING,
@@ -40,4 +44,8 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	userPhotos.associate = function(models) {
+		userPhotos.belongsTo(models.users);
+	}
+	return userPhotos;
 };

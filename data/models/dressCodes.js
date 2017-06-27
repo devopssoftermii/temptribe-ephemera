@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('dressCodes', {
+	var dressCodes = sequelize.define('dressCodes', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -36,4 +36,8 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	dressCodes.associate = function(models) {
+		dressCodes.hasMany(models.eventShifts);
+	}
+	return dressCodes;
 };

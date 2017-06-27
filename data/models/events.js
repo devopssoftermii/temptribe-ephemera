@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('events', {
+	var events = sequelize.define('events', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -14,12 +14,18 @@ module.exports = function(sequelize, DataTypes) {
 		clientID: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
-			primaryKey: true
+			references: {
+				model: 'clients',
+				key: 'id'
+			}
 		},
 		clientContactID: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
-			primaryKey: true
+			references: {
+				model: 'users',
+				key: 'id'
+			}
 		},
 		lolaContactID: {
 			type: DataTypes.INTEGER,
@@ -28,7 +34,10 @@ module.exports = function(sequelize, DataTypes) {
 		venueID: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
-			primaryKey: true
+			references: {
+				model: 'venues',
+				key: 'id'
+			}
 		},
 		managerID: {
 			type: DataTypes.INTEGER,
@@ -122,4 +131,11 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	events.associate = function(models) {
+		events.belongsTo(models.clients);
+		events.belongsTo(models.users);
+		events.belongsTo(models.venues);
+		events.hasMany(models.eventShifts);
+	}
+	return events;
 };

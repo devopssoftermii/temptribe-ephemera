@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('userTimesheets', {
+	var userTimesheets = sequelize.define('userTimesheets', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -10,12 +10,18 @@ module.exports = function(sequelize, DataTypes) {
 		userID: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
-			primaryKey: true
+			references: {
+				model: 'users',
+				key: 'id'
+			}
 		},
 		eventShiftID: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
-			primaryKey: true
+			references: {
+				model: 'eventShifts',
+				key: 'id'
+			}
 		},
 		startTime: {
 			type: DataTypes.DATE,
@@ -85,4 +91,9 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true
 	});
+	userTimesheets.associate = function(models) {
+		userTimesheets.belongsTo(models.users);
+		userTimesheets.belongsTo(models.eventShifts);
+	}
+	return userTimesheets;
 };
