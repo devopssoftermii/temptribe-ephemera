@@ -13,17 +13,20 @@ var auto = new SequelizeAuto(process.env.DB_DATABASE, process.env.DB_USERNAME, p
         freezeTableName: true
     },
     tables: [
+      'users',
+      'userPhotos',
+      'userTimesheets',
       'clients',
       'events',
       'eventShifts',
-      'users',
-      'venues'
+      'venues',
+			'dressCodes',
+			'jobRoles',
     ]
 });
 
 auto.run(function (err) {
   if (err) throw err;
-
   console.log(auto.tables); // table list
   console.log(auto.foreignKeys); // foreign key list
 });
