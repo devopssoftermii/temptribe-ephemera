@@ -6,8 +6,8 @@ module.exports = function(req, res, next) {
   models.users.findById(req.user.id, {
     attributes: [],
     include: [{
-      attributes: ['id'],
       model: models.userTimesheets,
+      attributes: ['id'],
       as: 'timesheets',
       where: {
         status: 4
