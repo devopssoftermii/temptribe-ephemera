@@ -3,11 +3,13 @@ require('dotenv-safe').config();
 
 // Import Express and middleware
 var logging = require('./middleware/logging'),
-    app     = require('express')();
+    express = require('express'),
+    app = express();
 
 app.locals = Object.assign({}, app.locals, require('./data'));
 if (process.env.NODE_ENV === 'development') {
   app.set('json spaces', 2);
+  app.use('/static', express.static('static'));
 }
 
 // Pre-request logging
