@@ -15,7 +15,7 @@ module.exports = function(req, res, next) {
       where: {
         $and: {
           email: req.body.email,
-          password: sequelize.fn('udf_CalculateHash', req.body.password, sequelize.col('salt'))
+          password: sequelize.fn('dbo.udf_CalculateHash', req.body.password, sequelize.col('salt'))
         }
       }
     }).then(function(result) {
