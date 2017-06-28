@@ -77,7 +77,27 @@ module.exports = function(req, res, next) {
           ],
           as: 'jobRole'
         }]
-      }]
+      }],
+      order: [
+        [
+          {
+            model: models.eventShifts,
+            as: 'shift',
+          }, {
+            model: models.events,
+            as: 'event',
+          },
+          'eventDate',
+          'ASC'
+        ], [
+          {
+            model: models.eventShifts,
+            as: 'shift',
+          },
+          'startTime',
+          'ASC'
+        ],
+      ]
     }]
   }).then(function(result) {
     res.json(result.timesheets.map(function(timesheet) {
