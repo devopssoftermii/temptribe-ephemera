@@ -51,7 +51,7 @@ module.exports = function(req, res, next) {
                 '/images/venuePhotos/',
                 sequelize.fn(
                   'convert',
-                  sequelize.literal(varchar(10)),
+                  sequelize.literal('VARCHAR(10)'),
                   sequelize.col('id')
                 ),
                 '.jpg'
