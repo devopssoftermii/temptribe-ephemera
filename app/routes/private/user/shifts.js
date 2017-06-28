@@ -11,6 +11,7 @@ module.exports = function(req, res, next) {
       include: [{
         model: models.eventShifts,
         as: 'shift',
+        required: true,
         include: [{
           model: models.events,
           as: 'event',
@@ -25,6 +26,6 @@ module.exports = function(req, res, next) {
   }).then(function(result) {
     res.json(result.timesheets.map(function(timesheet) {
       return timesheet.shift;
-    }).filter());
+    }));
   });
 }
