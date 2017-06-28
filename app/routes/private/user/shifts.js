@@ -1,10 +1,10 @@
 module.exports = function(req, res, next) {
   var sequelize = req.app.locals.sequelize;
   var models = req.app.locals.models;
-  models.users.findById(226890, {
+  models.users.findById(req.user.id, {
     attributes: [],
     include: [{
-      attributes: [],
+      attributes: ['id'],
       model: models.userTimesheets,
       as: 'timesheets',
       where: {
@@ -52,7 +52,7 @@ module.exports = function(req, res, next) {
                 sequelize.fn(
                   'convert',
                   sequelize.literal('VARCHAR(10)'),
-                  sequelize.col('timesheet.shift.event.venue.id')
+                  sequelize.col('timesheets->shift->event->venue.id')
                 ),
                 '.jpg'
               ), 'imageURL']
@@ -81,5 +81,7 @@ module.exports = function(req, res, next) {
     }]
   }).then(function(result) {
     res.json(result.timesheets);
+  }).catch(function(err) {
+    res.status(500).json(null);
   });
 }
