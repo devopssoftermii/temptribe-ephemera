@@ -4,10 +4,10 @@ module.exports = function(req, res, next) {
   models.users.findById(req.user.id, {
     attributes: [
       'id',
-			'firstname',
-			'surname',
-			'email',
-			'mobile',
+      'firstname',
+      'surname',
+      'email',
+      'mobile',
     ],
     include: [{
       model: models.userPhotos,
