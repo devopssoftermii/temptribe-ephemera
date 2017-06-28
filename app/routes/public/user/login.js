@@ -3,7 +3,11 @@ var jwt = require('jsonwebtoken');
 module.exports = function(req, res, next) {
   try {
     if (!req.body.email || !req.body.password) {
-      throw new Error('Missing email or password');
+      res.status(401).json({
+        success: false,
+        error: 'Missing email or password'
+      });
+      return;
     }
     var models = req.app.locals.models;
     var sequelize = req.app.locals.sequelize;
@@ -28,11 +32,14 @@ module.exports = function(req, res, next) {
         res.json({
           success: true,
           userID: result.id,
-          token: jwt.sign(result, process.env.JWT_SECRET, { expiresIn: 60*60*1000000 })
+          token: jwt.sign(result, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 1000000 })
         });
       }
     }).catch(function(err) {
-      throw new Error('Unknown user or password');
+      res.status(401).json({
+        success: false,
+        error: 'Unknown user or password'
+      });
     });
   } catch (ex) {
     res.status(401).json({
