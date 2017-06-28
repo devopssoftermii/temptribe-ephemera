@@ -6,16 +6,7 @@ module.exports = function(req, res, next) {
       model: models.userTimesheets,
       as: 'timesheets',
       where: {
-        $and: {
-          status: 4,
-          shift: {
-            event: {
-              eventDate: {
-                $gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
-              }
-            }
-          }
-        }
+        status: 4
       },
       include: [{
         model: models.eventShifts,
@@ -23,6 +14,11 @@ module.exports = function(req, res, next) {
         include: [{
           model: models.events,
           as: 'event',
+          where: {
+            eventDate: {
+              $gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
+            }
+          }
         }]
       }]
     }]
