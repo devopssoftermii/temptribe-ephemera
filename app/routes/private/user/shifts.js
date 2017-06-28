@@ -85,11 +85,7 @@ module.exports = function(req, res, next) {
   }).then(function(result) {
     res.json(result.timesheets.map(function(timesheet) {
       return timesheet.shift;
-    }).sort(function(a, b) {
-      var as = eventHelpers.splitTime(a.startTime);
-      var bs = eventHelpers.splitTime(b.startTime);
-      return a.event.eventDate.setHours(as[0], as[1]) - b.event.eventDate.setHours(bs[0], bs[1])
-    }));
+    }).sort(eventHelpers.sortByShift);
   }).catch(function(err) {
     res.status(500).json(null);
   });
