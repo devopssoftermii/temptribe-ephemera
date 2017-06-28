@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 
 module.exports = function(req, res, next) {
   try {
-    if (!req.body.email || req.body.password) {
+    if (!req.body.email || !req.body.password) {
       throw new Error('Missing email or password');
     }
     var models = req.app.locals.models;
