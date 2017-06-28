@@ -1,9 +1,15 @@
 module.exports = function(req, res, next) {
-  req.app.locals.models.events.findById(143544, {
+  var models = req.app.locals.models;
+  models.users.findById(226890, {
     include: [{
-      model: req.app.locals.models.eventShifts
+      model: models.userTimesheets,
+      as: 'timesheets',
+      include: [{
+        model: models.eventShifts,
+        as: 'shifts',
+      }]
     }]
   }).then(function(result) {
-    res.json(result.eventShifts);
+    res.json(result);
   });
 }
