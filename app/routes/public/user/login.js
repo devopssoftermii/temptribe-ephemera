@@ -24,7 +24,7 @@ module.exports = function(req, res, next) {
       }
       res.json({
         success: true,
-        userID: result.id
+        userID: result.id,
         token: jwt.sign(result, process.env.JWT_SECRET, { expiresIn: 60*60*1000000 })
       });
     }).catch(function(err) {
