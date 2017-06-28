@@ -78,6 +78,7 @@ module.exports = function(req, res, next) {
           ],
           as: 'jobRole'
         }]
+      }]
     }]
   }).then(function(result) {
     res.json(result.timesheets.map(function(timesheet) {
