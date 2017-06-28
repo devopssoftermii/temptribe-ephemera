@@ -29,10 +29,13 @@ module.exports = function(req, res, next) {
           error: 'Unknown user or password'
         });
       } else {
+        var user = result.get({
+          plain: true
+        }));
         res.json({
           success: true,
-          userID: result.id,
-          token: jwt.sign(result, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 1000000 })
+          userID: user.id,
+          token: jwt.sign(user, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 1000000 })
         });
       }
     }).catch(function(err) {
