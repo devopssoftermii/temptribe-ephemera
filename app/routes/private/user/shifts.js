@@ -1,4 +1,5 @@
 module.exports = function(req, res, next) {
+  var sequelize = req.app.locals.sequelize;
   var models = req.app.locals.models;
   models.users.findById(226890, {
     include: [{
@@ -15,7 +16,7 @@ module.exports = function(req, res, next) {
           as: 'event',
           where: {
             eventDate: {
-              $gt: new Date(Date.now() - 864e5)
+              $gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
             }
           }
         }]
