@@ -20,13 +20,17 @@ module.exports = function(req, res, next) {
       }
     }).then(function(result) {
       if (!result) {
-        throw new Error('Unknown user or password');
+        res.status(401).json({
+          success: false,
+          error: 'Unknown user or password'
+        });
+      } else {
+        res.json({
+          success: true,
+          userID: result.id,
+          token: jwt.sign(result, process.env.JWT_SECRET, { expiresIn: 60*60*1000000 })
+        });
       }
-      res.json({
-        success: true,
-        userID: result.id,
-        token: jwt.sign(result, process.env.JWT_SECRET, { expiresIn: 60*60*1000000 })
-      });
     }).catch(function(err) {
       throw new Error('Unknown user or password');
     });
