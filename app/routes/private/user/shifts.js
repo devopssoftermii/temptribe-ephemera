@@ -12,6 +12,7 @@ module.exports = function(req, res, next) {
         as: 'shift',
         include: [{
           model: models.events,
+          as: 'event',
           where: {
             eventDate: {
               $gt: new Date(Date.now() - 864e5)
