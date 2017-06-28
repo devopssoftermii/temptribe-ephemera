@@ -52,7 +52,7 @@ module.exports = function(req, res, next) {
                 sequelize.fn(
                   'convert',
                   sequelize.literal('VARCHAR(10)'),
-                  sequelize.col('venues.id')
+                  sequelize.col('timesheet.shift.event.venue.id')
                 ),
                 '.jpg'
               ), 'imageURL']
