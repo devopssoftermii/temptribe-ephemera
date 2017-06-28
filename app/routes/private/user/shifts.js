@@ -13,7 +13,7 @@ module.exports = function(req, res, next) {
       include: [{
         model: models.eventShifts,
         attributes: [
-          'id',
+          sequelize.col('id'),
           [sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108), 'startTime'],
           [sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalFinishTime'), 108), 'endTime'],
           'originalStartTime',
@@ -25,10 +25,10 @@ module.exports = function(req, res, next) {
         include: [{
           model: models.events,
           attributes: [
-            'id',
-            'comments',
-            'title',
-            'subtitle'
+            sequelize.col('id'),
+            sequelize.col('comments'),
+            sequelize.col('title'),
+            sequelize.col('subtitle')
           ],
           as: 'event',
           where: {
@@ -39,7 +39,7 @@ module.exports = function(req, res, next) {
           include: [{
             model: models.venues,
             attributes: [
-              'name',
+              sequelize.col('name'),
               'address1',
               'address2',
               'town',
@@ -60,20 +60,20 @@ module.exports = function(req, res, next) {
             as: 'venue'
           }, {
             model: models.clients,
-            attributes: [['clientName', 'name']],
+            attributes: ['clientName'],
             as: 'client'
           }]
         }, {
           model: models.dressCodes,
           attributes: [
             ['ShortDescription', 'shortDescription'],
-            'description'
+            sequelize.col('description')
           ],
           as: 'dressCode'
         }, {
           model: models.jobRoles,
           attributes: [
-            'title'
+            sequelize.col('title')
           ],
           as: 'jobRole'
         }]
