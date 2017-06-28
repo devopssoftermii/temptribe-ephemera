@@ -11,7 +11,7 @@ module.exports = function(req, res, next) {
     }
     var models = req.app.locals.models;
     var sequelize = req.app.locals.sequelize;
-    models.users.find({
+    models.users.findOne({
       attributes: [
         'id',
         'email'
