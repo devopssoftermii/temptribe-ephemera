@@ -26,6 +26,7 @@ module.exports = function(req, res, next) {
           model: models.events,
           attributes: [
             'id',
+            [sequelize.fn('convert', sequelize.literal('DATE'), sequelize.col('eventDate')), 'eventDate'],
             'comments',
             'title',
             'subtitle'
