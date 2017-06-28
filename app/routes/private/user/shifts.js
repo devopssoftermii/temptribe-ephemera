@@ -6,7 +6,7 @@ module.exports = function(req, res, next) {
       as: 'timesheets',
       include: [{
         model: models.eventShifts,
-        as: 'shifts',
+        as: 'shift',
       }]
     }]
   }).then(function(result) {

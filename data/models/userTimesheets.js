@@ -93,7 +93,7 @@ module.exports = function(sequelize, DataTypes) {
 	});
 	userTimesheets.associate = function(models) {
 		userTimesheets.belongsTo(models.users, { as: 'user' });
-		userTimesheets.belongsTo(models.eventShifts, { as: 'eventShift' });
+		userTimesheets.belongsTo(models.eventShifts, { as: 'shift' });
 	}
 	return userTimesheets;
 };
