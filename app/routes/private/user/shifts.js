@@ -8,12 +8,8 @@ module.exports = function(req, res, next) {
       where: {
         $and: {
           status: 4,
-          shift: {
-            event: {
-              eventDate: {
-                $gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
-              }
-            }
+          '$shift.event.eventDate$': {
+            $gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
           }
         }
       },
