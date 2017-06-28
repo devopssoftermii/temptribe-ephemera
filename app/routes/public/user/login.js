@@ -31,7 +31,7 @@ module.exports = function(req, res, next) {
       } else {
         var user = result.get({
           plain: true
-        }));
+        });
         res.json({
           success: true,
           userID: user.id,
