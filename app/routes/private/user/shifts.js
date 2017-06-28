@@ -80,7 +80,9 @@ module.exports = function(req, res, next) {
       }]
     }]
   }).then(function(result) {
-    res.json(result.timesheets);
+    res.json(result.timesheets.map(function(timesheet) {
+      return timesheet.shift;
+    }));
   }).catch(function(err) {
     res.status(500).json(null);
   });
