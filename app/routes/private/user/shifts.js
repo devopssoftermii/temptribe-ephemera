@@ -83,9 +83,13 @@ module.exports = function(req, res, next) {
       }]
     }]
   }).then(function(result) {
-    res.json(result.timesheets.map(function(timesheet) {
-      return timesheet.shift;
-    }).sort(eventHelpers.sortByShift));
+    if (result) {
+      res.json(result.timesheets.map(function(timesheet) {
+        return timesheet.shift;
+      }).sort(eventHelpers.sortByShift));
+    } else {
+      res.json([]);
+    }
   }).catch(function(err) {
     res.status(500).json(null);
   });
