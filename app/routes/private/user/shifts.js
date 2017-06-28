@@ -4,12 +4,25 @@ module.exports = function(req, res, next) {
     include: [{
       model: models.userTimesheets,
       as: 'timesheets',
+      where: {
+        status: 4
+      },
       include: [{
         model: models.eventShifts,
         as: 'shift',
+        include: [{
+          model: models.events,
+          where: {
+            eventDate: {
+              $gt: new Date(Date.now() - 864e5)
+            }
+          }
+        }]
       }]
     }]
   }).then(function(result) {
-    res.json(result);
+    res.json(result.timesheets.map(function(timesheet) {
+      return timesheet.shift;
+    }));
   });
 }
