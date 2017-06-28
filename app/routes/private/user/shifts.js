@@ -85,7 +85,7 @@ module.exports = function(req, res, next) {
   }).then(function(result) {
     res.json(result.timesheets.map(function(timesheet) {
       return timesheet.shift;
-    }).sort(eventHelpers.sortByShift);
+    }).sort(eventHelpers.sortByShift));
   }).catch(function(err) {
     res.status(500).json(null);
   });
