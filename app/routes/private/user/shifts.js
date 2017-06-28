@@ -78,31 +78,12 @@ module.exports = function(req, res, next) {
           ],
           as: 'jobRole'
         }]
-      }],
-      order: [
-        [
-          {
-            model: models.eventShifts,
-            as: 'shift',
-          }, {
-            model: models.events,
-            as: 'event',
-          },
-          'eventDate',
-          'ASC'
-        ], [
-          {
-            model: models.eventShifts,
-            as: 'shift',
-          },
-          'startTime',
-          'ASC'
-        ],
-      ]
     }]
   }).then(function(result) {
     res.json(result.timesheets.map(function(timesheet) {
       return timesheet.shift;
+    }).sort(function(a, b) {
+      return Date.parse(a.event.eventDate.replace('T00:00', a.startTime)) - Date.parse(b.event.eventDate.replace('T00:00', b.startTime))
     }));
   }).catch(function(err) {
     res.status(500).json(null);
