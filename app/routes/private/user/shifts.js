@@ -1,3 +1,5 @@
+var eventHelpers = require('../../../../util/events');
+
 module.exports = function(req, res, next) {
   var sequelize = req.app.locals.sequelize;
   var models = req.app.locals.models;
@@ -84,7 +86,9 @@ module.exports = function(req, res, next) {
     res.json(result.timesheets.map(function(timesheet) {
       return timesheet.shift;
     }).sort(function(a, b) {
-      return Date.parse(a.event.eventDate.replace('T00:00', a.startTime)) - Date.parse(b.event.eventDate.replace('T00:00', b.startTime))
+      var as = eventHelpers.splitTime(a.startTime);
+      var bs = eventHelpers.splitTime(b.startTime);
+      return a.event.eventDate.setHours(as[0], as[1]) - b.event.eventDate.setHours(bs[0], bs[1])
     }));
   }).catch(function(err) {
     res.status(500).json(null);
