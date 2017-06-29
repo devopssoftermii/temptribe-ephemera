@@ -21,4 +21,6 @@ models.forEach(function(model) {
 
 sequelize.sync({
   force: (process.env.NODE_ENV === 'development')
+}).then(function(result) {
+  console.log(result);
 });
