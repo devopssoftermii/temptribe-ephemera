@@ -30,7 +30,7 @@ module.exports = function(router) {
             error: 'Unknown user or password'
           });
         } else {
-          session.create(result, models).then(function(sessionResult) {
+          return session.create(result, models).then(function(sessionResult) {
             res.json(sessionResult);
           }).catch(function(err) {
             res.status(500).json({
