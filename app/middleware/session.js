@@ -5,7 +5,7 @@ module.exports = {
     return {
       success: true,
       userID: user.id,
-      token: jwt.sign(user, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TTL })
+      token: jwt.sign(user, process.env.JWT_SECRET, { expiresIn: parseInt(process.env.JWT_TTL, 10) })
     }
   }
 };
