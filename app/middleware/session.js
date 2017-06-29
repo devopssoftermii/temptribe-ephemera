@@ -37,7 +37,7 @@ module.exports = {
         }
         return {
           success: true,
-          userId: user.id,
+          userId: result.user.id,
           access: jwt.sign(result.user.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: parseInt(process.env.JWT_TTL, 10) }),
           refresh: jwt.sign(result.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: 86400 * 365 })
         };
