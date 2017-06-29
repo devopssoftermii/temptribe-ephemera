@@ -237,10 +237,6 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: true
 		},
-		userGUID: {
-			type: DataTypes.UUIDV4,
-			allowNull: true
-		},
 		eventPackNotes: {
 			type: DataTypes.TEXT,
 			allowNull: true
