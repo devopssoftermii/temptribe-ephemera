@@ -1,37 +1,56 @@
-var morgan = require('morgan'),
-    rfs = require('rotating-file-stream'),
+var morgan    = require('morgan'),
+    rfs       = require('rotating-file-stream'),
     path 			= require('path'),
     fs 				= require('fs');
+    Raven     = null;
 
-module.exports = {
-  before: [],
-  after: []
-};
-
-// Sentry logging
-var ravenLogger = null;
-var errorLogger = null;
 if (process.env.SENTRY_DSN) {
-  var Raven = require('raven');
+  Raven = require('raven');
   Raven.config(process.env.SENTRY_DSN).install();
   Raven.captureMessage('Initialising Ephemera API', {
     level: 'info'
   });
-  module.exports.before.push(Raven.requestHandler());
-  module.exports.after.push(Raven.errorHandler());
 }
 
-// HTTP access logging
-var logDir = process.env.LOGDIR || 'log';
-fs.existsSync(logDir) || fs.mkdirSync(logDir);
+var options = {
+  sequelize: function(message) {
+    if (!process.env.DB_VERBOSE === 'true') {
+      console.log('>>> DB: ' + message);
+    }
+  }
+};
 
-module.exports.before.push(
-  morgan('combined', {
-    stream: rfs('access.log', {
-      interval: '1d',
-      path: logDir
-    })
-  })
-);
+module.exports = {
+  before: function(app) {
+    // Sentry logging
+    if (Raven) {
+      app.use(Raven.requestHandler());
+    }
 
-module.exports.before.push(morgan('dev'));
+    // HTTP access logging
+    var logDir = process.env.LOGDIR || 'log';
+    fs.existsSync(logDir) || fs.mkdirSync(logDir);
+
+    app.use(
+      morgan('combined', {
+        stream: rfs('access.log', {
+          interval: '1d',
+          path: logDir
+        })
+      })
+    );
+    if (process.env.NODE_ENV === 'development') {
+      app.use(morgan('dev'));
+    }
+
+    app.locals = Object.assign({}, app.locals, {
+      logging: options
+    });
+  },
+  after: function(app) {
+    // Sentry logging
+    if (Raven) {
+      app.use(Raven.errorHandler());
+    }
+  }
+}
