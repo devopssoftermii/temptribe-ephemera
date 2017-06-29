@@ -20,7 +20,7 @@ require('./data')(app);
 
 if (process.env.NODE_ENV === 'development') {
   app.set('json spaces', 2);
-  app.use('/static', express.static('static'));
+  app.use('/api/static', express.static('static'));
 }
 
 // JSON parser
