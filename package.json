@@ -1,6 +1,6 @@
 {
-  "name": "lola_app_api",
-  "version": "1.0.0",
+  "name": "ephemera",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,14 +11,19 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "cors": "^2.8.1",
-    "dotenv": "^4.0.0",
-    "errorhandler": "^1.5.0",
+    "dotenv-safe": "^4.0.4",
     "express": "^4.15.2",
     "express-jwt": "^5.1.0",
-    "http": "0.0.0",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
-    "mssql": "^3.3.0",
-    "underscore": "^1.8.3"
+    "pg": "^6.4.0",
+    "pg-hstore": "^2.3.2",
+    "raven": "^2.1.0",
+    "rotating-file-stream": "^1.2.2",
+    "sequelize": "^4.2.0",
+    "tedious": "^2.0.0"
+  },
+  "devDependencies": {
+    "sequelize-auto": "^0.4.28"
   }
 }

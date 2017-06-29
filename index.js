@@ -1,247 +1,45 @@
-var morgan          = require('morgan'),
-    cors            = require('cors'),
-    http            = require('http'),
-    express         = require('express'),
-    errorhandler    = require('errorhandler'),
-    dotenv          = require('dotenv'),
-    bodyParser      = require('body-parser'),
-    jwt             = require('express-jwt'),
-    mssql           = require('mssql'),
-    _               = require('underscore'),
-    jwt_generator   = require('jsonwebtoken'),
-    sql             = require('mssql'),
-    path 			= require('path'),
-    fs 				= require('fs'),
-    rfs 			= require('rotating-file-stream')
+// Import config into process.env
+require('dotenv-safe').config();
 
-dotenv.config(); // loads environment variables from .env file at the same level as this file
+// Import Express
+var express = require('express'),
+    app     = express(),
+    logging = require('./middleware/logging');
 
-var app = express();
+app.locals = Object.assign({}, app.locals, {
+  logging: {
+    sequelize: false
+  }
+});
 
-var logDirectory = path.join(__dirname, 'log')
-// ensure log directory exists
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+// Initialise logging middleware
+logging.before(app);
 
-// create a rotating write stream
-var accessLogStream = rfs('access.log', {
-  interval: '1d', // rotate daily
-  path: logDirectory
-})
+// Initialise DB
+require('./data')(app);
 
-// setup the logger
-app.use(morgan('combined', {stream: accessLogStream}))
-
-var config = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    server: process.env.localhost, // You can use 'localhost\\instance' to connect to named instance
-    database: process.env.DB_DATABASE
+if (process.env.NODE_ENV === 'development') {
+  app.set('json spaces', 2);
+  app.use('/static', express.static('static'));
 }
 
-var secret = process.env.JWT_SECRET
+// JSON parser
+app.use(require('body-parser').json());
 
-var jwtCheck = jwt({secret: secret});
+// App
+app.use('/api/v2', require('./app'));
 
-function createToken(user) {
-  return jwt_generator.sign(_.omit(user, 'password'), secret, { expiresIn: 60*60*1000000 });
-}
+// Post-request error handling
+logging.after(app);
 
-app.use(bodyParser.json());
+// Create HTTP server and listen
+const port = process.env.PORT || 3002;
+const host = process.env.HOST || 'localhost';
+require('http').createServer(app).listen(port, host, function (err) {
+  console.log(`
+>>  Listening for requests on http://${host}:${port}
+>>  Logging access requests locally, exceptions to Sentry if configured
 
-app.use(function(err, req, res, next) {
-  if (err.name === 'StatusError') {
-    res.send(err.status, err.message);
-  } else {
-    next(err);
-  }
+Ready.
+  `);
 });
-
-// if (process.env.NODE_ENV === 'development') {
-//   app.use(logger('dev'));
-//   app.use(errorhandler())
-// }
-
-app.get('/api/v1/test', function(req, res) {
-	res.type('json').status(200).send(JSON.stringify({
-	  data: "hello world"
-	}));
-})
-
-
-app.post('/api/v1/login', function(req, res) {
-  console.log(req.url)
-  var email = null
-  var password = null
-  var user = null
-  if(req.body.email && req.body.password) {
-    email = req.body.email;
-    password = req.body.password;
-  }
-  if (!email || !password) {
-    return res.type('json').status(400).send(JSON.stringify({
-      error: "Give us a username and password!"
-    }));
-  }
-
-  user = {
-    email: email,
-    password: password,
-    id: null
-  }
-
-  sql.connect(config)
-  .then(function() {
-    var request = new sql.Request();
-    request.input('email', email );
-    request.input('password', password);
-    request.query(
-		`SELECT id FROM users WHERE email=@email AND password=dbo.udf_CalculateHash(@password + salt) AND status IN (0, 1)`
-    )
-    .then(function(recordset) {
-    	if (recordset[0]) {
-    		res.type('json').status(201).send(
-			    JSON.stringify({
-			      id_token: createToken({
-			      	email: email,
-			      	id: recordset[0].id
-			      }),
-			      userID: recordset[0].id,
-			      error: null
-			    })
-			)
-    	} else {
-    		res.type('json').status(401).send(JSON.stringify({
-		      error: "password or username is just wrong!"
-		    }));
-    	}
-    })
-    .catch(function(err) {
-      console.log('Request error: ' + err);
-      	res.type('json').status(500).send(JSON.stringify({
-		      error: "code-E1"
-		    }));	
-    });
-  })
-  .catch(function(err) {
-      console.log('there was an err', err)
-      res.type('json').status(500).send(JSON.stringify({
-		      error: "code-E1"
-		    }));
-  });
-
-});
-
-app.use('/api/v1/', jwtCheck);
-
-app.get('/api/v1/user/:userID/events', function(req, res) {
-	console.log(req.url)
-	if (req.user.id.toString() === req.params.userID.toString()) {
-	  sql.connect(config)
-	  .then(function() {
-	    var request = new sql.Request();
-	    request.input('userID', req.params.userID);
-	    request.query(
-	        `SELECT 
-			users.id,
-			eventShifts.id as shiftID,
-			userTimesheets.status as status,
-			CONVERT(date ,events.eventDate) as eventDate,
-			CONVERT(VARCHAR(5),eventShifts.originalStartTime,108) as 'startTime',
-			CONVERT(VARCHAR(5),eventShifts.originalFinishTime,108) as 'endTime',
-			eventShifts.originalStartTime,
-			eventShifts.originalFinishTime,
-			eventShifts.hourlyRate,
-			events.id as eventID,
-			events.comments as eventInternalComments,
-			events.title,
-			events.subtitle,
-			venues.name as venueName,
-			venues.address1,
-			venues.address2,
-			venues.town,
-			venues.county,
-			venues.postcode,
-			venues.mapLink,
-			('/images/venuePhotos/' + convert(varchar(10), venues.id) + '.jpg') AS venueImageURL,
-			clients.clientName,
-			dressCodes.ShortDescription as dressCodeShortDescription,
-			dressCodes.description as dressCodeDescription,
-			jobRoles.title as jobRole
-			FROM users
-			JOIN userTimesheets on userTimesheets.userID = users.id 
-			JOIN eventShifts on eventShifts.id = userTimesheets.eventShiftID
-			JOIN events on events.id = eventShifts.eventID
-			JOIN venues on events.venueID = venues.id
-			JOIN clients on clients.id = events.clientID
-			JOIN dressCodes on dressCodes.id = eventShifts.dressCodeID
-			JOIN jobRoles on jobRoles.id = eventShifts.jobRoleID
-			WHERE users.id = @userID
-			AND userTimesheets.status in (4)
-			AND events.eventDate >= CONVERT(date, getdate())
-			ORDER BY events.eventDate ASC`
-	    )
-	    .then(function(recordset) {
-			res.type('json').status(200).send(
-			    JSON.stringify(recordset)
-			)
-	    })
-	    .catch(function(err) {
-	      console.log('Request error: ' + err);
-	    });
-	 })
-	  .catch(function(err) {
-	      console.log('there was an err', err)
-	  });
-	} else {
-		res.type('json').status(401).send(
-		    JSON.stringify({error: 'access denied'})
-		)
-	}
-});
-
-app.get('/api/v1/user/:userID/profile', function(req, res) {
-	console.log(req.url)
-	if (req.user.id.toString() === req.params.userID.toString()) {
-	  sql.connect(config)
-	  .then(function() {
-	  	console.log('HERE')
-	    var request = new sql.Request();
-	    request.input('userID', req.params.userID);
-	    request.query(
-	        `SELECT TOP 1 
-			users.id as userID, 
-			users.firstname, 
-			users.surname,
-			users.email,
-			users.mobile,
-			userPhotos.FileName as imageFileName
-			FROM users
-			JOIN userPhotos on users.id = userPhotos.UserID
-			WHERE users.id = @userID
-			AND userPhotos.IsMainImage = 1`
-	    )
-	    .then(function(recordset) {
-			res.type('json').status(200).send(
-			    JSON.stringify(recordset[0])
-			)
-	    })
-	    .catch(function(err) {
-	      console.log('Request error: ' + err);
-	    });
-	 })
-	  .catch(function(err) {
-	      console.log('there was an err', err)
-	  });
-	} else {
-		res.type('json').status(401).send(
-		    JSON.stringify({error: 'access denied'})
-		)
-	}
-});
-
-var port = process.env.PORT || 3002;
-
-http.createServer(app).listen(port, function (err) {
-  console.log('listening on http://localhost:' + port);
-});
-
