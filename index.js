@@ -23,11 +23,6 @@ if (process.env.NODE_ENV === 'development') {
   app.use('/static', express.static('static'));
 }
 
-// Pre-request logging
-logging.before.forEach(function(middleware) {
-  app.use(middleware);
-});
-
 // JSON parser
 app.use(require('body-parser').json());
 
