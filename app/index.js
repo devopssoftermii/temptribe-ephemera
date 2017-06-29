@@ -4,7 +4,7 @@ var router    = require('express').Router(),
 
 fs.readdirSync(`${__dirname}/routes`).forEach(function(filename) {
   var route = path.basename(filename, '.js');
-  router.use('/' + route, require(`${__dirname}/routes/${route}`));
+  require(`${__dirname}/routes/${route}`)(router);
 });
 
 router.use('/', function(req, res, next) {
