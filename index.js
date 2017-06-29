@@ -20,14 +20,16 @@ require('./data')(app);
 
 if (process.env.NODE_ENV === 'development') {
   app.set('json spaces', 2);
-  app.use('/api/static', express.static('static'));
+  app.use(process.env.API_PREFIX + '/static', express.static('static'));
 }
 
 // JSON parser
 app.use(require('body-parser').json());
 
 // App
-app.use('/api/v2', require('./app'));
+var version = require('./package.json').version.split('.');
+var apiPath = `${process.env.API_PREFIX}/v${version[0]}`;
+app.use(apiPath, require('./app'));
 
 // Post-request error handling
 logging.after(app);
