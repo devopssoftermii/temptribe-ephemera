@@ -19,7 +19,7 @@ module.exports = {
         reject(new Error('Invalid refresh token'));
       }
     }).then(function(payload) {
-      return models.sessions.findOne({
+      return models.apiSession.findOne({
         where: {
           id: payload.id
         },
