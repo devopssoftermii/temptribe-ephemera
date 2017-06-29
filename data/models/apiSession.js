@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  const APISession = sequelize.define('apiSession', {
+  const apiSession = sequelize.define('apiSession', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -8,8 +8,8 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'apiSession'
   });
-  APISession.associate = function(models) {
-    APISession.belongsTo(models.users);
+  apiSession.associate = function(models) {
+    apiSession.belongsTo(models.users);
   }
-  return APISession;
+  return apiSession;
 }

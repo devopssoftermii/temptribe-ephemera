@@ -287,7 +287,7 @@ module.exports = function(sequelize, DataTypes) {
 		users.hasMany(models.events, { foreignKey: 'clientContactID' });
 		users.hasMany(models.userPhotos, { foreignKey: 'UserID', as: 'photos' });
 		users.hasMany(models.userTimesheets, { foreignKey: 'userID', as: 'timesheets' });
-		users.hasMany(models.APISession);
+		users.hasMany(models.apiSession);
 	}
 	return users;
 };
