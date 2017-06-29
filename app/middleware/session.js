@@ -35,12 +35,12 @@ module.exports = {
         if (!result) {
           throw new Error('Invalid session');
         }
-        return {
-          success: true,
-          userId: result.user.id,
-          access: jwt.sign(result.user.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: parseInt(process.env.JWT_TTL, 10) }),
-          refresh: jwt.sign(result.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: 86400 * 365 })
-        };
+        return Promise.all([module.exports.create(result.user, models), result.destroy()]);
+      }).then(function(results) {
+        if (!Array.isArray(results) || !results[0]) {
+          throw new Error('Failed to create new session');
+        }
+        return results[0];
       });
     });
   }
