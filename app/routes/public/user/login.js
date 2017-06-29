@@ -1,4 +1,4 @@
-var jwt = require('jsonwebtoken');
+var session = require('../../../middleware/session');
 
 module.exports = function(router) {
   router.post('/login', function(req, res, next) {
@@ -33,11 +33,7 @@ module.exports = function(router) {
           var user = result.get({
             plain: true
           });
-          res.json({
-            success: true,
-            userID: user.id,
-            token: jwt.sign(user, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 1000000 })
-          });
+          res.json(session.create(user));
         }
       }).catch(function(err) {
         res.status(401).json({
