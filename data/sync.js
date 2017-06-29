@@ -2,7 +2,9 @@ require('dotenv-safe').config({
   path: '../.env',
   sample: '../.env.example'
 });
-var Sequelize = require('sequelize');
+
+var Sequelize = require('sequelize'),
+    fs = require('fs');
 
 var sequelize = new Sequelize({
   dialect: process.env.DB_DIALECT,
@@ -13,14 +15,21 @@ var sequelize = new Sequelize({
   logging: console.log
 });
 
-var models = ['apiSession'];
+var models = {};
 
-models.forEach(function(model) {
-  sequelize.import(`${__dirname}/models/${model}`);
+fs.readdirSync(__dirname + '/models').forEach(function(filename) {
+  var model = sequelize.import(`${__dirname}/models/${filename}`);
+  models[model.name] = model;
+});
+
+Object.keys(models).forEach(function(modelName) {
+  if ('associate' in models[modelName]) {
+    models[modelName].associate(models);
+  }
 });
 
 sequelize.sync({
-  force: (process.env.NODE_ENV === 'development')
+  force: false
 }).then(function(result) {
   console.log(`
     Done.

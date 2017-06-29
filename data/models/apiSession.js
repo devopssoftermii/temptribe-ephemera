@@ -5,5 +5,11 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     }
+  }, {
+    tableName: 'apiSession'
   });
+  APISession.associate = function(models) {
+    APISession.belongsTo(models.users);
+  }
+  return APISession;
 }
