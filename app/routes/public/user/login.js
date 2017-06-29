@@ -30,10 +30,14 @@ module.exports = function(router) {
             error: 'Unknown user or password'
           });
         } else {
-          var user = result.get({
-            plain: true
+          session.create(result).then(function(sessionResult) {
+            res.json(sessionResult);
+          }).catch(function(err) {
+            res.status(500).json({
+              error: true,
+              message: err.message
+            });
           });
-          res.json(session.create(user));
         }
       }).catch(function(err) {
         res.status(401).json({
