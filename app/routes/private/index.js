@@ -11,10 +11,6 @@ fs.readdirSync(__dirname).forEach(function(filename) {
   }
 });
 
-router.use('/', function(req, res, next) {
-  res.status(404).end();
-});
-
 module.exports = function(upRouter) {
   upRouter.use('/' + path.basename(__dirname), router);
 };
