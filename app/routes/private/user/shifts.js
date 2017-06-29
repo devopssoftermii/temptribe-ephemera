@@ -1,7 +1,7 @@
 var eventHelpers = require('../../../../util/events');
 
 module.exports = function(router) {
-  router.use('/profile', function(req, res, next) {
+  router.use('/shifts', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     models.users.findById(req.user.id, {
