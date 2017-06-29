@@ -21,7 +21,8 @@
     "raven": "^2.1.0",
     "rotating-file-stream": "^1.2.2",
     "sequelize": "^4.2.0",
-    "tedious": "^2.0.0"
+    "tedious": "^2.0.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "sequelize-auto": "^0.4.28"
