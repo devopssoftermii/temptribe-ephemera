@@ -39,7 +39,7 @@ const port = process.env.PORT || 3002;
 const host = process.env.HOST || 'localhost';
 require('http').createServer(app).listen(port, host, function (err) {
   console.log(`
->>  Listening for requests on http://${host}:${port}
+>>  Listening for requests on http://${host}:${port}${apiPath}
 >>  Logging access requests locally, exceptions to Sentry if configured
 
 Ready.
