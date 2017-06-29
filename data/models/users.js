@@ -272,9 +272,9 @@ module.exports = function(sequelize, DataTypes) {
 	});
 	users.associate = function(models) {
 		users.belongsTo(models.venues, { as: 'venue' });
-		users.hasMany(models.events, { foreignKey: 'clientContactID' });
-		users.hasMany(models.userPhotos, { foreignKey: 'UserID', as: 'photos' });
-		users.hasMany(models.userTimesheets, { foreignKey: 'userID', as: 'timesheets' });
+		users.hasMany(models.events, { foreignKey: 'clientContactId' });
+		users.hasMany(models.userPhotos, { foreignKey: 'UserId', as: 'photos' });
+		users.hasMany(models.userTimesheets, { foreignKey: 'userId', as: 'timesheets' });
 		users.hasMany(models.apiSession);
 	}
 	return users;

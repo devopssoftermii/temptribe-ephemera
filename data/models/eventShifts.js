@@ -74,7 +74,7 @@ module.exports = function(sequelize, DataTypes) {
 		eventShifts.belongsTo(models.events, { as: 'event' });
 		eventShifts.belongsTo(models.jobRoles, { as: 'jobRole' });
 		eventShifts.belongsTo(models.dressCodes, { as: 'dressCode' });
-		eventShifts.hasMany(models.userTimesheets, { foreignKey: 'eventShiftID', as: 'timesheets' });
+		eventShifts.hasMany(models.userTimesheets, { foreignKey: 'eventShiftId', as: 'timesheets' });
 	}
 	return eventShifts;
 };

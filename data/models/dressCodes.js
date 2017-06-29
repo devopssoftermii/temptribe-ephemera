@@ -37,7 +37,7 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	dressCodes.associate = function(models) {
-		dressCodes.hasMany(models.eventShifts, { foreignKey: 'dressCodeID' });
+		dressCodes.hasMany(models.eventShifts, { foreignKey: 'dressCodeId' });
 	}
 	return dressCodes;
 };

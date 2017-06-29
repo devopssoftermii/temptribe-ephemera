@@ -111,7 +111,7 @@ module.exports = function(sequelize, DataTypes) {
 		events.belongsTo(models.clients, { as: 'client' });
 		events.belongsTo(models.users, { as: 'clientContact' });
 		events.belongsTo(models.venues, { as: 'venue' });
-		events.hasMany(models.eventShifts, { foreignKey: 'eventID' });
+		events.hasMany(models.eventShifts, { foreignKey: 'eventId' });
 	}
 	return events;
 };

@@ -52,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 	jobRoles.associate = function(models) {
-		jobRoles.hasMany(models.eventShifts, { foreignKey: 'jobRoleID' });
+		jobRoles.hasMany(models.eventShifts, { foreignKey: 'jobRoleId' });
 	}
 	return jobRoles;
 };
