@@ -7,30 +7,6 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			primaryKey: true
 		},
-		eventID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'events',
-				key: 'id'
-			}
-		},
-		jobRoleID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'jobRoles',
-				key: 'id'
-			}
-		},
-		dressCodeID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'dressCodes',
-				key: 'id'
-			}
-		},
 		hourlyRate: {
 			type: "MONEY",
 			allowNull: true

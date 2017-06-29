@@ -7,14 +7,6 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			primaryKey: true
 		},
-		UserID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'users',
-				key: 'id'
-			}
-		},
 		FileName: {
 			type: DataTypes.STRING,
 			allowNull: true

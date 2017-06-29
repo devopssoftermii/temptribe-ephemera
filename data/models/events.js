@@ -11,33 +11,9 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: true
 		},
-		clientID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'clients',
-				key: 'id'
-			}
-		},
-		clientContactID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'users',
-				key: 'id'
-			}
-		},
 		lolaContactID: {
 			type: DataTypes.INTEGER,
 			allowNull: true
-		},
-		venueID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'venues',
-				key: 'id'
-			}
 		},
 		managerID: {
 			type: DataTypes.INTEGER,

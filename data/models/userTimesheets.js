@@ -7,22 +7,6 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			primaryKey: true
 		},
-		userID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'users',
-				key: 'id'
-			}
-		},
-		eventShiftID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'eventShifts',
-				key: 'id'
-			}
-		},
 		startTime: {
 			type: DataTypes.DATE,
 			allowNull: true

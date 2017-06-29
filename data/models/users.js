@@ -12,14 +12,6 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: true,
 			primaryKey: true
 		},
-		venueID: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'venues',
-				key: 'id'
-			}
-		},
 		gender: {
 			type: DataTypes.CHAR,
 			allowNull: true
