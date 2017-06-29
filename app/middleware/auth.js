@@ -7,7 +7,7 @@ module.exports = function(router) {
     res.status(401).json({
       error: true,
       message: err.message
-    });
+    }).end();
   });
   router.use(function(req, res, next) {
     if (!req.user || !req.user.id) {
