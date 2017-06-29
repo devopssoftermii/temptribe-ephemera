@@ -2,9 +2,8 @@ var jwt = require('jsonwebtoken');
 
 module.exports = {
   create: function(result) {
-    var session = app.locals.models.apiSession.create({ user_id: result });
     var user = result.get({ plain: true });
-    return .then(function(session) {
+    return app.locals.models.apiSession.create({ user_id: result }).then(function(session) {
       return {
         success: true,
         userID: user.id,
