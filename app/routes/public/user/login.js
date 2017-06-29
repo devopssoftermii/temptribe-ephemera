@@ -1,7 +1,7 @@
 var jwt = require('jsonwebtoken');
 
 module.exports = function(router) {
-  router.use('/login', function(req, res, next) {
+  router.post('/login', function(req, res, next) {
     try {
       if (!req.body.email || !req.body.password) {
         res.status(401).json({

@@ -1,4 +1,4 @@
 module.exports = function(router) {
-  router.use('/list', function(req, res, next) {
+  router.get('/list', function(req, res, next) {
   });
 }
