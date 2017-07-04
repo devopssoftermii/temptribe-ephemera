@@ -46,7 +46,7 @@ module.exports = {
     });
   },
   refresh: function(token, models) {
-    module.exports.destroy(token, models).then(function(user) {
+    return module.exports.destroy(token, models).then(function(user) {
       return module.exports.create(result.user, models);
     });
   }
