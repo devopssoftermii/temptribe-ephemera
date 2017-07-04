@@ -6,7 +6,7 @@ module.exports = function(router) {
   router.use(function(req, res, next) {
     return req.app.locals.sessionBlacklist.pget(req.headers.authorization.split(' ')[1]).then(function(value) {
       if (value !== undefined) {
-        throw new Error('Token has been revoked');
+        next('Token has been revoked');
       } else {
         next();
       }
