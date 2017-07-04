@@ -104,7 +104,7 @@ module.exports = function(sequelize, DataTypes) {
 					sequelize.fn(
 						'convert',
 						sequelize.literal('VARCHAR(10)'),
-						sequelize.literal('[event->venue].[id] AS [event.venue.id]')
+						sequelize.literal('[event->venue].[id]')
 					),
 					'.jpg'
 				), 'imageURL']
