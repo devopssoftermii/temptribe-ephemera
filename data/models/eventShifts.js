@@ -98,7 +98,12 @@ module.exports = function(sequelize, DataTypes) {
 				}, {
 					model: models.jobRoles,
 					as: 'jobRole'
-				}]
+				}],
+				orderBy: [[
+					eventShifts.associations.event, 'eventDate', 'ASC'
+				], [
+					'startTime', 'ASC'
+				]],
 			});
 		});
 	}

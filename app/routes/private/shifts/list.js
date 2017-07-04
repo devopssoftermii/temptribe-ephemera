@@ -5,11 +5,6 @@ module.exports = function(router) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     models.eventShifts.scope('staffFuture').findAndCountAll({
-      orderBy: [[
-        models.events, 'eventDate', 'ASC'
-      ], [
-        'startTime', 'ASC'
-      ]],
       limit: 100
     }).then(function(result) {
       if (result) {
