@@ -4,14 +4,20 @@ module.exports = function(router) {
   router.get('/list', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
-    models.eventShifts.findAndCountAll({
-      include: [{
-        model: models.events,
-        where: {
-
-        }
-      }]
+    models.eventShifts.scope('staffFuture').findAndCountAll({ limit: 100 }).then(function(result) {
+      if (result) {
+        res.json({
+          total: result.count,
+          shifts: result.rows.sort(eventHelpers.sortByShift)
+        });
+      } else {
+        res.json({
+          total: 0,
+          shifts: []
+        });
+      }
+    }).catch(function(err) {
+      res.status(500).json(null);
     });
-    res.json(null);
   });
 }

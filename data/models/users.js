@@ -280,7 +280,7 @@ module.exports = function(sequelize, DataTypes) {
 		users.addScope('staffShifts', {
 			attributes: [],
 			include: [{
-				model: models.userTimesheets.scope('staffUpcoming'),
+				model: models.userTimesheets.scope('staffConfirmed'),
 				as: 'timesheets'
 			}]
 		});
