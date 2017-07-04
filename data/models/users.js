@@ -276,6 +276,7 @@ module.exports = function(sequelize, DataTypes) {
 		users.hasMany(models.userPhotos, { foreignKey: 'UserId', as: 'photos' });
 		users.hasMany(models.userTimesheets, { foreignKey: 'userId', as: 'timesheets' });
 		users.hasMany(models.apiSession);
+		models.userTimesheets.preScope(models);
 		users.addScope('staffShifts', {
 			attributes: [],
 			include: [{

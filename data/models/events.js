@@ -112,6 +112,8 @@ module.exports = function(sequelize, DataTypes) {
 		events.belongsTo(models.users, { as: 'clientContact' });
 		events.belongsTo(models.venues, { as: 'venue' });
 		events.hasMany(models.eventShifts, { foreignKey: 'eventId' });
+	}
+	events.preScope = function(models) {
 		events.addScope('staff', {
 			attributes: [
 				'id',

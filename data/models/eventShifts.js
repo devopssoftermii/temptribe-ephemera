@@ -75,6 +75,9 @@ module.exports = function(sequelize, DataTypes) {
 		eventShifts.belongsTo(models.jobRoles, { as: 'jobRole' });
 		eventShifts.belongsTo(models.dressCodes, { as: 'dressCode' });
 		eventShifts.hasMany(models.userTimesheets, { foreignKey: 'eventShiftId', as: 'timesheets' });
+	};
+	eventShifts.preScope = function(models) {
+		models.events.preScope(models);
 		['Future', 'Past'].forEach(function(scope) {
 			eventShifts.addScope('staff' + scope, {
 				attributes: [

@@ -78,6 +78,9 @@ module.exports = function(sequelize, DataTypes) {
 	userTimesheets.associate = function(models) {
 		userTimesheets.belongsTo(models.users, { as: 'user' });
 		userTimesheets.belongsTo(models.eventShifts, { as: 'shift', foreignKey: 'eventShiftId' });
+	}
+	userTimesheets.preScope = function(models) {
+		models.eventShifts.preScope(models);
 		userTimesheets.addScope('staffUpcoming', {
 			attributes: ['id'],
 			where: {
