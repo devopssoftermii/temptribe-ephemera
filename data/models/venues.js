@@ -91,6 +91,7 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true,
 		defaultScope: {
 			attributes: [
+				'id',
 				'name',
 				'address1',
 				'address2',
@@ -98,16 +99,6 @@ module.exports = function(sequelize, DataTypes) {
 				'county',
 				'postcode',
 				'mapLink',
-				[sequelize.fn(
-					'concat',
-					'/images/venuePhotos/',
-					sequelize.fn(
-						'convert',
-						sequelize.literal('VARCHAR(10)'),
-						sequelize.literal('[event->venue].[id]')
-					),
-					'.jpg'
-				), 'imageURL']
 			],
 		}
 	});
