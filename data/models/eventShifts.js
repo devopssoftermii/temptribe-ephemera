@@ -75,6 +75,29 @@ module.exports = function(sequelize, DataTypes) {
 		eventShifts.belongsTo(models.jobRoles, { as: 'jobRole' });
 		eventShifts.belongsTo(models.dressCodes, { as: 'dressCode' });
 		eventShifts.hasMany(models.userTimesheets, { foreignKey: 'eventShiftId', as: 'timesheets' });
+		['Future', 'Past'].forEach(function(scope) {
+			eventShifts.addScope('staff' + scope, {
+				attributes: [
+					'id',
+					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108), 'startTime'],
+					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalFinishTime'), 108), 'endTime'],
+					'originalStartTime',
+					'originalFinishTime',
+					'hourlyRate',
+				],
+				required: true,
+				include: [{
+					model: models.events.scope(['staff', scope.toLowerCase()]),
+					as: 'event'
+				}, {
+					model: models.dressCodes,
+					as: 'dressCode'
+				}, {
+					model: models.jobRoles,
+					as: 'jobRole'
+				}]
+			});
+		});
 	}
 	return eventShifts;
 };

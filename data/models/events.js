@@ -112,6 +112,36 @@ module.exports = function(sequelize, DataTypes) {
 		events.belongsTo(models.users, { as: 'clientContact' });
 		events.belongsTo(models.venues, { as: 'venue' });
 		events.hasMany(models.eventShifts, { foreignKey: 'eventId' });
+		events.addScope('staff', {
+			attributes: [
+				'id',
+				[sequelize.fn('convert', sequelize.literal('DATE'), sequelize.col('eventDate')), 'eventDate'],
+				'comments',
+				'title',
+				'subtitle'
+			],
+			include: [{
+				model: models.venues,
+				as: 'venue'
+			}, {
+				model: models.clients,
+				as: 'client'
+			}]
+		});
+		events.addScope('future', {
+			where: {
+				eventDate: {
+					$gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
+				}
+			},
+		});
+		events.addScope('past', {
+			where: {
+				eventDate: {
+					$lte: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
+				}
+			},
+		});
 	}
 	return events;
 };

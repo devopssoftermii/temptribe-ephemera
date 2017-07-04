@@ -88,7 +88,28 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'venues',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
+		defaultScope: {
+			attributes: [
+				'name',
+				'address1',
+				'address2',
+				'town',
+				'county',
+				'postcode',
+				'mapLink',
+				[sequelize.fn(
+					'concat',
+					'/images/venuePhotos/',
+					sequelize.fn(
+						'convert',
+						sequelize.literal('VARCHAR(10)'),
+						sequelize.col('timesheets->shift->event->venue.id')
+					),
+					'.jpg'
+				), 'imageURL']
+			],
+		}
 	});
 	venues.associate = function(models) {
 		venues.hasMany(models.events, { foreignKey: 'venueId' });

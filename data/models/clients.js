@@ -117,7 +117,10 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'clients',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
+		defaultScope: {
+			attributes: [['clientName', 'name']],
+		}
 	});
 	clients.associate = function(models) {
 		clients.hasMany(models.events, { foreignKey: 'clientId' });
