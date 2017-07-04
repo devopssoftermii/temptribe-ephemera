@@ -4,12 +4,14 @@ require('dotenv-safe').config();
 // Import Express
 var express = require('express'),
     app     = express(),
+    cache   = require('./lib/cache'),
     logging = require('./middleware/logging');
 
 app.locals = Object.assign({}, app.locals, {
   logging: {
     sequelize: false
-  }
+  },
+  sessionBlacklist: cache(parseInt(process.env.JWT_TTL, 10))
 });
 
 // Initialise logging middleware

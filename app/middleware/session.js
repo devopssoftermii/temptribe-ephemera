@@ -9,9 +9,11 @@ module.exports = {
         access: jwt.sign(user.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: parseInt(process.env.JWT_TTL, 10) }),
         refresh: jwt.sign(session.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: '1y' })
       }
+    }).catch(function(err) {
+      return null;
     });
   },
-  refresh: function(token, models) {
+  destroy: function(token, models) {
     return new Promise(function(resolve, reject) {
       try {
         resolve(jwt.verify(token, process.env.JWT_SECRET));
@@ -35,13 +37,17 @@ module.exports = {
         if (!result) {
           throw new Error('Invalid session');
         }
-        return Promise.all([module.exports.create(result.user, models), result.destroy()]);
+        return Promise.all([result.user, result.destroy()]);
       }).then(function(results) {
-        if (!Array.isArray(results) || !results[0]) {
-          throw new Error('Failed to create new session');
-        }
         return results[0];
+      }).catch(function(err) {
+        throw new Error('Failed to destroy session');
       });
+    });
+  },
+  refresh: function(token, models) {
+    module.exports.destroy(token, models).then(function(user) {
+      return module.exports.create(result.user, models);
     });
   }
 };

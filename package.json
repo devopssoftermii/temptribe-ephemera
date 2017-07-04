@@ -16,6 +16,7 @@
     "express-jwt": "^5.1.0",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
+    "node-cache": "^4.1.1",
     "pg": "^6.4.0",
     "pg-hstore": "^2.3.2",
     "raven": "^2.1.0",
