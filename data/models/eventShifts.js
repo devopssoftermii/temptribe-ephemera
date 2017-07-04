@@ -99,7 +99,7 @@ module.exports = function(sequelize, DataTypes) {
 					model: models.jobRoles,
 					as: 'jobRole'
 				}],
-				orderBy: [[
+				order: [[
 					eventShifts.associations.event, 'eventDate', 'ASC'
 				], [
 					'startTime', 'ASC'
