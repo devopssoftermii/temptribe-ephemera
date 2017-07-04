@@ -4,7 +4,17 @@ module.exports = function(router) {
   router.get('/list', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
-    models.eventShifts.scope('staffFuture').findAndCountAll().then(function(result) {
+    var cache = req.app.locals.shiftlistCache;
+    shiftlistCache.pget('{}').then(function(result) {
+      if (result) {
+        return result;
+      }
+      return models.eventShifts.scope('staffFuture').findAndCountAll().then(function(result) {
+        return Promise.all([result, shiftlistCache.pset('{}', result)]);
+      }).then(function(promises) {
+        return promises[0];
+      });
+    }).then(function(result) {
       if (result) {
         res.json({
           total: result.count,
