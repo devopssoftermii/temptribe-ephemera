@@ -4,9 +4,7 @@ module.exports = function(router) {
   router.get('/list', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
-    models.eventShifts.scope('staffFuture').findAndCountAll({
-      limit: 100
-    }).then(function(result) {
+    models.eventShifts.scope('staffFuture').findAndCountAll().then(function(result) {
       if (result) {
         res.json({
           total: result.count,
