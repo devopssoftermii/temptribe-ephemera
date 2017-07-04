@@ -11,7 +11,9 @@ app.locals = Object.assign({}, app.locals, {
   logging: {
     sequelize: false
   },
-  sessionBlacklist: cache(parseInt(process.env.JWT_TTL, 10))
+  sessionBlacklist: cache({
+    stdTTL: parseInt(process.env.JWT_TTL, 10)
+  })
 });
 
 // Initialise logging middleware
