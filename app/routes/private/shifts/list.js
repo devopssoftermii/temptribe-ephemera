@@ -5,12 +5,12 @@ module.exports = function(router) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var cache = req.app.locals.shiftlistCache;
-    shiftlistCache.pget('{}').then(function(result) {
+    cache.pget('{}').then(function(result) {
       if (result) {
         return result;
       }
       return models.eventShifts.scope('staffFuture').findAndCountAll().then(function(result) {
-        return Promise.all([result, shiftlistCache.pset('{}', result)]);
+        return Promise.all([result, cache.pset('{}', result)]);
       }).then(function(promises) {
         return promises[0];
       });
