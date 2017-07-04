@@ -9,24 +9,17 @@ module.exports = function(router) {
       });
       return;
     }
-    try {
-      return session.destroy(req.body.token, req.app.locals.models).then(function(logoutResult) {
-        return req.app.locals.sessionBlacklist.pset(req.headers.authorization.split(' ')[1], true);
-      }).then(function(token) {
-        res.json({
-          success: true
-        });
-      }).catch(function(err) {
-        res.status(500).json({
-          success: false,
-          error: err.message
-        });
+    return session.destroy(req.body.token, req.app.locals.models).then(function(logoutResult) {
+      return req.app.locals.sessionBlacklist.pset(req.headers.authorization.split(' ')[1], true);
+    }).then(function(token) {
+      res.json({
+        success: true
       });
-    } catch (ex) {
+    }).catch(function(err) {
       res.status(500).json({
         success: false,
-        error: ex.message
+        error: err.message
       });
-    }
+    });
   });
 }
