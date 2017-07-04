@@ -84,6 +84,13 @@ module.exports = function(sequelize, DataTypes) {
 		Longitude: {
 			type: DataTypes.DECIMAL,
 			allowNull: true
+		},
+		imageURL: {
+			type: DataTypes.VIRTUAL,
+			allowNull: false,
+			get() {
+				return `/images/venuePhotos/${this.getDataValue('id')}.jpg`;
+			}
 		}
 	}, {
 		tableName: 'venues',
@@ -99,6 +106,7 @@ module.exports = function(sequelize, DataTypes) {
 				'county',
 				'postcode',
 				'mapLink',
+				'imageURL'
 			],
 		}
 	});
