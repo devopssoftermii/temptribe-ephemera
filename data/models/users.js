@@ -277,14 +277,14 @@ module.exports = function(sequelize, DataTypes) {
 		users.hasMany(models.userTimesheets, { foreignKey: 'userId', as: 'timesheets' });
 		users.hasMany(models.apiSession);
 		models.userTimesheets.preScope(models);
-		users.addScope('staffShifts', {
+		users.addScope('shifts', {
 			attributes: [],
 			include: [{
-				model: models.userTimesheets.scope('staffConfirmed'),
+				model: models.userTimesheets.scope('staff', 'confirmed'),
 				as: 'timesheets'
 			}]
 		});
-		users.addScope('staffProfile', {
+		users.addScope('profile', {
 			attributes: [
         'id',
         'firstname',

@@ -118,19 +118,19 @@ module.exports = function(sequelize, DataTypes) {
 		tableName: 'clients',
 		timestamps: false,
 		freezeTableName: true,
-		defaultScope: {
-			attributes: [
-				'id',
-				['clientName', 'name'],
-				'status',
-				'lolaComments'
-			],
-		},
 		scopes: {
 			minimal: {
 				attributes: [
 					'id',
 					['clientName', 'name'],
+				],
+			},
+			full: {
+				attributes: [
+					'id',
+					['clientName', 'name'],
+					'status',
+					'lolaComments'
 				],
 			}
 		}

@@ -114,36 +114,26 @@ module.exports = function(sequelize, DataTypes) {
 		events.hasMany(models.eventShifts, { foreignKey: 'eventId' });
 	}
 	events.preScope = function(models) {
-		events.addScope('staffFull', {
-			attributes: [
-				'id',
-				[sequelize.fn('convert', sequelize.literal('DATE'), sequelize.col('eventDate')), 'eventDate'],
-				'comments',
-				'title',
-				'subtitle'
-			],
-			include: [{
-				model: models.venues,
-				as: 'venue'
-			}, {
-				model: models.clients,
-				as: 'client'
-			}]
-		});
-		events.addScope('staffMinimal', {
-			attributes: [
+		events.addScope('staff', function(detail) {
+			var attributes = [
 				'id',
 				[sequelize.fn('convert', sequelize.literal('DATE'), sequelize.col('eventDate')), 'eventDate'],
 				'title',
 				'subtitle'
 			],
-			include: [{
-				model: models.venues.scope('minimal'),
-				as: 'venue'
-			}, {
-				model: models.clients.scope('minimal'),
-				as: 'client'
-			}]
+			if (detail === 'full') {
+				attributes.push('comments');
+			}
+			return {
+				attributes: attributes,
+				include: [{
+					model: models.venues.scope(detail),
+					as: 'venue'
+				}, {
+					model: models.clients.scope(detail),
+					as: 'client'
+				}]
+			}
 		});
 		events.addScope('future', {
 			where: {

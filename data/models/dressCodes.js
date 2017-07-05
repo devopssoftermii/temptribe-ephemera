@@ -40,6 +40,17 @@ module.exports = function(sequelize, DataTypes) {
 				['ShortDescription', 'shortDescription'],
 				'description'
 			]
+		},
+		scopes: {
+			full: {
+				attributes: [
+					['ShortDescription', 'shortDescription'],
+					'description'
+				]
+			},
+			minimal: {
+				attributes: []
+			}
 		}
 	});
 	dressCodes.associate = function(models) {

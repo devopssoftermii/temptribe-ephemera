@@ -81,15 +81,17 @@ module.exports = function(sequelize, DataTypes) {
 	}
 	userTimesheets.preScope = function(models) {
 		models.eventShifts.preScope(models);
-		userTimesheets.addScope('staffConfirmed', {
+		userTimesheets.addScope('staff', {
 			attributes: ['id'],
+			include: [{
+				model: models.eventShifts.scope({ method: ['staff', 'minimal', 'future']}),
+				as: 'shift'
+			}]
+		});
+		userTimesheets.addScope('confirmed', {
 			where: {
 				status: 4
 			},
-			include: [{
-				model: models.eventShifts.scope('staffMinimalFuture'),
-				as: 'shift'
-			}]
 		});
 	}
 	return userTimesheets;

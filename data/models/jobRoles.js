@@ -50,10 +50,18 @@ module.exports = function(sequelize, DataTypes) {
 		tableName: 'jobRoles',
 		timestamps: false,
 		freezeTableName: true,
-		defaultScope: {
-			attributes: [
-				'title'
-			]
+		scopes: {
+			minimal: {
+				attributes: [
+					'title'
+				]
+			},
+			full: {
+				attributes: [
+					'title',
+					'description'
+				]
+			}
 		}
 	});
 	jobRoles.associate = function(models) {

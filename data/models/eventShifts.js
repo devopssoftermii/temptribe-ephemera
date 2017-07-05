@@ -88,28 +88,17 @@ module.exports = function(sequelize, DataTypes) {
 	};
 	eventShifts.preScope = function(models) {
 		models.events.preScope(models);
-		['Future', 'Past'].forEach(function(timeScope) {
-			eventShifts.addScope('staffFull' + timeScope, {
-				include: [{
-					model: models.events.scope(['staffFull', timeScope.toLowerCase()]),
-					as: 'event'
-				}, {
-					model: models.dressCodes,
-					as: 'dressCode'
-				}, {
-					model: models.jobRoles,
-					as: 'jobRole'
-				}],
-			});
-			eventShifts.addScope('staffMinimal' + timeScope, {
-				include: [{
-					model: models.events.scope(['staffMinimal', timeScope.toLowerCase()]),
-					as: 'event'
-				}, {
-					model: models.jobRoles,
-					as: 'jobRole'
-				}],
-			});
+		eventShifts.addScope('staff', function(time, detail) {
+			include: [{
+				model: models.events.scope([{ method: ['staff', detail]}, time]),
+				as: 'event'
+			}, {
+				model: models.dressCodes.scope(detail),
+				as: 'dressCode'
+			}, {
+				model: models.jobRoles.scope(detail),
+				as: 'jobRole'
+			}],
 		});
 	}
 	return eventShifts;

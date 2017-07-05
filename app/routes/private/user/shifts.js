@@ -4,7 +4,7 @@ module.exports = function(router) {
   router.get('/shifts', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
-    models.users.scope('staffShifts').findById(req.user.id).then(function(result) {
+    models.users.scope('shifts').findById(req.user.id).then(function(result) {
       if (result) {
         res.json(result.timesheets.map(function(timesheet) {
           return timesheet.shift;
