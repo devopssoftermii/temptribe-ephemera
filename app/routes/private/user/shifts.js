@@ -13,7 +13,7 @@ module.exports = function(router) {
         res.json([]);
       }
     }).catch(function(err) {
-      res.status(500).json(null);
+      res.status(500).json(process.env.NODE_ENV === 'development'? err: null);
     });
   });
 }

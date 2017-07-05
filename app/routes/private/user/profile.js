@@ -5,7 +5,7 @@ module.exports = function(router) {
     models.users.scope('staffProfile').findById(req.user.id).then(function(result) {
       res.json(result);
     }).catch(function(err) {
-      res.status(500).json(null);
+      res.status(500).json(process.env.NODE_ENV === 'development'? err: null);
     });
   });
 }
