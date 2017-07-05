@@ -84,7 +84,7 @@ module.exports = function(sequelize, DataTypes) {
 		userTimesheets.addScope('staff', {
 			attributes: ['id'],
 			include: [{
-				model: models.eventShifts.scope({ method: ['staff', 'minimal', 'future']}),
+				model: models.eventShifts.scope({ method: ['staff', 'future', 'minimal']}),
 				as: 'shift'
 			}]
 		});
