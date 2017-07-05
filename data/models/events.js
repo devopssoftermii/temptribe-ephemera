@@ -120,7 +120,7 @@ module.exports = function(sequelize, DataTypes) {
 				[sequelize.fn('convert', sequelize.literal('DATE'), sequelize.col('eventDate')), 'eventDate'],
 				'title',
 				'subtitle'
-			],
+			];
 			if (detail === 'full') {
 				attributes.push('comments');
 			}
