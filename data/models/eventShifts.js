@@ -91,7 +91,7 @@ module.exports = function(sequelize, DataTypes) {
 		['Future', 'Past'].forEach(function(timeScope) {
 			eventShifts.addScope('staffFull' + timeScope, {
 				include: [{
-					model: models.events.scope(['staff', timeScope.toLowerCase()]),
+					model: models.events.scope(['staffFull', timeScope.toLowerCase()]),
 					as: 'event'
 				}, {
 					model: models.dressCodes,
