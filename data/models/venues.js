@@ -96,19 +96,6 @@ module.exports = function(sequelize, DataTypes) {
 		tableName: 'venues',
 		timestamps: false,
 		freezeTableName: true,
-		defaultScope: {
-			attributes: [
-				'id',
-				'name',
-				'address1',
-				'address2',
-				'town',
-				'county',
-				'postcode',
-				'mapLink',
-				'imageURL'
-			],
-		},
 		scopes: {
 			minimal: {
 				attributes: [
@@ -116,7 +103,20 @@ module.exports = function(sequelize, DataTypes) {
 					'name',
 					'imageURL'
 				],
-			}
+			},
+			full: {
+				attributes: [
+					'id',
+					'name',
+					'address1',
+					'address2',
+					'town',
+					'county',
+					'postcode',
+					'mapLink',
+					'imageURL'
+				],
+			},
 		}
 	});
 	venues.associate = function(models) {
