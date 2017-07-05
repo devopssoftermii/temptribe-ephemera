@@ -10,7 +10,7 @@ module.exports = function(router) {
       if (result) {
         return result;
       }
-      return models.eventShifts.scope('staffMinimalFuture').findAndCountAll().then(function(result) {
+      return models.eventShifts.scope({ method: ['staff', 'future', 'minimal']}).findAndCountAll().then(function(result) {
         var shiftList = {
           total: result.count,
           shifts: result.rows.sort(eventHelpers.sortByShift)
