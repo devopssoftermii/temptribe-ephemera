@@ -68,17 +68,17 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: true
 		},
 		duration: {
-			type: DataTypes.VIRTUAL,
+			type: DataTypes.VIRTUAL(DataTypes.FLOAT, ['originalStartTime', 'originalFinishTime']),
 			allowNull: false,
 			get() {
-				return (moment(this.getDataValue('originalFinishTime')).diff(this.getDataValue('originalStartTime'), 'hours', true) + 24) % 24;
+				return (moment(this.get('originalFinishTime')).diff(this.get('originalStartTime'), 'hours', true) + 24) % 24;
 			}
 		},
 		estimatedPay: {
-			type: DataTypes.VIRTUAL,
+			type: DataTypes.VIRTUAL(DataTypes.INTEGER, ['duration', 'hourlyRate']),
 			allowNull: false,
 			get() {
-				return Math.round(this.getDataValue('duration') * this.getDataValue('hourlyRate'));
+				return Math.round(this.get('duration') * this.get('hourlyRate'));
 			}
 		}
 	}, {
@@ -100,8 +100,6 @@ module.exports = function(sequelize, DataTypes) {
 					'id',
 					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108), 'startTime'],
 					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalFinishTime'), 108), 'endTime'],
-					'originalStartTime',
-					'originalFinishTime',
 					'duration',
 					'hourlyRate',
 					'estimatedPay'

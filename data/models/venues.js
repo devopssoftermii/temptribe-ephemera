@@ -89,7 +89,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.VIRTUAL,
 			allowNull: false,
 			get() {
-				return `/images/venuePhotos/${this.getDataValue('id')}.jpg`;
+				return `/images/venuePhotos/${this.get('id')}.jpg`;
 			}
 		}
 	}, {
