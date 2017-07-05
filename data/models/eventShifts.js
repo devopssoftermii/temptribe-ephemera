@@ -89,16 +89,18 @@ module.exports = function(sequelize, DataTypes) {
 	eventShifts.preScope = function(models) {
 		models.events.preScope(models);
 		eventShifts.addScope('staff', function(time, detail) {
-			include: [{
-				model: models.events.scope([{ method: ['staff', detail]}, time]),
-				as: 'event'
-			}, {
-				model: models.dressCodes.scope(detail),
-				as: 'dressCode'
-			}, {
-				model: models.jobRoles.scope(detail),
-				as: 'jobRole'
-			}],
+			return {
+				include: [{
+					model: models.events.scope([{ method: ['staff', detail]}, time]),
+					as: 'event'
+				}, {
+					model: models.dressCodes.scope(detail),
+					as: 'dressCode'
+				}, {
+					model: models.jobRoles.scope(detail),
+					as: 'jobRole'
+				}],
+			}
 		});
 	}
 	return eventShifts;
