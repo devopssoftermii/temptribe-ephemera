@@ -100,6 +100,8 @@ module.exports = function(sequelize, DataTypes) {
 					'id',
 					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108), 'startTime'],
 					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalFinishTime'), 108), 'endTime'],
+					'originalStartTime',
+					'originalFinishTime',
 					'duration',
 					'hourlyRate',
 					'estimatedPay'
