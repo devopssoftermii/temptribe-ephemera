@@ -71,7 +71,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.VIRTUAL,
 			allowNull: false,
 			get() {
-				return (moment(this.getDataValue('originalStartTime')).diff(this.getDataValue('originalFinishTime'), 'hours', true) + 24) % 24;
+				return (moment(this.getDataValue('originalFinishTime')).diff(this.getDataValue('originalStartTime'), 'hours', true) + 24) % 24;
 			}
 		},
 		estimatedPay: {
