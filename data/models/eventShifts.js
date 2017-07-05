@@ -1,5 +1,7 @@
 /* jshint indent: 1 */
 
+const moment = require('moment');
+
 module.exports = function(sequelize, DataTypes) {
 	var eventShifts = sequelize.define('eventShifts', {
 		id: {
@@ -64,6 +66,20 @@ module.exports = function(sequelize, DataTypes) {
 		Gender: {
 			type: DataTypes.STRING,
 			allowNull: true
+		},
+		duration: {
+			type: DataTypes.VIRTUAL,
+			allowNull: false,
+			get() {
+				return moment(this.getDataValue('originalStartTime')).diff(this.getDataValue('originalFinishTime'), 'hours', true) % 24;
+			}
+		},
+		estimatedPay: {
+			type: DataTypes.VIRTUAL,
+			allowNull: false,
+			get() {
+				return Math.round(this.getDataValue('duration') * this.getDataValue('hourlyRate'));
+			}
 		}
 	}, {
 		tableName: 'eventShifts',
@@ -84,6 +100,7 @@ module.exports = function(sequelize, DataTypes) {
 					'id',
 					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108), 'startTime'],
 					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalFinishTime'), 108), 'endTime'],
+					'duration',
 					'hourlyRate',
 					'estimatedPay'
 				],
