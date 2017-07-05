@@ -87,7 +87,7 @@ module.exports = function(sequelize, DataTypes) {
 				status: 4
 			},
 			include: [{
-				model: models.eventShifts.scope('staffFuture'),
+				model: models.eventShifts.scope('staffFutureMinimal'),
 				as: 'shift'
 			}]
 		});

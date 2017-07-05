@@ -119,7 +119,20 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true,
 		defaultScope: {
-			attributes: [['clientName', 'name']],
+			attributes: [
+				'id',
+				['clientName', 'name'],
+				'status',
+				'lolaComments'
+			],
+		},
+		scopes: {
+			minimal: {
+				attributes: [
+					'id',
+					['clientName', 'name'],
+				],
+			}
 		}
 	});
 	clients.associate = function(models) {

@@ -114,7 +114,7 @@ module.exports = function(sequelize, DataTypes) {
 		events.hasMany(models.eventShifts, { foreignKey: 'eventId' });
 	}
 	events.preScope = function(models) {
-		events.addScope('staff', {
+		events.addScope('staffFull', {
 			attributes: [
 				'id',
 				[sequelize.fn('convert', sequelize.literal('DATE'), sequelize.col('eventDate')), 'eventDate'],
@@ -127,6 +127,21 @@ module.exports = function(sequelize, DataTypes) {
 				as: 'venue'
 			}, {
 				model: models.clients,
+				as: 'client'
+			}]
+		});
+		events.addScope('staffMinimal', {
+			attributes: [
+				'id',
+				[sequelize.fn('convert', sequelize.literal('DATE'), sequelize.col('eventDate')), 'eventDate'],
+				'title',
+				'subtitle'
+			],
+			include: [{
+				model: models.venues.scope('minimal'),
+				as: 'venue'
+			}, {
+				model: models.clients.scope('minimal'),
 				as: 'client'
 			}]
 		});

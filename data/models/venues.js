@@ -108,6 +108,15 @@ module.exports = function(sequelize, DataTypes) {
 				'mapLink',
 				'imageURL'
 			],
+		},
+		scopes: {
+			minimal: {
+				attributes: [
+					'id',
+					'name',
+					'imageURL'
+				],
+			}
 		}
 	});
 	venues.associate = function(models) {
