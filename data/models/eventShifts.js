@@ -69,16 +69,6 @@ module.exports = function(sequelize, DataTypes) {
 		tableName: 'eventShifts',
 		timestamps: false,
 		freezeTableName: true,
-		defaultScope: {
-			attributes: [
-				'id',
-				[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108), 'startTime'],
-				[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalFinishTime'), 108), 'endTime'],
-				'hourlyRate',
-				'estimatedPay'
-			],
-			required: true
-		}
 	});
 	eventShifts.associate = function(models) {
 		eventShifts.belongsTo(models.events, { as: 'event' });
@@ -90,6 +80,14 @@ module.exports = function(sequelize, DataTypes) {
 		models.events.preScope(models);
 		eventShifts.addScope('staff', function(time, detail) {
 			return {
+				attributes: [
+					'id',
+					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108), 'startTime'],
+					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalFinishTime'), 108), 'endTime'],
+					'hourlyRate',
+					'estimatedPay'
+				],
+				required: true,
 				include: [{
 					model: models.events.scope([{ method: ['staff', detail]}, time]),
 					as: 'event'
