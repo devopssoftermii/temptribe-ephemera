@@ -1,4 +1,4 @@
-var eventHelpers = require('../../../../util/events');
+var eventHelpers = require('../../../../lib/events');
 
 module.exports = function(router) {
   router.get('/list', function(req, res, next) {
@@ -11,22 +11,14 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope('staffFuture').findAndCountAll().then(function(result) {
-        return Promise.all([result, cache.pset(query, result)]);
-      }).then(function(promises) {
-        return promises[0];
-      });
-    }).then(function(result) {
-      if (result) {
-        res.json({
+        var shiftList = {
           total: result.count,
           shifts: result.rows.sort(eventHelpers.sortByShift)
-        });
-      } else {
-        res.json({
-          total: 0,
-          shifts: []
-        });
-      }
+        };
+        return cache.pset(query, shiftList);
+      });
+    }).then(function(shiftList) {
+      res.json(shiftList);
     }).catch(function(err) {
       res.status(500).json(null);
     });

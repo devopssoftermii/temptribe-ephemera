@@ -1,4 +1,4 @@
-var eventHelpers = require('../../../../util/events');
+var eventHelpers = require('../../../../lib/events');
 
 module.exports = function(router) {
   router.get('/shifts', function(req, res, next) {
