@@ -1,6 +1,8 @@
 const fs    = require('fs'),
       path  = require('path');
 
+const ignoreQueryFilters = ['suit'];
+
 var filters = {};
 
 fs.readdirSync(__dirname).forEach(function(filename) {
@@ -15,6 +17,11 @@ module.exports = function(req, models) {
     key: {},
     scope: {}
   };
+  ignoreQueryFilters.forEach(function(filter) {
+    if (req.query.filters[filter]) {
+      delete req.query.filters[filter];
+    }
+  });
   Object.keys(filters).forEach(function(name) {
     filters[name](req, models, output);
   });
