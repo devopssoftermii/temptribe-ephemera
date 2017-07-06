@@ -11,18 +11,7 @@ module.exports = function(router) {
     }
     var models = req.app.locals.models;
     var sequelize = req.app.locals.sequelize;
-    models.users.findOne({
-      attributes: [
-        'id',
-        'email'
-      ],
-      where: {
-        $and: {
-          email: req.body.email,
-          password: sequelize.fn('dbo.udf_CalculateHash', sequelize.fn('concat', req.body.password, sequelize.col('salt')))
-        }
-      }
-    }).then(function(result) {
+    models.users.scope({ method: ['login', req.body] }).findOne().then(function(result) {
       if (!result) {
         res.status(401).json({
           success: false,

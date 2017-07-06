@@ -268,7 +268,7 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'users',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
 	});
 	users.associate = function(models) {
 		users.belongsTo(models.venues, { as: 'venue' });
@@ -305,6 +305,24 @@ module.exports = function(sequelize, DataTypes) {
         as: 'photos',
       }]
 		});
+		users.addScope('login', function(params) {
+			return {
+				attributes: [
+					'id',
+					'email'
+				],
+				where: {
+					$and: {
+						email: params.email,
+						password: sequelize.fn('dbo.udf_CalculateHash', sequelize.fn('concat', params.password, sequelize.col('salt')))
+					}
+				},
+				include: [{
+					models.suitabilityTypes,
+					as: 'suitabilityTypes'
+				}]
+			};
+    });
 	}
 	return users;
 };
