@@ -8,7 +8,14 @@ module.exports = function(req, models, output) {
   }
   output.scope.include.push({
     model: models.suitabilityTypes,
-    required: true,
+    through: {
+      where: {
+        SuitabilityTypeId: {
+          $in: typeList
+        }
+      },
+    },
+    required: true
   });
 
 }
