@@ -92,7 +92,6 @@ module.exports = function(sequelize, DataTypes) {
 		eventShifts.belongsTo(models.dressCodes, { as: 'dressCode' });
 		eventShifts.hasMany(models.userTimesheets, { foreignKey: 'eventShiftId', as: 'timesheets' });
 		eventShifts.belongsToMany(models.suitabilityTypes, {
-			as: 'suitabilityTypes',
 			through: models.eventShiftSuitabilityTypes,
 			foreignKey: 'EventShiftId',
 			otherKey: 'SuitabilityTypeId'

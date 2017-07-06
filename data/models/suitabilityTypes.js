@@ -44,13 +44,11 @@ module.exports = function(sequelize, DataTypes) {
 	});
 	suitabilityTypes.associate = function(models) {
 		suitabilityTypes.belongsToMany(models.users, {
-			as: 'users',
 			through: models.userSuitabilityTypes,
 			foreignKey: 'SuitabilityTypeID',
 			otherKey: 'UserID'
 		});
 		suitabilityTypes.belongsToMany(models.eventShifts, {
-			as: 'eventShifts',
 			through: models.eventShiftSuitabilityTypes,
 			foreignKey: 'SuitabilityTypeId',
 			otherKey: 'EventShiftId'

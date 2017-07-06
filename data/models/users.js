@@ -277,7 +277,6 @@ module.exports = function(sequelize, DataTypes) {
 		users.hasMany(models.userTimesheets, { foreignKey: 'userId', as: 'timesheets' });
 		users.hasMany(models.apiSession);
 		users.belongsToMany(models.suitabilityTypes, {
-			as: 'suitabilityTypes',
 			through: models.userSuitabilityTypes,
 			foreignKey: 'UserID',
 			otherKey: 'SuitabilityTypeID'
