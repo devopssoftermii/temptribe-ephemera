@@ -19,6 +19,8 @@ module.exports = function(router) {
           shifts: result.rows.sort(eventHelpers.sortByShift)
         };
         return cache.pset(filters.key, shiftList);
+      }).catch(function(err) {
+        throw err;
       });
     }).then(function(shiftList) {
       res.json(shiftList);
