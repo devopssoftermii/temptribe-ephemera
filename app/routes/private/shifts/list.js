@@ -16,8 +16,8 @@ module.exports = function(router) {
         method: ['staff', 'future', 'minimal']
       }]).findAndCountAll(filters.scope).then(function(result) {
         var shiftList = {
-          total: result.count,
-          shifts: eventHelpers.processShifts(result.rows)
+          total: result.length,
+          shifts: result.sort(eventHelpers.sortByShift)
         };
         return cache.pset(key, shiftList);
       }).catch(function(err) {
