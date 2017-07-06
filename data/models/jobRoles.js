@@ -49,7 +49,20 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'jobRoles',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
+		scopes: {
+			minimal: {
+				attributes: [
+					'title'
+				]
+			},
+			full: {
+				attributes: [
+					'title',
+					'description'
+				]
+			}
+		}
 	});
 	jobRoles.associate = function(models) {
 		jobRoles.hasMany(models.eventShifts, { foreignKey: 'jobRoleId' });

@@ -8,12 +8,12 @@ var express = require('express'),
     logging = require('./middleware/logging');
 
 app.locals = Object.assign({}, app.locals, {
-  logging: {
-    sequelize: false
-  },
   sessionBlacklist: cache({
     stdTTL: parseInt(process.env.JWT_TTL, 10)
-  })
+  }),
+  shiftlistCache: cache({
+    stdTTL: parseInt(process.env.SHIFTLIST_CACHE_TTL, 10)
+  }),
 });
 
 // Initialise logging middleware

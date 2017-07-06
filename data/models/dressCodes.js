@@ -34,7 +34,24 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'dressCodes',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
+		defaultScope: {
+			attributes: [
+				['ShortDescription', 'shortDescription'],
+				'description'
+			]
+		},
+		scopes: {
+			full: {
+				attributes: [
+					['ShortDescription', 'shortDescription'],
+					'description'
+				]
+			},
+			minimal: {
+				attributes: []
+			}
+		}
 	});
 	dressCodes.associate = function(models) {
 		dressCodes.hasMany(models.eventShifts, { foreignKey: 'dressCodeId' });

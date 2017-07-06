@@ -113,5 +113,42 @@ module.exports = function(sequelize, DataTypes) {
 		events.belongsTo(models.venues, { as: 'venue' });
 		events.hasMany(models.eventShifts, { foreignKey: 'eventId' });
 	}
+	events.preScope = function(models) {
+		events.addScope('staff', function(detail) {
+			var attributes = [
+				'id',
+				[sequelize.fn('convert', sequelize.literal('DATE'), sequelize.col('eventDate')), 'eventDate'],
+				'title',
+				'subtitle'
+			];
+			if (detail === 'full') {
+				attributes.push('comments');
+			}
+			return {
+				attributes: attributes,
+				include: [{
+					model: models.venues.scope(detail),
+					as: 'venue'
+				}, {
+					model: models.clients.scope(detail),
+					as: 'client'
+				}]
+			}
+		});
+		events.addScope('future', {
+			where: {
+				eventDate: {
+					$gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
+				}
+			},
+		});
+		events.addScope('past', {
+			where: {
+				eventDate: {
+					$lte: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
+				}
+			},
+		});
+	}
 	return events;
 };

@@ -38,6 +38,12 @@ module.exports = function(sequelize, DataTypes) {
 	});
 	userPhotos.associate = function(models) {
 		userPhotos.belongsTo(models.users, { as: 'User' });
+		userPhotos.addScope('mainPhoto', {
+			attributes: [['FileName', 'filename']],
+			where: {
+				IsMainImage: 1
+			}
+		});
 	}
 	return userPhotos;
 };

@@ -268,7 +268,7 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'users',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
 	});
 	users.associate = function(models) {
 		users.belongsTo(models.venues, { as: 'venue' });
@@ -276,6 +276,48 @@ module.exports = function(sequelize, DataTypes) {
 		users.hasMany(models.userPhotos, { foreignKey: 'UserId', as: 'photos' });
 		users.hasMany(models.userTimesheets, { foreignKey: 'userId', as: 'timesheets' });
 		users.hasMany(models.apiSession);
+		users.belongsToMany(models.suitabilityTypes, {
+			through: models.userSuitabilityTypes,
+			foreignKey: 'UserID',
+			otherKey: 'SuitabilityTypeID'
+		});
+		models.userTimesheets.preScope(models);
+		users.addScope('shifts', function(status) {
+			return {
+				attributes: [],
+				include: [{
+					model: models.userTimesheets.scope('staff', status),
+					as: 'timesheets'
+				}]
+			};
+		});
+		users.addScope('profile', {
+			attributes: [
+        'id',
+        'firstname',
+        'surname',
+        'email',
+        'mobile',
+      ],
+      include: [{
+        model: models.userPhotos,
+        as: 'photos',
+      }]
+		});
+		users.addScope('login', function(params) {
+			return {
+				attributes: [
+					'id',
+					'email'
+				],
+				where: {
+					$and: {
+						email: params.email,
+						password: sequelize.fn('dbo.udf_CalculateHash', sequelize.fn('concat', params.password, sequelize.col('salt')))
+					}
+				},
+			};
+    });
 	}
 	return users;
 };

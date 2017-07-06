@@ -11,37 +11,28 @@ module.exports = function(router) {
     }
     var models = req.app.locals.models;
     var sequelize = req.app.locals.sequelize;
-    models.users.findOne({
-      attributes: [
-        'id',
-        'email'
-      ],
-      where: {
-        $and: {
-          email: req.body.email,
-          password: sequelize.fn('dbo.udf_CalculateHash', sequelize.fn('concat', req.body.password, sequelize.col('salt')))
-        }
-      }
-    }).then(function(result) {
-      if (!result) {
+    models.users.scope({ method: ['login', req.body] }).findOne().then(function(user) {
+      if (!user) {
         res.status(401).json({
           success: false,
           error: 'Unknown user or password'
         });
       } else {
-        return session.create(result, models).then(function(sessionResult) {
-          res.json(sessionResult);
-        }).catch(function(err) {
-          res.status(500).json({
-            error: true,
-            message: err.message
-          });
-        });
+        return Promise.all([user.get({ plain: true }), user.getSuitabilityTypes()]);
       }
+    }).then(function(results) {
+      user = Object.assign(results[0], {
+        suitabilityTypes: results[1].map(function(type) {
+            return type.get({ plain: true });
+        })
+      });
+      return session.create(user, models);
+    }).then(function(sessionResult) {
+      res.json(sessionResult);
     }).catch(function(err) {
-      res.status(401).json({
+      res.status(500).json(process.env.NODE_ENV === 'development'? err: {
         success: false,
-        error: 'Unknown user or password'
+        error: 'Internal server error'
       });
     });
   });

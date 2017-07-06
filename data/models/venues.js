@@ -84,11 +84,40 @@ module.exports = function(sequelize, DataTypes) {
 		Longitude: {
 			type: DataTypes.DECIMAL,
 			allowNull: true
+		},
+		imageURL: {
+			type: DataTypes.VIRTUAL,
+			allowNull: false,
+			get() {
+				return `/images/venuePhotos/${this.get('id')}.jpg`;
+			}
 		}
 	}, {
 		tableName: 'venues',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
+		scopes: {
+			minimal: {
+				attributes: [
+					'id',
+					'name',
+					'imageURL'
+				],
+			},
+			full: {
+				attributes: [
+					'id',
+					'name',
+					'address1',
+					'address2',
+					'town',
+					'county',
+					'postcode',
+					'mapLink',
+					'imageURL'
+				],
+			},
+		}
 	});
 	venues.associate = function(models) {
 		venues.hasMany(models.events, { foreignKey: 'venueId' });

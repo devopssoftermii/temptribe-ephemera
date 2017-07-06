@@ -13,9 +13,9 @@ module.exports = function(router) {
     });
   });
   router.use(function(err, req, res, next) {
-    res.status(401).json({
+    res.status(401).json(process.env.NODE_ENV === 'development'? err: {
       error: true,
-      message: err.message
+      message: 'Authentication failed'
     }).end();
   });
   router.use(function(req, res, next) {

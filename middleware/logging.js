@@ -12,14 +12,6 @@ if (process.env.SENTRY_DSN) {
   });
 }
 
-var options = {
-  sequelize: function(message) {
-    if (!process.env.DB_VERBOSE === 'true') {
-      console.log('>>> DB: ' + message);
-    }
-  }
-};
-
 module.exports = {
   before: function(app) {
     // Sentry logging
@@ -42,10 +34,6 @@ module.exports = {
     if (process.env.NODE_ENV === 'development') {
       app.use(morgan('dev'));
     }
-
-    app.locals = Object.assign({}, app.locals, {
-      logging: options
-    });
   },
   after: function(app) {
     // Sentry logging
