@@ -21,9 +21,7 @@ module.exports = function(router) {
         return Promise.all(user, user.getSuitabilityTypes());
       }
     }).then(function(results) {
-      user = Object.assign({}, results[0].get({
-        plain: true
-      }), {
+      user = Object.assign({}, results[0], {
         suitabilityTypes: results[1]
       });
       return session.create(user, models);
