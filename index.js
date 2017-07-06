@@ -8,9 +8,6 @@ var express = require('express'),
     logging = require('./middleware/logging');
 
 app.locals = Object.assign({}, app.locals, {
-  logging: {
-    sequelize: process.env.NODE_ENV === 'development'
-  },
   sessionBlacklist: cache({
     stdTTL: parseInt(process.env.JWT_TTL, 10)
   }),
