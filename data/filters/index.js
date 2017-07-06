@@ -13,18 +13,10 @@ fs.readdirSync(__dirname).forEach(function(filename) {
 module.exports = function(req, models) {
   var output = {
     key: {},
-    scope: {
-      where: {
-        $and: []
-      }
-    }
+    scope: {}
   };
   Object.keys(filters).forEach(function(name) {
-    var normalized = filters[name](req, models);
-    output.key[name] = normalized.key;
-    if (normalized.scope) {
-      output.scope.where.$and.push(normalized.scope);
-    }
+    filters[name](req, models, output);
   });
   return output;
 }
