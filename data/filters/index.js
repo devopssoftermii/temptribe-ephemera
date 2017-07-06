@@ -1,3 +1,6 @@
+const fs    = require('fs'),
+      path  = require('path');
+
 var filters = {};
 
 fs.readdirSync(__dirname).forEach(function(filename) {
