@@ -319,7 +319,8 @@ module.exports = function(sequelize, DataTypes) {
 				},
 				include: [{
 					model: models.suitabilityTypes,
-					as: 'suitabilityTypes'
+					as: 'suitabilityTypes',
+					separate: true
 				}]
 			};
     });
