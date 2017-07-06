@@ -317,11 +317,6 @@ module.exports = function(sequelize, DataTypes) {
 						password: sequelize.fn('dbo.udf_CalculateHash', sequelize.fn('concat', params.password, sequelize.col('salt')))
 					}
 				},
-				include: [{
-					model: models.suitabilityTypes,
-					as: 'suitabilityTypes',
-					separate: true
-				}]
 			};
     });
 	}
