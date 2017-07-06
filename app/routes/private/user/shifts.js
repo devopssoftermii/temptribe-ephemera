@@ -1,7 +1,7 @@
 var eventHelpers = require('../../../../lib/events');
 
 module.exports = function(router) {
-  router.get('/shifts/:status(\w+)', function(req, res, next) {
+  router.get('/shifts/:status(\\w+)', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     if (['confirmed', 'applied', 'cancelled'].indexOf(req.params.status) === -1) {
