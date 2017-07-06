@@ -23,7 +23,10 @@ module.exports = function(router) {
     }).then(function(shiftList) {
       res.json(shiftList);
     }).catch(function(err) {
-      res.status(500).json(process.env.NODE_ENV === 'development'? err: null);
+      res.status(500).json(process.env.NODE_ENV === 'development'? err: {
+        error: true,
+        message: 'Failed to fetch shifts'
+      });
     });
   });
 }
