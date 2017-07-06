@@ -7,7 +7,8 @@ module.exports = function(router) {
     var models = req.app.locals.models;
     var cache = req.app.locals.shiftlistCache;
     var filters = filterQuery(req, models);
-    cache.pget(filters.key).then(function(result) {
+    var key = JSON.stringify(filters.key);
+    cache.pget(key).then(function(result) {
       if (result) {
         return result;
       }
@@ -18,7 +19,7 @@ module.exports = function(router) {
           total: result.count,
           shifts: result.rows.sort(eventHelpers.sortByShift)
         };
-        return cache.pset(filters.key, shiftList);
+        return cache.pset(key, shiftList);
       }).catch(function(err) {
         throw err;
       });
