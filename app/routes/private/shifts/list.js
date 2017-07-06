@@ -15,16 +15,17 @@ module.exports = function(router) {
       return models.eventShifts.scope([{
         method: ['staff', 'future', 'minimal']
       }]).findAll(filters.scope).then(function(result) {
-        var shiftList = {
-          total: result.length,
-          shifts: result.sort(eventHelpers.sortByShift)
+        var shifts = result.sort(eventHelpers.sortByShift);
+        var response = {
+          total: shifts.length,
+          shifts
         };
-        return cache.pset(key, shiftList);
+        return cache.pset(key, response);
       }).catch(function(err) {
         throw err;
       });
-    }).then(function(shiftList) {
-      res.json(shiftList);
+    }).then(function(response) {
+      res.json(response);
     }).catch(function(err) {
       res.status(500).json(process.env.NODE_ENV === 'development'? err: {
         error: true,

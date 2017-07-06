@@ -9,12 +9,16 @@ module.exports = function(router) {
     }
     models.users.scope({ method: ['shifts', req.params.status]}).findById(req.user.id).then(function(result) {
       if (result) {
-        res.json(result.timesheets.map(function(timesheet) {
+        var shifts = result.timesheets.map(function(timesheet) {
           return timesheet.shift;
-        }).sort(eventHelpers.sortByShift));
+        }).sort(eventHelpers.sortByShift);
       } else {
-        res.json([]);
+        shifts = [];
       }
+      res.json({
+        total: shifts.length,
+        shifts
+      });
     }).catch(function(err) {
       res.status(500).json(process.env.NODE_ENV === 'development'? err: {
         error: true,
