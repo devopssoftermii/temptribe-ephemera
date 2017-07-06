@@ -26,10 +26,10 @@ module.exports = function(router) {
         }), {
           suitabilityTypes: results[1]
         });
-        return session.create(user, models).then(function(sessionResult) {
-          res.json(sessionResult);
-        });
+        return session.create(user, models);
       }
+    }).then(function(sessionResult) {
+      res.json(sessionResult);
     }).catch(function(err) {
       res.status(500).json(process.env.NODE_ENV === 'development'? err: {
         success: false,
