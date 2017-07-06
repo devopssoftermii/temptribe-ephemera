@@ -10,7 +10,7 @@ module.exports = function(req, models, output) {
       ID: {
         $in: req.user.suitabilityTypes.map(function(type) {
           return type.id;
-        });
+        })
       }
     }
   });
