@@ -18,7 +18,7 @@ module.exports = function(router) {
           error: 'Unknown user or password'
         });
       } else {
-        return Promise.all(user, user.getSuitabilityTypes());
+        return Promise.all([user, user.getSuitabilityTypes()]);
       }
     }).then(function(results) {
       user = Object.assign({}, results[0], {
