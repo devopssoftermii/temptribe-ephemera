@@ -8,7 +8,7 @@ module.exports = function(app) {
     host: process.env.DB_HOST,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    logging: process.env.NODE_ENV === 'development' && process.env.DB_LOGGING === true? console.log: false
+    logging: process.env.NODE_ENV === 'development' && process.env.DB_VERBOSE === true? console.log: false
   });
 
   var models = {};
