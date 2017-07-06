@@ -90,6 +90,7 @@ module.exports = function(sequelize, DataTypes) {
 					status: 7
 				},
 			},
+			history: {}
 		}
 	});
 	userTimesheets.associate = function(models) {
@@ -98,12 +99,14 @@ module.exports = function(sequelize, DataTypes) {
 	}
 	userTimesheets.preScope = function(models) {
 		models.eventShifts.preScope(models);
-		userTimesheets.addScope('staff', {
-			attributes: ['id'],
-			include: [{
-				model: models.eventShifts.scope({ method: ['staff', 'future', 'minimal']}),
-				as: 'shift'
-			}]
+		userTimesheets.addScope('staff', function(era) {
+			return {
+				attributes: ['id'],
+				include: [{
+					model: models.eventShifts.scope({ method: ['staff', era, 'minimal'] }),
+					as: 'shift'
+				}]
+			}
 		});
 	}
 	return userTimesheets;
