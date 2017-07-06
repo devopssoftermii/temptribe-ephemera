@@ -43,7 +43,12 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	});
 	suitabilityTypes.associate = function(models) {
-		suitabilityTypes.belongsToMany(models.users, { as: 'users', through: 'userSuitabilityTypes', foreignKey: 'UserID' })
+		suitabilityTypes.belongsToMany(models.users, {
+			as: 'users',
+			through: 'userSuitabilityTypes',
+			foreignKey: 'UserID',
+			otherKey: 'SuitabilityTypeID'
+		})
 	}
 	return suitabilityTypes;
 };

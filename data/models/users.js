@@ -276,7 +276,12 @@ module.exports = function(sequelize, DataTypes) {
 		users.hasMany(models.userPhotos, { foreignKey: 'UserId', as: 'photos' });
 		users.hasMany(models.userTimesheets, { foreignKey: 'userId', as: 'timesheets' });
 		users.hasMany(models.apiSession);
-		users.belongsToMany(models.suitabilityTypes, { as: 'suitabilityTypes', through: 'userSuitabilityTypes', foreignKey: 'SuitabilityTypeID' });
+		users.belongsToMany(models.suitabilityTypes, {
+			as: 'suitabilityTypes',
+			through: 'userSuitabilityTypes',
+			foreignKey: 'SuitabilityTypeID',
+			otherKey: 'UserID'
+		});
 		models.userTimesheets.preScope(models);
 		users.addScope('shifts', function(status) {
 			return {
