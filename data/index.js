@@ -8,7 +8,7 @@ module.exports = function(app) {
     host: process.env.DB_HOST,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    logging: app.locals.logging.sequelize
+    logging: app.locals.logging.sequelize? console.log: false
   });
 
   var models = {};

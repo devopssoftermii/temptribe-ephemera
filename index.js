@@ -9,7 +9,7 @@ var express = require('express'),
 
 app.locals = Object.assign({}, app.locals, {
   logging: {
-    sequelize: process.env.NODE_ENV === 'development'? console.log: false
+    sequelize: process.env.NODE_ENV === 'development'
   },
   sessionBlacklist: cache({
     stdTTL: parseInt(process.env.JWT_TTL, 10)
