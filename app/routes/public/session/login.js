@@ -21,9 +21,9 @@ module.exports = function(router) {
         return session.create(result, models).then(function(sessionResult) {
           res.json(sessionResult);
         }).catch(function(err) {
-          res.status(500).json({
-            error: true,
-            message: err.message
+          res.status(500).json(process.env.NODE_ENV === 'development'? err: {
+            success: false,
+            error: 'Internal server error'
           });
         });
       }

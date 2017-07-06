@@ -16,9 +16,9 @@ module.exports = function(router) {
         success: true
       });
     }).catch(function(err) {
-      res.status(500).json({
+      res.status(500).json(process.env.NODE_ENV === 'development'? err: {
         success: false,
-        error: err.message
+        error: 'Internal server error'
       });
     });
   });
