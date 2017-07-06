@@ -6,9 +6,11 @@ module.exports = {
       return {
         success: true,
         userId: user.id,
-        access: jwt.sign(user.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: parseInt(process.env.JWT_TTL, 10) }),
+        access: jwt.sign(user, process.env.JWT_SECRET, { expiresIn: parseInt(process.env.JWT_TTL, 10) }),
         refresh: jwt.sign(session.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: '1y' })
       }
+    }).catch(function(err) {
+      throw err;
     });
   },
   destroy: function(token, models) {
@@ -31,19 +33,23 @@ module.exports = {
           ],
           required: true
         }]
-      }).then(function(result) {
-        if (!result) {
-          throw new Error('Invalid session');
-        }
-        return Promise.all([result.user, result.destroy()]);
-      }).then(function(results) {
-        return results[0];
       });
+    }).then(function(result) {
+      if (!result) {
+        throw new Error('Invalid session');
+      }
+      return Promise.all([result.user, result.destroy()]);
+    }).then(function(results) {
+      return results[0];
+    }).catch(function(err) {
+      throw err;
     });
   },
   refresh: function(token, models) {
     return module.exports.destroy(token, models).then(function(user) {
       return module.exports.create(user, models);
+    }).catch(function(err) {
+      throw err;
     });
   }
 };
