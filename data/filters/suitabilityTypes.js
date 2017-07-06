@@ -5,7 +5,7 @@ module.exports = function(req, models, output) {
   if (req.query.filters && Array.isArray(req.query.filters.suit)) {
     var selectedSet = new Set(req.query.filters.suit);
     typeList = Array.from(new Set(typeList)).filter(function(item) {
-      return selectedSet.has(item);
+      return selectedSet.has(item.toString());
     });
   }
   output.key.suitabilityTypes = typeList.sort();
