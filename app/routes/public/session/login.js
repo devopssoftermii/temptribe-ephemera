@@ -21,13 +21,12 @@ module.exports = function(router) {
         return Promise.all(user, user.getSuitabilityTypes());
       }
     }).then(function(results) {
-        user = Object.assign({}, results[0].get({
-          plain: true
-        }), {
-          suitabilityTypes: results[1]
-        });
-        return session.create(user, models);
-      }
+      user = Object.assign({}, results[0].get({
+        plain: true
+      }), {
+        suitabilityTypes: results[1]
+      });
+      return session.create(user, models);
     }).then(function(sessionResult) {
       res.json(sessionResult);
     }).catch(function(err) {
