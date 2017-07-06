@@ -48,7 +48,13 @@ module.exports = function(sequelize, DataTypes) {
 			through: models.userSuitabilityTypes,
 			foreignKey: 'SuitabilityTypeID',
 			otherKey: 'UserID'
-		})
+		});
+		suitabilityTypes.belongsToMany(models.eventShifts, {
+			as: 'eventShifts',
+			through: models.eventShiftSuitabilityTypes,
+			foreignKey: 'SuitabilityTypeId',
+			otherKey: 'EventShiftId'
+		});
 	}
 	return suitabilityTypes;
 };
