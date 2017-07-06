@@ -276,13 +276,16 @@ module.exports = function(sequelize, DataTypes) {
 		users.hasMany(models.userPhotos, { foreignKey: 'UserId', as: 'photos' });
 		users.hasMany(models.userTimesheets, { foreignKey: 'userId', as: 'timesheets' });
 		users.hasMany(models.apiSession);
+		users.belongsToMany(models.suitabilityTypes, { as: 'suitabilityTypes', through: 'userSuitabilityTypes', foreignKey: 'SuitabilityTypeID' });
 		models.userTimesheets.preScope(models);
-		users.addScope('shifts', {
-			attributes: [],
-			include: [{
-				model: models.userTimesheets.scope('staff', 'confirmed'),
-				as: 'timesheets'
-			}]
+		users.addScope('shifts', function(status) {
+			return {
+				attributes: [],
+				include: [{
+					model: models.userTimesheets.scope('staff', status),
+					as: 'timesheets'
+				}]
+			};
 		});
 		users.addScope('profile', {
 			attributes: [

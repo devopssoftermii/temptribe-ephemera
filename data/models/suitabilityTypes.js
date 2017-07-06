@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('suitabilityTypes', {
+	var suitabilityTypes = sequelize.define('suitabilityTypes', {
 		ID: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -28,6 +28,22 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'suitabilityTypes',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
+		defaultScope: {
+			attributes: [
+				['ID', 'id'],
+				['Description', 'name']
+			],
+			where: {
+				Status: 1
+			},
+			order: [
+				['SortOrder', 'ASC']
+			]
+		}
 	});
+	suitabilityTypes.associate = function(models) {
+		suitabilityTypes.belongsToMany(models.users, { as: 'users', through: 'userSuitabilityTypes', foreignKey: 'UserID' })
+	}
+	return suitabilityTypes;
 };

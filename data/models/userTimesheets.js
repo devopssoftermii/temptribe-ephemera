@@ -73,7 +73,24 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'userTimesheets',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
+		scopes: {
+			confirmed: {
+				where: {
+					status: 4
+				},
+			},
+			applied: {
+				where: {
+					status: 1
+				},
+			},
+			cancelled: {
+				where: {
+					status: 7
+				},
+			},
+		}
 	});
 	userTimesheets.associate = function(models) {
 		userTimesheets.belongsTo(models.users, { as: 'user' });
@@ -87,11 +104,6 @@ module.exports = function(sequelize, DataTypes) {
 				model: models.eventShifts.scope({ method: ['staff', 'future', 'minimal']}),
 				as: 'shift'
 			}]
-		});
-		userTimesheets.addScope('confirmed', {
-			where: {
-				status: 4
-			},
 		});
 	}
 	return userTimesheets;
