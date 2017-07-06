@@ -283,10 +283,11 @@ module.exports = function(sequelize, DataTypes) {
 		});
 		models.userTimesheets.preScope(models);
 		users.addScope('shifts', function(status) {
+			var era = status === 'history'? 'past': 'future';
 			return {
 				attributes: [],
 				include: [{
-					model: models.userTimesheets.scope('staff', status),
+					model: models.userTimesheets.scope([{ method: ['staff', era] }, status]),
 					as: 'timesheets'
 				}]
 			};

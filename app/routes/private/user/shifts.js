@@ -7,7 +7,7 @@ module.exports = function(router) {
     if (['confirmed', 'applied', 'cancelled'].indexOf(req.params.status) === -1) {
       req.params.status = 'confirmed';
     }
-    models.users.scope({ method: ['shifts', req.params.status]}).findById(req.user.id).then(function(result) {
+    models.users.scope({ method: ['shifts', req.params.status] }).findById(req.user.id).then(function(result) {
       if (result) {
         var shifts = result.timesheets.map(function(timesheet) {
           return timesheet.shift;
