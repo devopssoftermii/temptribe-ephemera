@@ -24,6 +24,9 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		tableName: 'userSuitabilityTypes',
 		timestamps: false,
-		freezeTableName: true
+		freezeTableName: true,
+		defaultScope: {
+			attributes: []
+		}
 	});
 };

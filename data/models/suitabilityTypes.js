@@ -45,7 +45,7 @@ module.exports = function(sequelize, DataTypes) {
 	suitabilityTypes.associate = function(models) {
 		suitabilityTypes.belongsToMany(models.users, {
 			as: 'users',
-			through: 'userSuitabilityTypes',
+			through: models.userSuitabilityTypes,
 			foreignKey: 'SuitabilityTypeID',
 			otherKey: 'UserID'
 		})
