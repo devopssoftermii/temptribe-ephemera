@@ -2,11 +2,24 @@ module.exports = function(req, models, output) {
   var typeList = req.user.suitabilityTypes.map(function(type) {
     return type.id;
   });
-  if (req.query.filters && Array.isArray(req.query.filters.suit)) {
-    var selectedSet = new Set(req.query.filters.suit);
-    typeList = Array.from(new Set(typeList)).filter(function(item) {
-      return selectedSet.has(item.toString());
-    });
+  var selectedSet;
+  if (req.query.filters && req.query.filters.suit) {
+      if (Array.isArray(req.query.filters.suit)) {
+          selectedSet = new Set(req.query.filters.suit);
+      } else {
+          var testType = parseInt(req.query.filters.suit, 10);
+          if (!isNaN(testType)) {
+              selectedSet = new Set([testType]);
+          }
+      }
+      if (selectedSet) {
+          var testList = Array.from(new Set(typeList)).filter(function(item) {
+              return selectedSet.has(item.toString());
+          });
+          if (testList.length) {
+              typeList = testList;
+          }
+      }
   }
   output.key.suitabilityTypes = typeList.sort();
   if (!output.scope.include) {

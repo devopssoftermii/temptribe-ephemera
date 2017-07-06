@@ -1,7 +1,7 @@
 const fs    = require('fs'),
       path  = require('path');
 
-const ignoreQueryFilters = ['suit'];
+const ignoreQueryFilters = [];
 
 var filters = {};
 
