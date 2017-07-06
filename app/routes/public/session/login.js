@@ -28,9 +28,9 @@ module.exports = function(router) {
         });
       }
     }).catch(function(err) {
-      res.status(401).json({
+      res.status(500).json(process.env.NODE_ENV === 'development'? err: {
         success: false,
-        error: 'Unknown user or password'
+        error: 'Internal server error'
       });
     });
   });
