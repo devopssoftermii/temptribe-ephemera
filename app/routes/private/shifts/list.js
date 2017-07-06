@@ -6,7 +6,7 @@ module.exports = function(router) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var cache = req.app.locals.shiftlistCache;
-    var filters = filterQuery(req.query);
+    var filters = filterQuery(req, models);
     cache.pget(filters.key).then(function(result) {
       if (result) {
         return result;

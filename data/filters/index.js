@@ -7,7 +7,7 @@ fs.readdirSync(__dirname).forEach(function(filename) {
   }
 });
 
-module.exports = function(query, models) {
+module.exports = function(req, models) {
   var output = {
     key: {},
     scope: {
@@ -17,7 +17,7 @@ module.exports = function(query, models) {
     }
   };
   Object.keys(filters).forEach(function(name) {
-    var normalized = filters[name](query, models);
+    var normalized = filters[name](req, models);
     output.key[name] = normalized.key;
     if (normalized.scope) {
       output.scope.where.$and.push(normalized.scope);
