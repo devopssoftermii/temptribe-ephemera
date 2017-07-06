@@ -1,5 +1,8 @@
 module.exports = function(req, models, output) {
-  output.key.suitabilityTypes = req.user.id;
+  var typeList = req.user.suitabilityTypes.map(function(type) {
+    return type.id;
+  }).sort();
+  output.key.suitabilityTypes = typeList;
   if (!output.scope.include) {
     output.scope.include = [];
   }
@@ -8,9 +11,7 @@ module.exports = function(req, models, output) {
     required: true,
     where: {
       ID: {
-        $in: req.user.suitabilityTypes.map(function(type) {
-          return type.id;
-        })
+        $in: typeList
       }
     }
   });
