@@ -90,6 +90,7 @@ module.exports = function(sequelize, DataTypes) {
 					status: 7
 				},
 			},
+			history: {}
 		}
 	});
 	userTimesheets.associate = function(models) {
