@@ -46,8 +46,8 @@ module.exports = function(sequelize, DataTypes) {
 		suitabilityTypes.belongsToMany(models.users, {
 			as: 'users',
 			through: 'userSuitabilityTypes',
-			foreignKey: 'UserID',
-			otherKey: 'SuitabilityTypeID'
+			foreignKey: 'SuitabilityTypeID',
+			otherKey: 'UserID'
 		})
 	}
 	return suitabilityTypes;

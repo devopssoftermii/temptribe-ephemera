@@ -279,8 +279,8 @@ module.exports = function(sequelize, DataTypes) {
 		users.belongsToMany(models.suitabilityTypes, {
 			as: 'suitabilityTypes',
 			through: 'userSuitabilityTypes',
-			foreignKey: 'SuitabilityTypeID',
-			otherKey: 'UserID'
+			foreignKey: 'UserID',
+			otherKey: 'SuitabilityTypeID'
 		});
 		models.userTimesheets.preScope(models);
 		users.addScope('shifts', function(status) {
