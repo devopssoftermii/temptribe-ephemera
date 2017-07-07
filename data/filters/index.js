@@ -15,7 +15,9 @@ fs.readdirSync(__dirname).forEach(function(filename) {
 module.exports = function(req, models) {
   var output = {
     key: {},
-    scope: {}
+    scope: {
+      distinct: true
+    }
   };
   if ('object' === typeof(req.query.f)) {
     ignoreQueryFilters.forEach(function(filter) {
