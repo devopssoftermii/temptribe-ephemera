@@ -113,13 +113,13 @@ module.exports = function(sequelize, DataTypes) {
 		});
 		userTimesheets.addScope('byUser', function(id) {
 			return {
-				include: {
+				include: [{
 					model: models.users,
 					as: 'user',
 					where: {
 						id
 					},
-				},
+				}],
 				required: true
 			}
 		});
