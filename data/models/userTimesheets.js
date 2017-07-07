@@ -93,7 +93,13 @@ module.exports = function(sequelize, DataTypes) {
 					status: 7
 				},
 			},
-			history: {}
+			history: {
+				where: {
+					$not: {
+						status: 2
+					}
+				}
+			}
 		}
 	});
 	userTimesheets.associate = function(models) {
