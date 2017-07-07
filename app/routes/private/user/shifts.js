@@ -7,18 +7,14 @@ module.exports = function(router) {
     if (['confirmed', 'applied', 'cancelled', 'history'].indexOf(req.params.status) === -1) {
       req.params.status = 'confirmed';
     }
-    models.users.scope({ method: ['shifts', req.params.status] }).findById(req.user.id).then(function(result) {
-      if (result) {
-        var shifts = result.timesheets.map(function(timesheet) {
-          return timesheet.shift;
-        }).sort(eventHelpers.sortByShift(req.params.status === 'history'));
-      } else {
-        shifts = [];
-      }
-      res.json({
-        total: shifts.length,
-        shifts
-      });
+    return models.eventShifts.scope([{
+      method: ['staff', 'future', 'minimal', req.user.id, req.params.status]
+    }]).findAndCountAll(filters.scope).then(function(result) {
+      var response = {
+        total: result.count,
+        shifts: result.rows
+      };
+      res.json(response);
     }).catch(function(err) {
       next(err);
     });

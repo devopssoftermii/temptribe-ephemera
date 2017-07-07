@@ -133,7 +133,7 @@ module.exports = function(sequelize, DataTypes) {
 			}
 			var timesheetScopes = ['refOnly'];
 			if (user) {
-				timesheetScopes.push({ method: ['byUser', userId] });
+				timesheetScopes.push({ method: ['byUser', user] });
 			}
 			if (status) {
 				timesheetScopes.push(status);
