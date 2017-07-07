@@ -122,7 +122,7 @@ module.exports = function(sequelize, DataTypes) {
 				}],
 			};
 			var user, status;
-			for (var i = 1; i > -1; i++) {
+			for (var i = 1; i > -1; i--) {
 				if (args.length > i) {
 					if (['confirmed', 'applied', 'cancelled', 'history'].indexOf(args[i]) !== -1) {
 						status = args[i];
