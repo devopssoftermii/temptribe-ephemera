@@ -76,7 +76,7 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true,
 		scopes: {
 			refOnly: {
-				attributes: [],
+				attributes: ['status'],
 			},
 			confirmed: {
 				where: {
