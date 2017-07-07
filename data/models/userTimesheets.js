@@ -77,7 +77,7 @@ module.exports = function(sequelize, DataTypes) {
 		scopes: {
 			refOnly: {
 				attributes: [],
-			}
+			},
 			confirmed: {
 				where: {
 					status: 4
