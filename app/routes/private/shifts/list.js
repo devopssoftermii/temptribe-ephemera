@@ -12,12 +12,17 @@ module.exports = function(router) {
       if (result) {
         return result;
       }
-      return models.eventShifts.scope([{
-        method: ['staff', 'future', 'minimal']
-      }]).findAll(filters.scope).then(function(result) {
-        var shifts = result.sort(eventHelpers.sortByShift());
+      return Promise.all([
+        models.eventShifts.scope([{
+          method: ['staff', 'future', 'minimal']
+        }]).count(filters.scope),
+        models.eventShifts.scope([{
+          method: ['staff', 'future', 'minimal']
+        }]).findAll(filters.scope),
+      ]).then(function(result) {
+        var shifts = result[1].sort(eventHelpers.sortByShift());
         var response = {
-          total: shifts.length,
+          total: result[0],
           shifts
         };
         return cache.pset(key, response);

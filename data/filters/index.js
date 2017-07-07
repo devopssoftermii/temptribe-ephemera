@@ -17,10 +17,10 @@ module.exports = function(req, models) {
     key: {},
     scope: {}
   };
-  if ('object' === typeof(req.query.filters)) {
+  if ('object' === typeof(req.query.f)) {
     ignoreQueryFilters.forEach(function(filter) {
-      if (req.query.filters[filter]) {
-        delete req.query.filters[filter];
+      if (req.query.f[filter]) {
+        delete req.query.f[filter];
       }
     });
   }
