@@ -27,10 +27,7 @@ module.exports = function(router) {
     }).then(function(response) {
       res.json(response);
     }).catch(function(err) {
-      res.status(500).json(process.env.NODE_ENV === 'development'? err: {
-        error: true,
-        message: 'Failed to fetch shifts'
-      });
+      next(err);
     });
   });
 }

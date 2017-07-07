@@ -30,10 +30,7 @@ module.exports = function(router) {
     }).then(function(sessionResult) {
       res.json(sessionResult);
     }).catch(function(err) {
-      res.status(500).json(process.env.NODE_ENV === 'development'? err: {
-        success: false,
-        error: 'Internal server error'
-      });
+      next(err);
     });
   });
 }
