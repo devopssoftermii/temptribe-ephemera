@@ -144,6 +144,7 @@ module.exports = function(sequelize, DataTypes) {
 					as: 'timesheets',
 				});
 			}
+			return scope;
 		});
 	}
 	return eventShifts;
