@@ -120,6 +120,10 @@ module.exports = function(sequelize, DataTypes) {
 					model: models.jobRoles.scope(detail),
 					as: 'jobRole'
 				}],
+				order: [
+					[models.events, 'eventDate', 'ASC'],
+					['originalStartTime', 'ASC']
+				]
 			};
 			var user, status;
 			for (var i = 1; i > -1; i--) {
