@@ -121,7 +121,10 @@ module.exports = function(sequelize, DataTypes) {
 					as: 'jobRole'
 				}],
 				order: [
-					[models.events, 'eventDate', 'ASC'],
+					[{
+						model: models.events,
+						as: 'event'
+					}, 'eventDate', 'ASC'],
 					['originalStartTime', 'ASC']
 				]
 			};
