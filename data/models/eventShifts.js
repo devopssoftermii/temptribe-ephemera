@@ -120,15 +120,9 @@ module.exports = function(sequelize, DataTypes) {
 					model: models.jobRoles.scope(detail),
 					as: 'jobRole'
 				}],
-				order: [
-					[{
-						model: models.events,
-						as: 'event'
-					}, 'eventDate', 'ASC'],
-					['originalStartTime', 'ASC']
-				]
 			};
 			var user, status;
+			var sortDir = 'ASC';
 			for (var i = 1; i > -1; i--) {
 				if (args.length > i) {
 					if (['confirmed', 'applied', 'cancelled', 'history'].indexOf(args[i]) !== -1) {
@@ -144,6 +138,9 @@ module.exports = function(sequelize, DataTypes) {
 			}
 			if (status) {
 				timesheetScopes.push(status);
+				if (status === 'history') {
+					sortDir = 'DESC';
+				}
 			}
 			if (timesheetScopes.length > 1) {
 				scope.include.push({
@@ -151,6 +148,13 @@ module.exports = function(sequelize, DataTypes) {
 					as: 'timesheets',
 				});
 			}
+			scope.order = [
+				[{
+					model: models.events,
+					as: 'event'
+				}, 'eventDate', sortDir],
+				['originalStartTime', sortDir]
+			];
 			return scope;
 		});
 	}
