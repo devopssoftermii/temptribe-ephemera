@@ -99,7 +99,6 @@ module.exports = function(sequelize, DataTypes) {
 	};
 	eventShifts.preScope = function(models) {
 		models.events.preScope(models);
-		models.userTimesheets.preScope(models);
 		eventShifts.addScope('staff', function(era, detail, userId) {
 			return {
 				attributes: [
