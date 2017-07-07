@@ -114,7 +114,7 @@ module.exports = function(sequelize, DataTypes) {
 		userTimesheets.addScope('byUser', function(id) {
 			return {
 				include: {
-					model: model.users,
+					model: models.users,
 					as: 'user',
 					where: {
 						id
