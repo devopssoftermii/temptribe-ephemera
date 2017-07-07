@@ -117,7 +117,7 @@ module.exports = function(sequelize, DataTypes) {
 					model: models.userTimesheets,
 					as: 'timesheets',
 					include: {
-						model.model.users,
+						model: model.users,
 						as: 'user',
 						where: {
 							id: userId
