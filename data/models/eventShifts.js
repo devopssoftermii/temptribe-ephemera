@@ -114,7 +114,7 @@ module.exports = function(sequelize, DataTypes) {
 					model: models.events.scope([{ method: ['staff', detail]}, era]),
 					as: 'event'
 				}, {
-					model: models.userTimesheets.scope([{ method: ['user', userId] }, 'refOnly']),
+					model: models.userTimesheets.scope([{ method: ['byUser', userId] }, 'refOnly']),
 					as: 'timesheets',
 				}, {
 					model: models.dressCodes.scope(detail),
