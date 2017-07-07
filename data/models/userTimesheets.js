@@ -127,7 +127,6 @@ module.exports = function(sequelize, DataTypes) {
 						id
 					},
 					order: [['updated', 'DESC']],
-					limit: 1
 				}],
 				required: true
 			}
