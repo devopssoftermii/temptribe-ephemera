@@ -99,8 +99,8 @@ module.exports = function(sequelize, DataTypes) {
 	};
 	eventShifts.preScope = function(models) {
 		models.events.preScope(models);
-		eventShifts.addScope('staff', function(era, detail, userId) {
-			return {
+		eventShifts.addScope('staff', function(era, detail, ...args) {
+			var scope = {
 				attributes: [
 					'id',
 					[sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108), 'startTime'],
@@ -114,15 +114,35 @@ module.exports = function(sequelize, DataTypes) {
 					model: models.events.scope([{ method: ['staff', detail]}, era]),
 					as: 'event'
 				}, {
-					model: models.userTimesheets.scope([{ method: ['byUser', userId] }, 'refOnly']),
-					as: 'timesheets',
-				}, {
 					model: models.dressCodes.scope(detail),
 					as: 'dressCode'
 				}, {
 					model: models.jobRoles.scope(detail),
 					as: 'jobRole'
 				}],
+			};
+			var user, status;
+			for (var i = 1; i > -1; i++) {
+				if (args.length > i) {
+					if (['confirmed', 'applied', 'cancelled', 'history'].indexOf(args[i]) !== -1) {
+						status = args[i];
+					} else if ('number' === typeof(args[i])) {
+						user = args[i];
+					}
+				}
+			}
+			var timesheetScopes = ['refOnly'];
+			if (user) {
+				timesheetScopes.push({ method: ['byUser', userId] });
+			}
+			if (status) {
+				timesheetScopes.push(status);
+			}
+			if (timesheetScopes.length > 1) {
+				scope.include.push({
+					model: models.userTimesheets.scope(timesheetScopes),
+					as: 'timesheets',
+				});
 			}
 		});
 	}

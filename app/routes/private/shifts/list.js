@@ -15,10 +15,9 @@ module.exports = function(router) {
       return models.eventShifts.scope([{
         method: ['staff', 'future', 'minimal', req.user.id]
       }]).findAndCountAll(filters.scope).then(function(result) {
-        var shifts = result.rows.sort(eventHelpers.sortByShift());
         var response = {
           total: result.count,
-          shifts
+          shifts: result.rows
         };
         return cache.pset(key, response);
       }).catch(function(err) {
