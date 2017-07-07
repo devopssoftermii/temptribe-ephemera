@@ -9,7 +9,7 @@ module.exports = function(router) {
     }
     return models.eventShifts.scope([{
       method: ['staff', req.params.status === 'history'? 'past': 'future', 'minimal', req.user.id, req.params.status]
-    }]).findAndCountAll(filters.scope).then(function(result) {
+    }]).findAndCountAll().then(function(result) {
       var response = {
         total: result.count,
         shifts: result.rows
