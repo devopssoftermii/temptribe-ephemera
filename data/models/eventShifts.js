@@ -99,6 +99,7 @@ module.exports = function(sequelize, DataTypes) {
 	};
 	eventShifts.preScope = function(models) {
 		models.events.preScope(models);
+		models.userTimesheets.preScope(models);
 		eventShifts.addScope('staff', function(era, detail, userId) {
 			return {
 				attributes: [
@@ -114,16 +115,8 @@ module.exports = function(sequelize, DataTypes) {
 					model: models.events.scope([{ method: ['staff', detail]}, era]),
 					as: 'event'
 				}, {
-					model: models.userTimesheets,
+					model: models.userTimesheets.scope([{ method: ['user', userId] }, 'refOnly']),
 					as: 'timesheets',
-					include: {
-						model: model.users,
-						as: 'user',
-						where: {
-							id: userId
-						},
-					},
-					required: true
 				}, {
 					model: models.dressCodes.scope(detail),
 					as: 'dressCode'

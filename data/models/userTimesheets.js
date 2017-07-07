@@ -75,6 +75,9 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		freezeTableName: true,
 		scopes: {
+			refOnly: {
+				attributes: [],
+			}
 			confirmed: {
 				where: {
 					status: 4
@@ -106,6 +109,18 @@ module.exports = function(sequelize, DataTypes) {
 					model: models.eventShifts.scope({ method: ['staff', era, 'minimal'] }),
 					as: 'shift'
 				}]
+			}
+		});
+		userTimesheets.addScope('byUser', function(id) {
+			return {
+				include: {
+					model: model.users,
+					as: 'user',
+					where: {
+						id
+					},
+				},
+				required: true
 			}
 		});
 	}
