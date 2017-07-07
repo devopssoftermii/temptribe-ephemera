@@ -8,7 +8,7 @@ module.exports = function(router) {
       req.params.status = 'confirmed';
     }
     return models.eventShifts.scope([{
-      method: ['staff', 'future', 'minimal', req.user.id, req.params.status]
+      method: ['staff', req.params.status === 'history'? 'past': 'future', 'minimal', req.user.id, req.params.status]
     }]).findAndCountAll(filters.scope).then(function(result) {
       var response = {
         total: result.count,
