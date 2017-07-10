@@ -2,8 +2,8 @@ module.exports = function(req, models, output) {
   var typeList = req.user.suitabilityTypes.map(function(type) {
     return type.id;
   });
-  if (req.query.f && req.query.f.su) {
-      var filterSuit = req.query.f.su;
+  if (req.body.f && req.body.f.su) {
+      var filterSuit = req.body.f.su;
       if (!Array.isArray(filterSuit)) {
           filterSuit = [filterSuit];
       }

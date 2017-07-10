@@ -2,7 +2,7 @@ var eventHelpers = require('../../../../lib/events');
 var filterQuery = require('../../../../data/filters');
 
 module.exports = function(router) {
-  router.get('/list', function(req, res, next) {
+  router.post('/list', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var cache = req.app.locals.shiftlistCache;
