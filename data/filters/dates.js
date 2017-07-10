@@ -10,7 +10,7 @@ module.exports = function(req, models, output) {
   for (var i = 0; i < 14; i++) {
     if (filterDates.has(i)) {
       datesList.push(i);
-      datesSearch.push(moment().add(i, 'days').toDate());
+      datesSearch.push(moment().add(i, 'days').format('YYYYMMDD'));
     }
   }
   if (!datesList.length) {
