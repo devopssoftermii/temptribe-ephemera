@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 module.exports = function(req, models, output) {
-  if (!req.body.f || req.body.f.d || !Array.isArray(req.body.f.d)) {
+  if (!req.body.f || !req.body.f.d || !Array.isArray(req.body.f.d)) {
     throw new Error('Date selection (f[d]) is a required filter for this endpoint');
   }
   var filterDates = new Set(req.body.f.d);
