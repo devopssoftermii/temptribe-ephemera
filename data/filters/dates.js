@@ -11,7 +11,7 @@ module.exports = function(req, models, output) {
   for (var i = 0; i < 14; i++) {
     if (filterDates.has(i)) {
       datesList.push(i);
-      datesSearch.push(sequelize.fn('convert', sequelize.literal('DATE'), moment().add(i, 'days').format('YYYYMMDD')));
+      datesSearch.push(moment().add(i, 'days').format('YYYYMMDD'));
     }
   }
   if (!datesList.length) {
