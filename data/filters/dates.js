@@ -22,7 +22,7 @@ module.exports = function(req, models, output) {
   }
   output.scope.include.push({
     model: models.events,
-    attributes: [],
+    as: 'event',
     where: {
       eventDate: {
         $in: datesSearch
