@@ -12,9 +12,11 @@ module.exports = function(router) {
       if (result) {
         return result;
       }
-      return models.eventShifts.scope([{
-        method: ['staff', 'future', 'minimal']
-      }]).findAndCountAll(filters.scope).then(function(result) {
+      return models.eventShifts.scope(, {
+        method: ['staff', 'future', 'minimal', filters.scope]
+      }).findAndCountAll({
+        distinct: true
+      }).then(function(result) {
         var response = {
           total: result.count,
           shifts: result.rows

@@ -121,14 +121,16 @@ module.exports = function(sequelize, DataTypes) {
 					as: 'jobRole'
 				}],
 			};
-			var user, status;
+			var user, status, filters;
 			var sortDir = 'ASC';
 			for (var i = 1; i > -1; i--) {
 				if (args.length > i) {
-					if (['confirmed', 'applied', 'cancelled', 'history'].indexOf(args[i]) !== -1) {
+					if ('string' === typeof(args[i]) && ['confirmed', 'applied', 'cancelled', 'history'].indexOf(args[i]) !== -1) {
 						status = args[i];
 					} else if ('number' === typeof(args[i])) {
 						user = args[i];
+					} else if ('object' === typeof(args[i])) {
+						filters = args[i];
 					}
 				}
 			}
