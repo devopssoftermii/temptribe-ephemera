@@ -148,6 +148,7 @@ module.exports = function(sequelize, DataTypes) {
 				Object.keys(filters.include).forEach(function(modelName) {
           var include = filters.include[modelName];
           include.model = models[modelName];
+          include.required = true;
           scope.include.push(include);
         });
 			}
