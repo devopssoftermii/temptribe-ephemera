@@ -16,18 +16,11 @@ module.exports = function(req, models, output) {
       }
   }
   output.key.suitabilityTypes = typeList.sort();
-  if (!output.scope.include) {
-    output.scope.include = [];
-  }
-  output.scope.include.push({
-    model: models.suitabilityTypes,
-    attributes: [],
+  output.scope.include.suitabilityTypes = {
     where: {
       ID: {
         $in: typeList
       }
     },
-    required: true
-  });
-
+  }
 }

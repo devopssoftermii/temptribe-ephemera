@@ -17,18 +17,17 @@ module.exports = function(req, models, output) {
     throw new Error('Date selection (f[d]) is a required filter for this endpoint');
   }
   output.key.dates = datesList;
-  if (!output.scope.include) {
-    output.scope.include = [];
-  }
-  output.scope.include.push({
-    model: models.events,
-    as: 'event',
-    where: {
-      eventDate: {
-        $in: datesSearch
+  if (!output.scope.include.events) {
+    output.scope.include.events = {
+      as: 'event',
+      where: {
+        $and: []
       }
-    },
-    required: true
+    };
+  }
+  output.scope.include.events.where.$and.push({
+    eventDate: {
+      $in: datesSearch
+    }
   });
-
 }

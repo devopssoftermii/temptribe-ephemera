@@ -144,6 +144,13 @@ module.exports = function(sequelize, DataTypes) {
 					sortDir = 'DESC';
 				}
 			}
+			if (filters) {
+				Object.keys(filters.include).forEach(function(modelName) {
+          var include = filters.include[modelName];
+          include.model = models[modelName];
+          scope.include.push(include);
+        });
+			}
 			if (timesheetScopes.length > 1) {
 				scope.include.push({
 					model: models.userTimesheets.scope(timesheetScopes),
