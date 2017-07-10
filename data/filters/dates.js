@@ -8,7 +8,7 @@ module.exports = function(req, models, output) {
   var datesList = [];
   var datesSearch = [];
   for (var i = 0; i < 14; i++) {
-    if (filterDates.has(i.toString())) {
+    if (filterDates.has(i)) {
       datesList.add(i);
       datesSearch.add(moment().add(i, 'days').toDate());
     }
