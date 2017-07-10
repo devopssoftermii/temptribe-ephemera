@@ -4,13 +4,14 @@ module.exports = function(req, models, output) {
   if (!req.body.f || !req.body.f.d || !Array.isArray(req.body.f.d)) {
     throw new Error('Date selection (f[d]) is a required filter for this endpoint');
   }
+  var sequelize = req.app.locals.sequelize;
   var filterDates = new Set(req.body.f.d);
   var datesList = [];
   var datesSearch = [];
   for (var i = 0; i < 14; i++) {
     if (filterDates.has(i)) {
       datesList.push(i);
-      datesSearch.push(moment().add(i, 'days').format('YYYYMMDD'));
+      datesSearch.push(sequelize.fn('convert', sequelize.literal('DATE'), moment().add(i, 'days').format('YYYYMMDD')));
     }
   }
   if (!datesList.length) {
