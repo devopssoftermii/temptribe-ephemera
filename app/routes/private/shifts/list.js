@@ -18,12 +18,14 @@ module.exports = function(router) {
       if (result) {
         return result;
       }
+      var findTerms = {
+        distinct: true,
+        col: 'eventShifts.id',
+        limit: process.env.SHIFTLIST_PAGE_SIZE
+      };
       return models.eventShifts.scope({
         method: ['staff', 'future', req.params.detail, filters.scope]
-      }).findAndCountAll({
-        distinct: true,
-        col: 'eventShifts.id'
-      }).then(function(result) {
+      }).findAndCountAll(findTerms).then(function(result) {
         var response = {
           total: result.count,
           shifts: result.rows.map(function(shift) {
