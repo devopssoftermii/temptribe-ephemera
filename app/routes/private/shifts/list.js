@@ -8,11 +8,14 @@ module.exports = function(router) {
     var cache = req.app.locals.shiftlistCache;
     var detail = req.params.detail;
     var after = null;
+    var page = null;
     if (['full', 'minimal', 'listonly'].indexOf(detail) === -1) {
       detail = 'minimal';
     }
     if (req.body.after && 'number' === typeof(req.body.after)) {
       after = req.body.after;
+    } else if (req.body.page && 'number' === typeof(req.body.page)) {
+      page = req.body.page;
     }
     var filters = filterQuery(req, models);
     var key = JSON.stringify({
@@ -34,7 +37,7 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(result) {
-      res.json(eventHelpers.formatShiftList(result, detail, after));
+      res.json(eventHelpers.formatShiftList(result, detail, after, page));
     }).catch(function(err) {
       next(err);
     });
