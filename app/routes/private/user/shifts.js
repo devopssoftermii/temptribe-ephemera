@@ -5,7 +5,6 @@ module.exports = function(router) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var after = null;
-    var limit = parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10);
     var status = req.params.status;
     if (['confirmed', 'applied', 'cancelled', 'history'].indexOf(status) === -1) {
       status = 'confirmed';

@@ -8,7 +8,6 @@ module.exports = function(router) {
     var cache = req.app.locals.shiftlistCache;
     var detail = req.params.detail;
     var after = null;
-    var limit = parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10);
     if (['full', 'minimal', 'listonly'].indexOf(detail) === -1) {
       detail = 'minimal';
     }
