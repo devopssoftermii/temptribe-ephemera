@@ -39,7 +39,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       order: [
         ['SortOrder', 'ASC']
-      ]
+      ],
     }
   });
   suitabilityTypes.associate = function (models) {

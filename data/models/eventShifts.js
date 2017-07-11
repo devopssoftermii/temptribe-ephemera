@@ -105,8 +105,8 @@ module.exports = function (sequelize, DataTypes) {
       .events
       .preScope(models);
     eventShifts.addScope('staff', function (era, detail, ...args) {
-      var include = [
-        {
+      var include = {
+        events: {
           model: models
             .events
             .scope([
@@ -116,13 +116,18 @@ module.exports = function (sequelize, DataTypes) {
               era
             ]),
           as: 'event'
-        }, {
-          model: models
-            .jobRoles
-            .scope(detail),
-          as: 'jobRole'
-        }
-      ];
+        },
+        suitabilityTypes: {
+          model: models.suitabilityTypes,
+          attributes: [
+            ['ID', 'id'],
+          ],
+          through: {
+            model: models.eventShiftSuitabilityTypes,
+            attributes: []
+          },
+        },
+      };
       var attributes = [
         'id',
         [
@@ -135,19 +140,20 @@ module.exports = function (sequelize, DataTypes) {
         ]
       ];
       if (detail !== 'listonly') {
-        include.push({
+        include.dressCodes = {
           model: models
             .dressCodes
             .scope(detail),
           as: 'dressCode'
-        });
+        };
+        include.jobRoles = {
+          model: models
+            .jobRoles
+            .scope(detail),
+          as: 'jobRole'
+        };
         attributes.push('duration', 'hourlyRate', 'estimatedPay');
       }
-      var scope = {
-        required: true,
-        attributes,
-        include
-      };
       var user,
         status,
         filters;
@@ -179,36 +185,37 @@ module.exports = function (sequelize, DataTypes) {
         Object
           .keys(filters.include)
           .forEach(function (modelName) {
-            var include = filters.include[modelName];
-            include.model = models[modelName];
-            include.required = true;
-            scope
-              .include
-              .push(include);
+            if (include[modelName]) {
+              include[modelName].where = filters.include[modelName].where;
+            }
           });
       }
       if (timesheetScopes.length > 1) {
-        scope
-          .include
-          .push({
-            model: models
-              .userTimesheets
-              .scope(timesheetScopes),
-            as: 'timesheets'
-          });
+        include.userTimesheets = {
+          model: models
+            .userTimesheets
+            .scope(timesheetScopes),
+          as: 'timesheets'
+        };
       }
-      scope.order = [
-        [
-          {
-            model: models.events,
-            as: 'event'
-          },
-          'eventDate',
-          sortDir
-        ],
-        ['originalStartTime', sortDir]
-      ];
-      return scope;
+      return {
+        required: true,
+        attributes,
+        include: Object.keys(include).map(function(key) {
+          return include[key];
+        }),
+        order: [
+          [
+            {
+              model: models.events,
+              as: 'event'
+            },
+            'eventDate',
+            sortDir
+          ],
+          ['originalStartTime', sortDir]
+        ]
+      };
     });
   }
   return eventShifts;

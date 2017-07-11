@@ -18,8 +18,10 @@ module.exports = function(req, models, output) {
   output.key.suitabilityTypes = typeList.sort();
   output.scope.include.suitabilityTypes = {
     where: {
-      ID: {
-        $in: typeList
+      $and: {
+        ID: {
+          $in: typeList
+        }
       }
     },
   }
