@@ -7,15 +7,16 @@ module.exports = function(router) {
     var models = req.app.locals.models;
     var cache = req.app.locals.shiftlistCache;
     var detail = req.params.detail;
+    var page = 1;
     var after = null;
-    var page = null;
     if (['full', 'minimal', 'listonly'].indexOf(detail) === -1) {
       detail = 'minimal';
     }
-    if (req.body.after && 'number' === typeof(req.body.after)) {
-      after = req.body.after;
-    } else if (req.body.page && 'number' === typeof(req.body.page)) {
+    if (req.body.page && 'number' === typeof(req.body.page)) {
       page = req.body.page;
+    } else if (req.body.after && 'number' === typeof(req.body.after)) {
+      after = req.body.after;
+      page = null;
     }
     var filters = filterQuery(req, models);
     var key = JSON.stringify({
@@ -37,7 +38,7 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(result) {
-      res.json(eventHelpers.formatShiftList(result, detail, after, page));
+      res.json(eventHelpers.formatShiftList(result, detail, page, after));
     }).catch(function(err) {
       next(err);
     });
