@@ -144,7 +144,8 @@ module.exports = function (sequelize, DataTypes) {
           attributes.push('comments');
         }
         return {
-          attributes: attributes,
+          attributes,
+          include
         }
       });
     events.addScope('future', {
