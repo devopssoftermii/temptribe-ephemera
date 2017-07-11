@@ -6,39 +6,47 @@ module.exports = function(router) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var cache = req.app.locals.shiftlistCache;
-    if (['full', 'minimal', 'listonly'].indexOf(req.params.detail) === -1) {
-      req.params.detail = 'minimal';
+    var detail = req.params.detail;
+    var after = null;
+    var limit = parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10);
+    if (['full', 'minimal', 'listonly'].indexOf(detail) === -1) {
+      detail = 'minimal';
+    }
+    if (req.body.after && 'number' === typeof(req.body.after)) {
+      after = req.body.after;
     }
     var filters = filterQuery(req, models);
     var key = JSON.stringify({
-      detail: req.params.detail,
-      filters: filters.key
+      filters: filters.key,
+      detail,
     });
-    var limit = parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10);
     cache.pget(key).then(function(result) {
       if (result) {
         return result;
       }
-      var findTerms = {
-        distinct: true,
-        col: 'eventShifts.id',
-        limit
-      };
       return models.eventShifts.scope({
-        method: ['staff', 'future', req.params.detail, filters.scope]
-      }).findAndCountAll(findTerms).then(function(result) {
-        var response = {
-          total: result.count,
-          shifts: result.rows.map(function(shift) {
-            return eventHelpers.formatShift(shift.get({ plain: true }), req.params.detail);
-          })
-        };
-        return cache.pset(key, response);
+        method: ['staff', 'future', detail, filters.scope]
+      }).findAndCountAll({
+        distinct: true,
+        col: 'eventShifts.id'
+      }).then(function(result) {
+        return cache.pset(key, result);
       }).catch(function(err) {
         throw err;
       });
-    }).then(function(response) {
-      res.json(response);
+    }).then(function(result) {
+      var lowerBound = 0;
+      if (after) {
+        lowerBound = result.rows.findIndex(function(shift) {
+          return shift.id === after;
+        }) + 1;
+      }
+      res.json({
+        total: result.count,
+        shifts: result.rows.slice(lowerBound, limit).map(function(shift) {
+          return eventHelpers.formatShift(shift.get({ plain: true }), detail);
+        })
+      });
     }).catch(function(err) {
       next(err);
     });
