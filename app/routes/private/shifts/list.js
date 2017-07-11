@@ -27,7 +27,7 @@ module.exports = function(router) {
         var response = {
           total: result.count,
           shifts: result.rows.map(function(shift) {
-            return eventHelpers.formatShift(shift, detail);
+            return eventHelpers.formatShift(shift, req.params.detail);
           })
         };
         return cache.pset(key, response);
