@@ -34,7 +34,7 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(result) {
-      res.json(eventHelpers.formatShiftList(result, after));
+      res.json(eventHelpers.formatShiftList(result, detail, after));
     }).catch(function(err) {
       next(err);
     });

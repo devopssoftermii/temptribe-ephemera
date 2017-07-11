@@ -18,7 +18,7 @@ module.exports = function(router) {
       distinct: true,
       col: 'eventShifts.id'
     }).then(function(result) {
-      res.json(eventHelpers.formatShiftList(result, after));
+      res.json(eventHelpers.formatShiftList(result, 'minimal', after));
     }).catch(function(err) {
       next(err);
     });
