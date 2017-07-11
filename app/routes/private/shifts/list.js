@@ -35,18 +35,7 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(result) {
-      var lowerBound = 0;
-      if (after) {
-        lowerBound = result.rows.findIndex(function(shift) {
-          return shift.id === after;
-        }) + 1;
-      }
-      res.json({
-        total: result.count,
-        shifts: result.rows.slice(lowerBound, lowerBound + limit).map(function(shift) {
-          return eventHelpers.formatShift(shift.get({ plain: true }), detail);
-        })
-      });
+      res.json(eventHelpers.formatShiftList(result, after));
     }).catch(function(err) {
       next(err);
     });
