@@ -1,4 +1,5 @@
 var filterQuery = require('../../../../data/filters');
+var eventHelpers = require('../../../../lib/events');
 
 module.exports = function(router) {
   router.post('/list/:detail(\\w+)', function(req, res, next) {
@@ -25,7 +26,9 @@ module.exports = function(router) {
       }).then(function(result) {
         var response = {
           total: result.count,
-          shifts: result.rows
+          shifts: result.rows.map(function(shift) {
+            return eventHelpers.formatShift(shift, detail);
+          })
         };
         return cache.pset(key, response);
       }).catch(function(err) {
