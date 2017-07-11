@@ -14,6 +14,7 @@ module.exports = function(router) {
       detail: req.params.detail,
       filters: filters.key
     });
+    var limit = parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10);
     cache.pget(key).then(function(result) {
       if (result) {
         return result;
@@ -21,7 +22,7 @@ module.exports = function(router) {
       var findTerms = {
         distinct: true,
         col: 'eventShifts.id',
-        limit: process.env.SHIFTLIST_PAGE_SIZE
+        limit
       };
       return models.eventShifts.scope({
         method: ['staff', 'future', req.params.detail, filters.scope]
