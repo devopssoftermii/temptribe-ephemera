@@ -123,15 +123,10 @@ module.exports = function (sequelize, DataTypes) {
             'eventDate'
           ],
         ];
+        var include = [];
         if (detail !== 'listonly') {
           attributes.push('title', 'subtitle');
-        }
-        if (detail === 'full') {
-          attributes.push('comments');
-        }
-        return {
-          attributes: attributes,
-          include: [
+          include = [
             {
               model: models
                 .venues
@@ -143,7 +138,13 @@ module.exports = function (sequelize, DataTypes) {
                 .scope(detail),
               as: 'client'
             }
-          ]
+          ];
+        }
+        if (detail === 'full') {
+          attributes.push('comments');
+        }
+        return {
+          attributes: attributes,
         }
       });
     events.addScope('future', {
