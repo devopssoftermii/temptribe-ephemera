@@ -43,7 +43,7 @@ module.exports = function(router) {
       }
       res.json({
         total: result.count,
-        shifts: result.rows.slice(lowerBound, limit).map(function(shift) {
+        shifts: result.rows.slice(lowerBound, lowerBound + limit).map(function(shift) {
           return eventHelpers.formatShift(shift.get({ plain: true }), detail);
         })
       });
