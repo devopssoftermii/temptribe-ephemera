@@ -13,18 +13,18 @@ router.use('/', function(req, res, next) {
 
 router.use(function(err, req, res, next) {
   if (process.env.NODE_ENV !== 'development') {
-    err = {
+    res.status(500).json({
       error: true,
       message: 'Internal server error'
-    };
+    });
+    next(err);
   } else if (err instanceof Error) {
-    err = {
+    res.status(500).json({
       name: err.name,
       message: err.message,
       stack: err.stack? err.stack: ''
-    }
+    });
   }
-  res.status(500).json(err);
 });
 
 
