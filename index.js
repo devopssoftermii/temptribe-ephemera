@@ -46,7 +46,6 @@ app.use(function(err, req, res, next) {
   if (process.env.NODE_ENV !== 'development') {
     res.status(status).json({
       error: true,
-      name,
       message: status === 500? 'Internal server error': err.message,
       code
     });
