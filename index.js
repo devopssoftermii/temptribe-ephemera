@@ -50,6 +50,8 @@ app.use(function(err, req, res, next) {
       message: err.message,
       stack: err.stack? err.stack: ''
     });
+  } else {
+    res.status(500).json(err);
   }
 });
 
