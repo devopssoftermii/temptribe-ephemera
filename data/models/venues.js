@@ -97,7 +97,7 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false,
     freezeTableName: true,
     scopes: {
-      minimal: {
+      detail: {
         attributes: ['id', 'name', 'imageURL']
       },
       full: {

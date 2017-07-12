@@ -121,7 +121,7 @@ module.exports = function (sequelize, DataTypes) {
             model: models
               .eventShifts
               .scope({
-                method: ['staff', era, 'minimal']
+                method: ['staff', era, 'detail']
               }),
             as: 'shift'
           }

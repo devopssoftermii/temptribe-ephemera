@@ -139,7 +139,7 @@ module.exports = function (sequelize, DataTypes) {
           'endTime'
         ]
       ];
-      if (detail !== 'listonly') {
+      if (detail !== 'metadata') {
         include.dressCodes = {
           model: models
             .dressCodes

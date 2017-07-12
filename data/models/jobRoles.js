@@ -51,10 +51,10 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false,
     freezeTableName: true,
     scopes: {
-      listonly: {
+      metadata: {
         attributes: []
       },
-      minimal: {
+      detail: {
         attributes: ['title']
       },
       full: {

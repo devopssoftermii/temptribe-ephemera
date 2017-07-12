@@ -42,7 +42,7 @@ module.exports = function(sequelize, DataTypes) {
       ]
     },
     scopes: {
-      minimal: {
+      detail: {
         attributes: []
       },
       full: {

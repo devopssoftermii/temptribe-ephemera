@@ -124,7 +124,7 @@ module.exports = function (sequelize, DataTypes) {
           ],
         ];
         var include = [];
-        if (detail !== 'listonly') {
+        if (detail !== 'metadata') {
           attributes.push('title', 'subtitle');
           include = [
             {

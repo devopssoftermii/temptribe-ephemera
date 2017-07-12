@@ -9,8 +9,8 @@ module.exports = function(router) {
     var detail = req.params.detail;
     var page = 1;
     var after = null;
-    if (['full', 'minimal', 'listonly'].indexOf(detail) === -1) {
-      detail = 'minimal';
+    if (['detail', 'metadata'].indexOf(detail) === -1) {
+      detail = 'detail';
     }
     if (req.body.page && 'number' === typeof(req.body.page)) {
       page = req.body.page;
