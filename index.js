@@ -5,7 +5,8 @@ require('dotenv-safe').config();
 var express = require('express'),
     app     = express(),
     cache   = require('./lib/cache'),
-    logging = require('./middleware/logging');
+    logging = require('./middleware/logging'),
+    errors  = require('./middleware/errors');
 
 app.locals = Object.assign({}, app.locals, {
   sessionBlacklist: cache({
@@ -37,7 +38,7 @@ app.use(apiPath, require('./app'));
 
 // Post-request error handling
 logging.after(app);
-require('./middleware/errors')(app);
+errors(app);
 
 // Create HTTP server and listen
 const port = process.env.PORT || 3002;
