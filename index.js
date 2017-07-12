@@ -48,7 +48,7 @@ app.use(function(err, req, res, next) {
       error: true,
       message: status === 500? 'Internal server error': err.message,
       code
-    });
+    }).end();
   } else if (err instanceof Error) {
     res.status(status).json({
       error: true,
@@ -56,9 +56,9 @@ app.use(function(err, req, res, next) {
       message: err.message,
       code,
       stack
-    });
+    }).end();
   } else {
-    res.status(status).json(err);
+    res.status(status).json(err).end();
   }
 });
 
