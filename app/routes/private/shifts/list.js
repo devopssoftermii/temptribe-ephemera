@@ -2,15 +2,15 @@ var filterQuery = require('../../../../data/filters');
 var eventHelpers = require('../../../../lib/events');
 
 module.exports = function(router) {
-  router.post('/list/:detail(\\w+)', function(req, res, next) {
+  router.post('/list', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var cache = req.app.locals.shiftlistCache;
-    var detail = req.params.detail;
+    var detail = 'standard';
     var page = 1;
     var after = null;
-    if (['standard', 'metadata'].indexOf(detail) === -1) {
-      detail = 'standard';
+    if (req.body.detail && ['standard', 'metadata'].indexOf(req.body.detail) !== -1) {
+      detail = req.body.detail;
     }
     if (req.body.page && 'number' === typeof(req.body.page)) {
       page = req.body.page;
@@ -21,7 +21,7 @@ module.exports = function(router) {
     var filters = filterQuery(req, models);
     var key = JSON.stringify({
       filters: filters.key,
-      detail,
+      detail
     });
     cache.pget(key).then(function(result) {
       if (result) {
