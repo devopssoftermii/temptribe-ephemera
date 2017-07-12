@@ -54,7 +54,7 @@ module.exports = function (sequelize, DataTypes) {
       metadata: {
         attributes: []
       },
-      detail: {
+      standard: {
         attributes: ['title']
       },
       full: {

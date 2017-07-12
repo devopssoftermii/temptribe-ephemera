@@ -17,12 +17,17 @@ module.exports = function(router) {
       page = null;
     }
     return models.eventShifts.scope([{
-      method: ['staff', status === 'history'? 'past': 'future', 'detail', req.user.id, status]
+      method: ['staff', status === 'history'? 'past': 'future', 'standard', req.user.id, status]
     }]).findAndCountAll({
       distinct: true,
       col: 'eventShifts.id'
     }).then(function(result) {
-      res.json(eventHelpers.formatShiftList(result, 'detail', page, after));
+      var pageInfo = {
+        page,
+        limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
+        after
+      }
+      res.json(eventHelpers.formatShiftList(result, 'standard', pageInfo));
     }).catch(function(err) {
       next(err);
     });

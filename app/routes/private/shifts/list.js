@@ -9,8 +9,8 @@ module.exports = function(router) {
     var detail = req.params.detail;
     var page = 1;
     var after = null;
-    if (['detail', 'metadata'].indexOf(detail) === -1) {
-      detail = 'detail';
+    if (['standard', 'metadata'].indexOf(detail) === -1) {
+      detail = 'standard';
     }
     if (req.body.page && 'number' === typeof(req.body.page)) {
       page = req.body.page;
@@ -38,7 +38,12 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(result) {
-      res.json(eventHelpers.formatShiftList(result, detail, page, after));
+      var pageInfo = detail === 'metadata'? null: {
+        page,
+        limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
+        after
+      }
+      res.json(eventHelpers.formatShiftList(result, detail, pageInfo));
     }).catch(function(err) {
       next(err);
     });
