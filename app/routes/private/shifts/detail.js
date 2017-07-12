@@ -2,6 +2,7 @@ module.exports = function(router) {
   router.post('/detail/:id', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
+    var id = req.params.id;
     var cache = req.app.locals.shiftlistCache;
     var key = JSON.stringify({
       shiftId: id,
