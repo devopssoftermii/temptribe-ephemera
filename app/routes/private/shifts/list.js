@@ -28,7 +28,7 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope({
-        method: ['staff', 'future', detail, filters.scope]
+        method: ['staff', detail, 'future', filters.scope]
       }).findAndCountAll({
         distinct: true,
         col: 'eventShifts.id'

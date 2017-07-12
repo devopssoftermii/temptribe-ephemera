@@ -104,17 +104,18 @@ module.exports = function (sequelize, DataTypes) {
     models
       .events
       .preScope(models);
-    eventShifts.addScope('staff', function (era, detail, ...args) {
+    eventShifts.addScope('staff', function (detail, era = null, ...args) {
+      var eventScope = [{
+        method: ['staff', detail]
+      }];
+      if (era) {
+        eventScope.push(era);
+      }
       var include = {
         events: {
           model: models
             .events
-            .scope([
-              {
-                method: ['staff', detail]
-              },
-              era
-            ]),
+            .scope(eventScope),
           as: 'event'
         },
         suitabilityTypes: {

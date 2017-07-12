@@ -291,9 +291,7 @@ module.exports = function (sequelize, DataTypes) {
       .userTimesheets
       .preScope(models);
     users.addScope('shifts', function (status) {
-      var era = status === 'history'
-        ? 'past'
-        : 'future';
+      var era = status === 'history'? 'past': 'future';
       return {
         attributes: [],
         include: [
