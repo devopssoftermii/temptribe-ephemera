@@ -1,4 +1,6 @@
 var jwt = require('jsonwebtoken');
+const UnauthorizedError = require('../../lib/errors/UnauthorizedError');
+const ServerError = require('../../lib/errors/ServerError');
 
 module.exports = {
   create: function(user, models) {
@@ -18,7 +20,7 @@ module.exports = {
       try {
         resolve(jwt.verify(token, process.env.JWT_SECRET));
       } catch (ex) {
-        reject(new Error('Invalid refresh token'));
+        reject(new UnauthorizedError('invalid_refresh', {message: 'Invalid refresh token'}));
       }
     }).then(function(payload) {
       return models.apiSession.findOne({
@@ -36,7 +38,7 @@ module.exports = {
       });
     }).then(function(result) {
       if (!result) {
-        throw new Error('Invalid session');
+        throw new UnauthorizedError('invalid_session', {message: 'Invalid session'});
       }
       return Promise.all([result.user, result.destroy()]);
     }).then(function(results) {

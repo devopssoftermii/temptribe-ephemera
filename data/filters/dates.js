@@ -1,8 +1,9 @@
 const moment = require('moment');
+const HttpError = require('../../lib/errors/HttpError');
 
 module.exports = function(req, models, output) {
   if (!req.body.f || !req.body.f.d || !Array.isArray(req.body.f.d)) {
-    throw new Error('Date selection (f[d]) is a required filter for this endpoint');
+    throw new HttpError(422, {message: 'Date selection (f[d]) is a required filter for this endpoint'});
   }
   var sequelize = req.app.locals.sequelize;
   var filterDates = new Set(req.body.f.d);
@@ -15,7 +16,7 @@ module.exports = function(req, models, output) {
     }
   }
   if (!datesList.length) {
-    throw new Error('Date selection (f[d]) is a required filter for this endpoint');
+    throw new HttpError(422, {message: 'Date selection (f[d]) is a required filter for this endpoint'});
   }
   output.key.dates = datesList;
   if (!output.scope.include.events) {

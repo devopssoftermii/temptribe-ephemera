@@ -39,19 +39,27 @@ app.use(apiPath, require('./app'));
 logging.after(app);
 
 app.use(function(err, req, res, next) {
+  var status = err.status || err.status_code || 500;
+  var stack = err.stack || null;
+  var name = err.name || 'ServerError';
+  var code = err.code || 'internal_error';
   if (process.env.NODE_ENV !== 'development') {
-    res.status(500).json({
+    res.status(status).json({
       error: true,
-      message: 'Internal server error'
+      name,
+      message: status === 500? 'Internal server error': err.message,
+      code
     });
   } else if (err instanceof Error) {
-    res.status(500).json({
-      name: err.name,
+    res.status(status).json({
+      error: true,
+      name,
       message: err.message,
-      stack: err.stack? err.stack: ''
+      code,
+      stack
     });
   } else {
-    res.status(500).json(err);
+    res.status(status).json(err);
   }
 });
 
