@@ -38,6 +38,21 @@ app.use(apiPath, require('./app'));
 // Post-request error handling
 logging.after(app);
 
+app.use(function(err, req, res, next) {
+  if (process.env.NODE_ENV !== 'development') {
+    res.status(500).json({
+      error: true,
+      message: 'Internal server error'
+    });
+  } else if (err instanceof Error) {
+    res.status(500).json({
+      name: err.name,
+      message: err.message,
+      stack: err.stack? err.stack: ''
+    });
+  }
+});
+
 // Create HTTP server and listen
 const port = process.env.PORT || 3002;
 const host = process.env.HOST || 'localhost';
