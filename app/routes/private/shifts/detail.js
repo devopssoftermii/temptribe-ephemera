@@ -1,3 +1,5 @@
+var eventHelpers = require('../../../../lib/events');
+
 module.exports = function(router) {
   router.post('/detail/:id', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
@@ -13,11 +15,11 @@ module.exports = function(router) {
       }
       return models.eventShifts.scope({
         method: ['staff', 'full', 'future']
-      }).findById(id).then(function(result) {
-        if (!result) {
+      }).findById(id).then(function(shift) {
+        if (!shift) {
           return null;
         }
-        return cache.pset(key, result);
+        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true })));
       }).catch(function(err) {
         throw err;
       });
