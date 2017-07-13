@@ -9,7 +9,7 @@ module.exports = function(router) {
       let allTypes = new Set(result[0]);
       let userTypes = new Set(result[1].suitabilityTypes);
       let intersection = new Set([...allTypes].filter(x => userTypes.has(x)));
-      console.log(intersection);
+      res.json([...intersection]);
     }).catch(function(err) {
       next(err);
     });
