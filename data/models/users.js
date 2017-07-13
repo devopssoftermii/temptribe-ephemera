@@ -287,6 +287,12 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'UserID',
       otherKey: 'SuitabilityTypeID'
     });
+    users.belongsToMany(models.clients, {
+      through: models.clientFavourites,
+      as: 'favouritedBy',
+      foreignKey: 'UserID',
+      otherKey: 'ClientID'
+    });
     models
       .userTimesheets
       .preScope(models);
@@ -318,7 +324,7 @@ module.exports = function (sequelize, DataTypes) {
         }
       ]
     });
-    users.addScope('suitability', {
+    users.addScope('includeOnly', {
       attributes: ['id']
     });
     users.addScope('login', function (params) {

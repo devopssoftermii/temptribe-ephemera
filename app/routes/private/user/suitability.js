@@ -4,7 +4,7 @@ module.exports = function(router) {
     var models = req.app.locals.models;
     Promise.all([
       models.suitabilityTypes.findAll(),
-      models.users.scope('suitability').findById(req.user.id),
+      models.users.scope('includeOnly').findById(req.user.id),
     ]).then(function(result) {
       return Promise.all([
         result[0],

@@ -50,24 +50,32 @@ module.exports = function(router) {
       });
     }
     if (process.env.FETCH_USER_FROM_JWT === 'false') {
-      var typesKey = JSON.stringify({
+      var userKey = JSON.stringify({
         userId: req.user.id,
-        field: 'suitability'
+        fields: ['favouritedBy', 'suitability']
       });
-      cache.pget(typesKey).then(function(result) {
+      return cache.pget(userKey).then(function(result) {
         if (result) {
           return result;
         }
-        return models.users.scope('suitability').findById(req.user.id).then(function(result) {
-          return result.getSuitabilityTypes();
-        }).then(function(types) {
-          var plainTypes = types.map(function(type) {
-            return type.get({ plain: true });
-          });
-          return cache.pset(typesKey, plainTypes);
+        return models.users.scope('includeOnly').findById(req.user.id).then(function(result) {
+          return Promise.all([
+            result.getSuitabilityTypes(),
+            result.getFavouritedBy()
+          ]);
+        }).then(function(userFields) {
+          var plainFields = {
+            suitabilityTypes: userFields[0].map(function(type) {
+              return type.get({ plain: true });
+            }),
+            favouritedBy: userFields[1].map(function(client) {
+              return client.get({ plain: true });
+            }),
+          };
+          return cache.pset(userKey, plainFields);
         });
-      }).then(function(types) {
-        req.user.suitabilityTypes = types;
+      }).then(function(plainFields) {
+        return Object.assign(req.user, plainFields);
       }).then(processRequest);
     } else {
       return processRequest();

@@ -12,13 +12,16 @@ module.exports = function(router) {
       if (!user) {
         throw new UnauthorizedError('unknown_credentials', {message: 'Unknown email or password'});
       } else {
-        return Promise.all([user.get({ plain: true }), user.getSuitabilityTypes()]);
+        return Promise.all([user.get({ plain: true }), user.getSuitabilityTypes(), user.getFavouritedBy()]);
       }
     }).then(function(results) {
       user = Object.assign(results[0], {
         suitabilityTypes: results[1].map(function(type) {
           return type.get({ plain: true });
-        })
+        }),
+        favouritedBy: results[2].map(function(client) {
+          return client.get({ plain: true });
+        }),
       });
       return session.create(user, models);
     }).then(function(sessionResult) {

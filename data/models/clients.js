@@ -137,6 +137,11 @@ module.exports = function (sequelize, DataTypes) {
   });
   clients.associate = function (models) {
     clients.hasMany(models.events, {foreignKey: 'clientId'});
+    clients.belongsToMany(models.users, {
+      through: models.clientFavourites,
+      foreignKey: 'ClientID',
+      otherKey: 'UserID'
+    });
   }
   return clients;
 };
