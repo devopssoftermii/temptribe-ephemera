@@ -318,6 +318,14 @@ module.exports = function (sequelize, DataTypes) {
         }
       ]
     });
+    users.addScope('suitability', {
+      attributes: [],
+      include: [
+        {
+          model: models.suitabilityTypes,
+        }
+      ]
+    });
     users.addScope('login', function (params) {
       return {
         attributes: [
