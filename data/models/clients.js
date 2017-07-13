@@ -119,6 +119,9 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false,
     freezeTableName: true,
     scopes: {
+      metadata: {
+        attributes: ['id']
+      },
       standard: {
         attributes: [
           'id',

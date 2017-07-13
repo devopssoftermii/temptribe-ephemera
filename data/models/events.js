@@ -123,22 +123,20 @@ module.exports = function (sequelize, DataTypes) {
             'eventDate'
           ],
         ];
-        var include = [];
+        var include = [{
+          model: models
+            .clients
+            .scope(detail),
+          as: 'client'
+        }];
         if (detail !== 'metadata') {
           attributes.push('title', 'subtitle');
-          include = [
-            {
-              model: models
-                .venues
-                .scope(detail),
-              as: 'venue'
-            }, {
-              model: models
-                .clients
-                .scope(detail),
-              as: 'client'
-            }
-          ];
+          include.push({
+            model: models
+              .venues
+              .scope(detail),
+            as: 'venue'
+          });
         }
         if (detail === 'full') {
           attributes.push('comments');

@@ -2,7 +2,6 @@ var eventHelpers = require('../../../../lib/events');
 
 module.exports = function(router) {
   router.get('/shifts/:status(\\w+)', function(req, res, next) {
-    var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var page = 1;
     var after = null;
@@ -27,7 +26,10 @@ module.exports = function(router) {
         limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
         after
       }
-      res.json(eventHelpers.formatShiftList(result, 'full', pageInfo));
+      var favourites = req.user.favouritedBy.map(function(client) {
+        return client.id;
+      });
+      res.json(eventHelpers.formatShiftList(result, favourites, 'full', pageInfo));
     }).catch(function(err) {
       next(err);
     });

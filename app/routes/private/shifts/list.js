@@ -3,7 +3,6 @@ var eventHelpers = require('../../../../lib/events');
 
 module.exports = function(router) {
   router.post('/list', function(req, res, next) {
-    var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var cache = req.app.locals.shiftlistCache;
     var detail = 'standard';
@@ -18,67 +17,37 @@ module.exports = function(router) {
       after = req.body.after;
       page = null;
     }
-    var processRequest = function() {
-      var filters = filterQuery(req, models);
-      var key = JSON.stringify({
-        filters: filters.key,
-        detail
-      });
-      return cache.pget(key).then(function(result) {
-        if (result) {
-          return result;
-        }
-        return models.eventShifts.scope({
-          method: ['staff', detail, 'future', filters.scope]
-        }).findAndCountAll({
-          distinct: true,
-          col: 'eventShifts.id'
-        }).then(function(result) {
-          return cache.pset(key, result);
-        }).catch(function(err) {
-          throw err;
-        });
+    var filters = filterQuery(req, models);
+    var key = JSON.stringify({
+      filters: filters.key,
+      detail
+    });
+    return cache.pget(key).then(function(result) {
+      if (result) {
+        return result;
+      }
+      return models.eventShifts.scope({
+        method: ['staff', detail, 'future', filters.scope]
+      }).findAndCountAll({
+        distinct: true,
+        col: 'eventShifts.id'
       }).then(function(result) {
-        var pageInfo = detail === 'metadata'? null: {
-          page,
-          limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
-          after
-        }
-        res.json(eventHelpers.formatShiftList(result, detail, pageInfo));
+        return cache.pset(key, result);
       }).catch(function(err) {
-        next(err);
+        throw err;
       });
-    }
-    if (process.env.FETCH_USER_FROM_JWT === 'false') {
-      var userKey = JSON.stringify({
-        userId: req.user.id,
-        fields: ['favouritedBy', 'suitability']
+    }).then(function(result) {
+      var pageInfo = detail === 'metadata'? null: {
+        page,
+        limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
+        after
+      }
+      var favourites = req.user.favouritedBy.map(function(client) {
+        return client.id;
       });
-      return cache.pget(userKey).then(function(result) {
-        if (result) {
-          return result;
-        }
-        return models.users.scope('includeOnly').findById(req.user.id).then(function(result) {
-          return Promise.all([
-            result.getSuitabilityTypes(),
-            result.getFavouritedBy()
-          ]);
-        }).then(function(userFields) {
-          var plainFields = {
-            suitabilityTypes: userFields[0].map(function(type) {
-              return type.get({ plain: true });
-            }),
-            favouritedBy: userFields[1].map(function(client) {
-              return client.get({ plain: true });
-            }),
-          };
-          return cache.pset(userKey, plainFields);
-        });
-      }).then(function(plainFields) {
-        return Object.assign(req.user, plainFields);
-      }).then(processRequest);
-    } else {
-      return processRequest();
-    }
+      res.json(eventHelpers.formatShiftList(result, favourites, detail, pageInfo));
+    }).catch(function(err) {
+      next(err);
+    });
   });
 }
