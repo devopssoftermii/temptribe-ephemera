@@ -17,7 +17,7 @@ module.exports = function(router) {
     }).then(function(results) {
       user = Object.assign(results[0], {
         suitabilityTypes: results[1].map(function(type) {
-            return type.get({ plain: true });
+          return type.get({ plain: true });
         })
       });
       return session.create(user, models);

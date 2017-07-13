@@ -18,34 +18,59 @@ module.exports = function(router) {
       after = req.body.after;
       page = null;
     }
-    var filters = filterQuery(req, models);
-    var key = JSON.stringify({
-      filters: filters.key,
-      detail
-    });
-    cache.pget(key).then(function(result) {
-      if (result) {
-        return result;
-      }
-      return models.eventShifts.scope({
-        method: ['staff', detail, 'future', filters.scope]
-      }).findAndCountAll({
-        distinct: true,
-        col: 'eventShifts.id'
-      }).then(function(result) {
-        return cache.pset(key, result);
-      }).catch(function(err) {
-        throw err;
+    var processRequest = function() {
+      var filters = filterQuery(req, models);
+      var key = JSON.stringify({
+        filters: filters.key,
+        detail
       });
-    }).then(function(result) {
-      var pageInfo = detail === 'metadata'? null: {
-        page,
-        limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
-        after
-      }
-      res.json(eventHelpers.formatShiftList(result, detail, pageInfo));
-    }).catch(function(err) {
-      next(err);
-    });
+      return cache.pget(key).then(function(result) {
+        if (result) {
+          return result;
+        }
+        return models.eventShifts.scope({
+          method: ['staff', detail, 'future', filters.scope]
+        }).findAndCountAll({
+          distinct: true,
+          col: 'eventShifts.id'
+        }).then(function(result) {
+          return cache.pset(key, result);
+        }).catch(function(err) {
+          throw err;
+        });
+      }).then(function(result) {
+        var pageInfo = detail === 'metadata'? null: {
+          page,
+          limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
+          after
+        }
+        res.json(eventHelpers.formatShiftList(result, detail, pageInfo));
+      }).catch(function(err) {
+        next(err);
+      });
+    }
+    if (process.env.FETCH_USER_FROM_JWT === 'false') {
+      var typesKey = {
+        userId: req.user.id,
+        field: 'suitability'
+      };
+      cache.pget(typesKey).then(function(result) {
+        if (result) {
+          return result;
+        }
+        return models.users.scope('suitability').findById(req.user.id).then(function(result) {
+          return result.getSuitabilityTypes();
+        }).then(function(types) {
+          var plainTypes = types.map(function(type) {
+            return type.get({ plain: true });
+          });
+          return cache.pset(typesKey, plainTypes);
+        });
+      }).then(function(types) {
+        req.user.suitabilityTypes = types;
+      }).then(processRequest);
+    } else {
+      return processRequest();
+    }
   });
 }
