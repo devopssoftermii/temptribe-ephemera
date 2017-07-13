@@ -17,7 +17,7 @@ module.exports = function(router) {
       page = null;
     }
     return models.eventShifts.scope([{
-      method: ['staff', 'standard', status === 'history'? 'past': 'future', req.user.id, status]
+      method: ['staff', 'full', status === 'history'? 'past': 'future', req.user.id, status]
     }]).findAndCountAll({
       distinct: true,
       col: 'eventShifts.id'
@@ -27,7 +27,7 @@ module.exports = function(router) {
         limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
         after
       }
-      res.json(eventHelpers.formatShiftList(result, 'standard', pageInfo));
+      res.json(eventHelpers.formatShiftList(result, 'full', pageInfo));
     }).catch(function(err) {
       next(err);
     });
