@@ -19,6 +19,7 @@ var auto = new SequelizeAuto(process.env.DB_DATABASE, process.env.DB_USERNAME, p
       'userSuitabilityTypes',
       'suitabilityTypes',
       'clients',
+      'clientFavourites',
       'events',
       'eventShifts',
       'EventShiftSuitabilityTypes',
