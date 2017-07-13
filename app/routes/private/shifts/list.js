@@ -50,10 +50,10 @@ module.exports = function(router) {
       });
     }
     if (process.env.FETCH_USER_FROM_JWT === 'false') {
-      var typesKey = {
+      var typesKey = JSON.stringify({
         userId: req.user.id,
         field: 'suitability'
-      };
+      });
       cache.pget(typesKey).then(function(result) {
         if (result) {
           return result;
