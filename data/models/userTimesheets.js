@@ -80,7 +80,9 @@ module.exports = function (sequelize, DataTypes) {
       },
       confirmed: {
         where: {
-          status: 4
+          status: {
+            $or: [4, 7]
+          }
         }
       },
       applied: {
