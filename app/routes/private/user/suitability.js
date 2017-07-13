@@ -6,10 +6,12 @@ module.exports = function(router) {
       models.suitabilityTypes.findAll(),
       models.users.scope('suitability').findById(req.user.id),
     ]).then(function(result) {
-      let allTypes = new Set(result[0].map(a => a.get({ plain: true })));
-      let userTypes = new Set(result[1].suitabilityTypes.map(b => b.get({ plain: true })));
-      let intersection = new Set([...allTypes].filter(x => userTypes.has(x)));
-      res.json([...intersection]);
+      let userTypes = new Set(result[1].suitabilityTypes.map(b => b.get({ plain: true }).id));
+      res.json(result[0].map(a => {
+        a = a.get({ plain: true });
+        a.enabled = userTypes.has(a.id);
+        return a;
+      }));
     }).catch(function(err) {
       next(err);
     });

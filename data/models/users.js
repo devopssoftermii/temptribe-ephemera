@@ -323,6 +323,9 @@ module.exports = function (sequelize, DataTypes) {
       include: [
         {
           model: models.suitabilityTypes,
+          through: {
+            attributes: []
+          }
         }
       ]
     });
