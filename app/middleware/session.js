@@ -15,6 +15,22 @@ module.exports = {
       throw err;
     });
   },
+  buildTokenUser: function(user) {
+    return Promise.all([
+      user.get({ plain: true }),
+      user.getSuitabilityTypes(),
+      user.getFavouritedBy()
+    ]).then(function([user, types, favouritedBy]) {
+      return Object.assign(user, {
+        suitabilityTypes: types.map(function(type) {
+          return type.get({ plain: true });
+        }),
+        favouritedBy: favouritedBy.map(function(client) {
+          return client.get({ plain: true });
+        }),
+      });
+    });
+  },
   destroy: function(token, models) {
     return new Promise(function(resolve, reject) {
       try {
@@ -30,8 +46,7 @@ module.exports = {
         include: [{
           model: models.users,
           attributes: [
-            'id',
-            'email'
+            'id', 'email'
           ],
           required: true
         }]
@@ -40,9 +55,10 @@ module.exports = {
       if (!result) {
         throw new UnauthorizedError('invalid_session', {message: 'Invalid session'});
       }
-      return Promise.all([result.user, result.destroy()]);
-    }).then(function(results) {
-      return results[0];
+      var user = result.user;
+      return Promise.all([module.exports.buildTokenUser(user), result.destroy()]);
+    }).then(function([user, destroyResult]) {
+      return user;
     }).catch(function(err) {
       throw err;
     });
