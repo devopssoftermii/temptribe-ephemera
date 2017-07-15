@@ -11,9 +11,8 @@ module.exports = function(router) {
     models.users.scope({ method: ['login', req.body] }).findOne().then(function(user) {
       if (!user) {
         throw new UnauthorizedError('unknown_credentials', {message: 'Unknown email or password'});
-      } else {
-        return session.buildTokenUser(user);
       }
+      return user;
     }).then(function(user) {
       return session.create(user, models);
     }).then(function(sessionResult) {
