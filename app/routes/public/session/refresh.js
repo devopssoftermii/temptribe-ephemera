@@ -9,7 +9,7 @@ module.exports = function(router) {
     return session.refresh(req.body.token, req.app.locals.models).then(function(refreshResult) {
       res.json(refreshResult);
     }).catch(function(err) {
-      throw err;
+      next(err);
     });
   });
 }
