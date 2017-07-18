@@ -182,6 +182,7 @@ module.exports = function (sequelize, DataTypes) {
           sortDir = 'DESC';
         }
       }
+      var where = null;
       if (filters) {
         Object
           .keys(filters.include)
@@ -190,6 +191,7 @@ module.exports = function (sequelize, DataTypes) {
               include[modelName].where = filters.include[modelName].where;
             }
           });
+        where = filters.where;
       }
       if (timesheetScopes.length > 1) {
         include.userTimesheets = {
@@ -199,7 +201,7 @@ module.exports = function (sequelize, DataTypes) {
           as: 'timesheets'
         };
       }
-      return {
+      var result = {
         required: true,
         attributes,
         include: Object.keys(include).map(function(key) {
@@ -217,6 +219,10 @@ module.exports = function (sequelize, DataTypes) {
           ['originalStartTime', sortDir]
         ]
       };
+      if (where) {
+        result.where = where;
+      }
+      return result;
     });
   }
   return eventShifts;
