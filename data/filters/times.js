@@ -17,11 +17,11 @@ module.exports = function(req, models, output) {
   }
   output.scope.where.$and.push({
     originalStartTime: {
-      $gte: moment('1900-01-01 00:00:00.000').add(startTime - 0.5, 'hours')
+      $gte: moment('1900-01-01 00:00:00.000').add(startTime - 0.5, 'hours').format('YYYY-MM-DDTHH:mm:ss.SSS')
     }
   }, {
     originalFinishTime: {
-      $lte: moment('1900-01-01 00:00:00.000').add(endTime + 0.5, 'hours')
+      $lte: moment('1900-01-01 00:00:00.000').add(endTime + 0.5, 'hours').format('YYYY-MM-DDTHH:mm:ss.SSS')
     }
   });
 }
