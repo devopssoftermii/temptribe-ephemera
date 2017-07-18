@@ -21,8 +21,8 @@ module.exports = function(req, models) {
   };
   if ('object' === typeof(req.query.f)) {
     ignoreQueryFilters.forEach(function(filter) {
-      if (req.query.f[filter]) {
-        delete req.query.f[filter];
+      if (req.body.f[filter]) {
+        delete req.body.f[filter];
       }
     });
   }

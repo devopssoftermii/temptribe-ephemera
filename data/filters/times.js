@@ -2,6 +2,9 @@ const moment = require('moment');
 const HttpError = require('../../lib/errors/HttpError');
 
 module.exports = function(req, models, output) {
+  if (!req.body.f || !Array.isArray(req.body.f.t)) {
+    return;
+  }
   var [startTime, endTime] = req.body.f.t.map(i => parseFloat(i));
   if (isNaN(startTime) || isNaN(endTime) || endTime < startTime || startTime < 6 || endTime > 30) {
     throw new HttpError(422, {message: 'Invalid time selection (f[t])'});

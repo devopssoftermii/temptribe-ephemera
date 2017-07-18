@@ -8,6 +8,9 @@ module.exports = function(router) {
     var detail = 'standard';
     var page = 1;
     var after = null;
+    var favourites = req.user.favouritedBy.map(function(client) {
+      return client.id;
+    });
     if (req.body.detail && ['standard', 'metadata'].indexOf(req.body.detail) !== -1) {
       detail = req.body.detail;
     }
@@ -18,6 +21,10 @@ module.exports = function(router) {
       page = null;
     }
     var filters = filterQuery(req, models);
+    if (req.body.f && req.body.f.fav) {
+      filters.key.favourite = true;
+      filters.scope.favourite = favourites;
+    }
     var key = JSON.stringify({
       filters: filters.key,
       detail
@@ -42,9 +49,6 @@ module.exports = function(router) {
         limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
         after
       }
-      var favourites = req.user.favouritedBy.map(function(client) {
-        return client.id;
-      });
       res.json(eventHelpers.formatShiftList(result, favourites, detail, pageInfo));
     }).catch(function(err) {
       next(err);
