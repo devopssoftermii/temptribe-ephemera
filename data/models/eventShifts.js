@@ -122,8 +122,9 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       }
+      var favourite = filters? filters.favourite: null;
       var eventScope = [{
-        method: ['staff', detail, filters.favourite]
+        method: ['staff', detail, favourite]
       }];
       if (era) {
         eventScope.push(era);
