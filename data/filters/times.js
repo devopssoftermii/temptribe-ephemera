@@ -17,7 +17,7 @@ module.exports = function(req, models, output) {
     };
   }
   output.scope.where.$and.push(
-    sequelize.literal('originalStartTime >= ' + moment('1900-01-01 00:00:00.000').add(startTime - 0.5, 'hours').format('YYYY-MM-DDTHH:mm:ss.SSS')),
-    sequelize.literal('originalFinishTime >= ' + moment('1900-01-01 00:00:00.000').add(endTime + 0.5, 'hours').format('YYYY-MM-DDTHH:mm:ss.SSS'))
+    sequelize.literal('originalStartTime >= \'' + moment('1900-01-01 00:00:00.000').add(startTime - 0.5, 'hours').format('YYYY-MM-DDTHH:mm:ss.SSS') + '\''),
+    sequelize.literal('originalFinishTime >= \'' + moment('1900-01-01 00:00:00.000').add(endTime + 0.5, 'hours').format('YYYY-MM-DDTHH:mm:ss.SSS') + '\'')
   );
 }
