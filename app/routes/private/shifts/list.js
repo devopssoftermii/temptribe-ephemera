@@ -11,7 +11,7 @@ module.exports = function(router) {
     var favourites = req.user.favouritedBy.map(function(client) {
       return client.id;
     });
-    if (req.body.detail && ['standard', 'metadata'].indexOf(req.body.detail) !== -1) {
+    if (req.body.detail && ['full', 'standard', 'metadata'].indexOf(req.body.detail) !== -1) {
       detail = req.body.detail;
     }
     if (req.body.page && 'number' === typeof(req.body.page)) {
