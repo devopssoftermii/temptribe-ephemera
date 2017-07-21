@@ -171,7 +171,7 @@ module.exports = function (sequelize, DataTypes) {
             .scope(detail),
           as: 'jobRole'
         };
-        attributes.push('duration', 'hourlyRate', 'estimatedPay');
+        attributes.push('qty', 'duration', 'hourlyRate', 'estimatedPay');
       }
       var timesheetScopes = ['refOnly'];
       if (user) {
