@@ -23,12 +23,14 @@ module.exports = function(router) {
         return shift;
       });
     }).then(function(shift) {
+      var start = moment(shift.originalStartTime).format('YYYY-MM-DDTHH:mm:ss.SSS');
+      var finish = moment(shift.originalFinishTime).format('YYYY-MM-DDTHH:mm:ss.SSS');
       return models.eventShifts.findAll({
         include: [{
           model: models.events,
           as: 'event',
           where: {
-            eventDate: shift.event.eventDate
+            eventDate: moment(shift.event.eventDate).format('YYYY-MM-DD')
           }
         }, {
           model: models.userTimesheets.scope([{
@@ -39,18 +41,18 @@ module.exports = function(router) {
         where: {
           $or: [{
             $and: [{
-              originalStartTime: { $gte: shift.originalStartTime },
-              originalStartTime: { $lte: shift.originalFinishTime },
+              originalStartTime: { $gte: start },
+              originalStartTime: { $lte: finish },
             }]
           }, {
             $and: [{
-              originalFinishTime: { $gte: shift.originalStartTime },
-              originalFinishTime: { $lte: shift.originalFinishTime },
+              originalFinishTime: { $gte: start },
+              originalFinishTime: { $lte: finish },
             }]
           }, {
             $and: [{
-              originalStartTime: { $lte: shift.originalStartTime },
-              originalFinishTime: { $gte: shift.originalFinishTime },
+              originalStartTime: { $lte: start },
+              originalFinishTime: { $gte: finish },
             }]
           }]
         }
