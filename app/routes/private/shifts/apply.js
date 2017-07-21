@@ -19,10 +19,48 @@ module.exports = function(router) {
         }).catch(function(err) {
           throw err;
         });
-      }));
-    }).then(function() {
-      res.json({
-        message: 'not booked'
+      })).then(function() {
+        return shift;
+      });
+    }).then(function(shift) {
+      return models.eventShifts.findAll({
+        include: [{
+          model: models.events,
+          as: 'event',
+          where: {
+            eventDate: shift.event.eventDate
+          }
+        }, {
+          model: models.userTimesheets.scope([{
+            method: ['byUser', req.user.id]
+          }, 'confirmed']),
+          as: 'timesheets'
+        }],
+        where: {
+          $or: [{
+            $and: [{
+              originalStartTime: { $gte: shift.originalStartTime },
+              originalStartTime: { $lte: shift.originalFinishTime },
+            }]
+          }, {
+            $and: [{
+              originalFinishTime: { $gte: shift.originalStartTime },
+              originalFinishTime: { $lte: shift.originalFinishTime },
+            }]
+          }, {
+            $and: [{
+              originalStartTime: { $lte: shift.originalStartTime },
+              originalFinishTime: { $gte: shift.originalFinishTime },
+            }]
+          }]
+        }
+      }).then(function(clashing) {
+        if (clashing) {
+          throw new ClientError('already_booked_other', { message: 'You are already booked on another shift at this time' });
+        }
+        return shift;
+      }).catch(function(err) {
+        throw err;
       });
     }).catch(function(err) {
       next(err);
