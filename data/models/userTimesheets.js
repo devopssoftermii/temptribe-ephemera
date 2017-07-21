@@ -27,37 +27,37 @@ module.exports = function (sequelize, DataTypes) {
     useAgain: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: '(1)'
+      defaultValue: 1
     },
     status: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: '(0)'
+      defaultValue: 0
     },
     staffConfirmed: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: '(0)'
+      defaultValue: 0
     },
     worked: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: '(0)'
+      defaultValue: 0
     },
     paid: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: '(0)'
+      defaultValue: 0
     },
     dateStamp: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: '(getdate())'
+      defaultValue: sequelize.fn('getdate')
     },
     clientFeedbackID: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: '((0))'
+      defaultValue: null
     },
     clientFeedbackDescription: {
       type: DataTypes.STRING,
