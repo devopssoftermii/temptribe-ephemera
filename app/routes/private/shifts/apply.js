@@ -9,12 +9,16 @@ module.exports = function(router) {
     models.eventShifts.scope({
       method: ['staff', 'standard', 'future']
     }).findById(id).then(function(shift) {
-      var timesheets = shift.getTimesheets();
+      return Promise.all([shift, shift.getTimesheets()]);
+    }).then(function([shift, timesheets]) {
       timesheets.forEach(function(timesheet) {
-        var user = timesheet.getUser();
-        if (user.id === req.user.id) {
-          throw new ClientError('already_booked', { message: 'You are already booked on this shift' });
-        }
+        var user = timesheet.getUser().then(function(user) {
+          if (user.id === req.user.id) {
+            throw new ClientError('already_booked', { message: 'You are already booked on this shift' });
+          }
+        }).catch(function(err) {
+          throw err;
+        });
       });
       var favourites = req.user.favouritedBy.map(function(client) {
         return client.id;
