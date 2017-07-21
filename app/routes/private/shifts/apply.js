@@ -7,11 +7,15 @@ module.exports = function(router) {
     var id = req.params.id;
     var cache = req.app.locals.shiftlistCache;
     models.eventShifts.scope({
-      method: ['staff', 'standard', 'future', req.user.id]
+      method: ['staff', 'standard', 'future']
     }).findById(id).then(function(shift) {
-      if (shift) {
-        throw new ClientError('already_booked', { message: 'You are already booked on this shift!' });
-      }
+      var timesheets = shift.getTimesheets();
+      timesheets.forEach(function(timesheet) {
+        var user = timesheet.getUser();
+        if (user.id === req.user.id) {
+          throw new ClientError('already_booked', { message: 'You are already booked on this shift' });
+        }
+      });
       var favourites = req.user.favouritedBy.map(function(client) {
         return client.id;
       });
