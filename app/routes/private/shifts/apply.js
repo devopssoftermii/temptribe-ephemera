@@ -9,15 +9,11 @@ module.exports = function(router) {
     models.eventShifts.scope({
       method: ['staff', 'standard', 'future']
     }).findById(id).then(function(shift) {
-      return Promise.all([shift, shift.getTimesheets({
-        where: {
-          status: 8
-        }
-      })]);
+      return Promise.all([shift, shift.getTimesheets()]);
     }).then(function([shift, timesheets]) {
       return Promise.all(timesheets.map(function(timesheet) {
         return timesheet.getUser().then(function(user) {
-          if (user.id === req.user.id) {
+          if (timesheet.status = 4 && user.id === req.user.id) {
             throw new ClientError('already_booked', { message: 'You are already booked on this shift' });
           }
         }).catch(function(err) {
