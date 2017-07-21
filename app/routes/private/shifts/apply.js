@@ -29,7 +29,7 @@ module.exports = function(router) {
       });
     }).then(function(shift) {
       return getClashingShifts(models, sequelize, shift, req.user.id).then(function(clashing) {
-        if (clashing) {
+        if (clashing && clashing.length) {
           throw new ClientError('already_booked_other', { message: 'You are already booked on another shift at this time' });
         }
         return shift;
@@ -42,13 +42,15 @@ module.exports = function(router) {
       var favourites = new Set(req.user.favouritedBy.map(function(client) {
         return client.id;
       }));
-      return bookUserOnShift(
+      return Promise.all([shift, bookUserOnShift(
         models,
         sequelize,
         shift.id,
         req.user.id,
         favourites.has(shift.event.client.id) && !fullyStaffed
-      );
+      )]);
+    }).then(function([shift, result]) {
+      res.json(result);
     }).catch(function(err) {
       next(err);
     });
