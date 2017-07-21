@@ -1,4 +1,4 @@
-var eventHelpers = require('../../../../lib/events');
+var ClientError = require('../../../../lib/errors/ClientError');
 
 module.exports = function(router) {
   router.post('/apply/:id', function(req, res, next) {
@@ -9,15 +9,16 @@ module.exports = function(router) {
     models.eventShifts.scope({
       method: ['staff', 'standard', 'future', req.user.id]
     }).findById(id).then(function(shift) {
-      if (!shift) {
-        return null;
+      if (shift) {
+        throw new ClientError('already_booked', { message: 'You are already booked on this shift!' });
       }
       var favourites = req.user.favouritedBy.map(function(client) {
         return client.id;
       });
-      return eventHelpers.formatShift(shift.get({ plain: true }), favourites);
-    }).then(function(shift) {
-      res.json(shift);
+    }).then(function() {
+      res.json({
+        message: 'not booked'
+      });
     }).catch(function(err) {
       next(err);
     });
