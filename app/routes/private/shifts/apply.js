@@ -31,9 +31,11 @@ module.exports = function(router) {
         include: [{
           model: models.events,
           as: 'event',
-          where: [
-            sequelize.literal('event.eventDate = \'' + date + '\''),
-          ]
+          where: [{
+            $and: [
+              sequelize.literal('event.eventDate = \'' + date + '\''),
+            ]
+          }]
         }, {
           model: models.userTimesheets.scope([{
             method: ['byUser', req.user.id]
