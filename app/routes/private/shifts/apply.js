@@ -24,15 +24,16 @@ module.exports = function(router) {
         return shift;
       });
     }).then(function(shift) {
+      var date = moment(shift.event.eventDate).format('YYYY-MM-DD');
       var start = moment(shift.originalStartTime).format('YYYY-MM-DDTHH:mm:ss.SSS');
       var finish = moment(shift.originalFinishTime).format('YYYY-MM-DDTHH:mm:ss.SSS');
       return models.eventShifts.findAll({
         include: [{
           model: models.events,
           as: 'event',
-          where: {
-            eventDate: moment(shift.event.eventDate).format('YYYY-MM-DD')
-          }
+          where: [
+            sequelize.literal('event.eventDate = \'' + date + '\''),
+          ]
         }, {
           model: models.userTimesheets.scope([{
             method: ['byUser', req.user.id]
@@ -41,20 +42,20 @@ module.exports = function(router) {
         }],
         where: {
           $or: [{
-            $and: [{
-              originalStartTime: { $gte: start },
-              originalStartTime: { $lte: finish },
-            }]
+            $and: [
+              sequelize.literal('originalStartTime >= \'' + start + '\''),
+              sequelize.literal('originalStartTime <= \'' + finish + '\''),
+            ]
           }, {
-            $and: [{
-              originalFinishTime: { $gte: start },
-              originalFinishTime: { $lte: finish },
-            }]
+            $and: [
+              sequelize.literal('originalFinishTime >= \'' + start + '\''),
+              sequelize.literal('originalFinishTime <= \'' + finish + '\''),
+            ]
           }, {
-            $and: [{
-              originalStartTime: { $lte: start },
-              originalFinishTime: { $gte: finish },
-            }]
+            $and: [
+              sequelize.literal('originalFinishTime >= \'' + finish + '\''),
+              sequelize.literal('originalStartTime <= \'' + start + '\''),
+            ]
           }]
         }
       }).then(function(clashing) {
