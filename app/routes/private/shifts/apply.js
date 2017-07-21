@@ -46,15 +46,15 @@ module.exports = function(router) {
       var favourites = new Set(req.user.favouritedBy.map(function(client) {
         return client.id;
       }));
-      return Promise.all([shift, bookUserOnShift(
+      return bookUserOnShift(
         models,
         sequelize,
         shift.id,
         req.user.id,
         favourites.has(shift.event.client.id) && !fullyStaffed
-      )]);
-    }).then(function([shift, result]) {
-      res.json(result);
+      );
+    }).then(function(shift) {
+      res.json(shift);
     }).catch(function(err) {
       next(err);
     });
