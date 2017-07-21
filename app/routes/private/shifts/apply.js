@@ -1,5 +1,9 @@
-var ClientError = require('../../../../lib/errors/ClientError');
 var moment = require('moment');
+var ClientError = require('../../../../lib/errors/ClientError');
+var {
+  getClashingShifts,
+  isFullyStaffed
+} = require('../../../../lib/events');
 
 module.exports = function(router) {
   router.post('/apply/:id', function(req, res, next) {
@@ -24,43 +28,7 @@ module.exports = function(router) {
         return shift;
       });
     }).then(function(shift) {
-      var date = moment(shift.event.eventDate).format('YYYY-MM-DD');
-      var start = moment(shift.originalStartTime).format('YYYY-MM-DDTHH:mm:ss.SSS');
-      var finish = moment(shift.originalFinishTime).format('YYYY-MM-DDTHH:mm:ss.SSS');
-      return models.eventShifts.findAll({
-        include: [{
-          model: models.events,
-          as: 'event',
-          where: [{
-            $and: [
-              sequelize.literal('event.eventDate = \'' + date + '\''),
-            ]
-          }]
-        }, {
-          model: models.userTimesheets.scope([{
-            method: ['byUser', req.user.id]
-          }, 'confirmed']),
-          as: 'timesheets'
-        }],
-        where: {
-          $or: [{
-            $and: [
-              sequelize.literal('originalStartTime >= \'' + start + '\''),
-              sequelize.literal('originalStartTime <= \'' + finish + '\''),
-            ]
-          }, {
-            $and: [
-              sequelize.literal('originalFinishTime >= \'' + start + '\''),
-              sequelize.literal('originalFinishTime <= \'' + finish + '\''),
-            ]
-          }, {
-            $and: [
-              sequelize.literal('originalFinishTime >= \'' + finish + '\''),
-              sequelize.literal('originalStartTime <= \'' + start + '\''),
-            ]
-          }]
-        }
-      }).then(function(clashing) {
+      return getClashingShifts(models, sequelize, shift, req.user.id).then(function(clashing) {
         if (clashing) {
           throw new ClientError('already_booked_other', { message: 'You are already booked on another shift at this time' });
         }
@@ -68,6 +36,19 @@ module.exports = function(router) {
       }).catch(function(err) {
         throw err;
       });
+    }).then(function(shift) {
+      return Promise.all([shift, isFullyStaffed(shift.id)]);
+    }).then(function([shift, fullyStaffed]) {
+      var favourites = new Set(req.user.favouritedBy.map(function(client) {
+        return client.id;
+      }));
+      return bookUserOnShift(
+        models,
+        sequelize,
+        shift.id,
+        req.user.id,
+        favourites.has(shift.event.client.id) && !fullyStaffed
+      );
     }).catch(function(err) {
       next(err);
     });
