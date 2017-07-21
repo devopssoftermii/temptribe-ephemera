@@ -15,6 +15,9 @@ module.exports = function(router) {
     models.eventShifts.scope({
       method: ['staff', 'standard', 'future']
     }).findById(id).then(function(shift) {
+      if (!shift) {
+        throw new ClientError('invalid_shift', { message: 'No such shift' });
+      }
       return Promise.all([shift, shift.getTimesheets()]);
     }).then(function([shift, timesheets]) {
       return Promise.all(timesheets.map(function(timesheet) {
