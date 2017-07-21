@@ -11,15 +11,15 @@ module.exports = function(router) {
     }).findById(id).then(function(shift) {
       return Promise.all([shift, shift.getTimesheets()]);
     }).then(function([shift, timesheets]) {
-      timesheets.forEach(function(timesheet) {
-        var user = timesheet.getUser().then(function(user) {
+      return Promise.all(timesheets.map(function(timesheet) {
+        return timesheet.getUser().then(function(user) {
           if (user.id === req.user.id) {
             throw new ClientError('already_booked', { message: 'You are already booked on this shift' });
           }
         }).catch(function(err) {
           throw err;
         });
-      });
+      }));
       var favourites = req.user.favouritedBy.map(function(client) {
         return client.id;
       });
