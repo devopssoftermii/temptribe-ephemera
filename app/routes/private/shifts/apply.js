@@ -9,7 +9,11 @@ module.exports = function(router) {
     models.eventShifts.scope({
       method: ['staff', 'standard', 'future']
     }).findById(id).then(function(shift) {
-      return Promise.all([shift, shift.getTimesheets()]);
+      return Promise.all([shift, shift.getTimesheets({
+        where: {
+          status: 8
+        }
+      })]);
     }).then(function([shift, timesheets]) {
       return Promise.all(timesheets.map(function(timesheet) {
         return timesheet.getUser().then(function(user) {
@@ -20,9 +24,6 @@ module.exports = function(router) {
           throw err;
         });
       }));
-      var favourites = req.user.favouritedBy.map(function(client) {
-        return client.id;
-      });
     }).then(function() {
       res.json({
         message: 'not booked'
