@@ -1,4 +1,5 @@
 var ClientError = require('../../../../lib/errors/ClientError');
+var moment = require('moment');
 
 module.exports = function(router) {
   router.post('/apply/:id', function(req, res, next) {
