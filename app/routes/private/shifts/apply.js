@@ -2,7 +2,8 @@ var moment = require('moment');
 var ClientError = require('../../../../lib/errors/ClientError');
 var {
   getClashingShifts,
-  isFullyStaffed
+  isFullyStaffed,
+  bookUserOnShift
 } = require('../../../../lib/events');
 
 module.exports = function(router) {
