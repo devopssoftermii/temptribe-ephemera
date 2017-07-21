@@ -157,7 +157,7 @@ module.exports = function (sequelize, DataTypes) {
     events.addScope('future', {
       where: {
         eventDate: {
-          $gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
+          $gte: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
         }
       }
     });
