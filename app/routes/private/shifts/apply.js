@@ -37,7 +37,7 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(shift) {
-      return Promise.all([shift, isFullyStaffed(shift.id)]);
+      return Promise.all([shift, isFullyStaffed(sequelize, shift.id)]);
     }).then(function([shift, fullyStaffed]) {
       var favourites = new Set(req.user.favouritedBy.map(function(client) {
         return client.id;
