@@ -133,7 +133,7 @@ module.exports = function (sequelize, DataTypes) {
         ]
       }
     });
-    userTimesheets.addScope('byUser', function (id) {
+    userTimesheets.addScope('byUser', function (id, required = false) {
       return {
         include: [
           {
@@ -148,7 +148,7 @@ module.exports = function (sequelize, DataTypes) {
             ]
           }
         ],
-        required: true
+        required
       }
     });
   }
