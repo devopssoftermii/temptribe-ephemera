@@ -34,7 +34,7 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope({
-        method: ['staff', detail, 'future', 'notUser', filters.scope]
+        method: ['staff', detail, 'future', 'notUser', req.user.id, filters.scope]
       }).findAndCountAll({
         distinct: true,
         col: 'eventShifts.id'
