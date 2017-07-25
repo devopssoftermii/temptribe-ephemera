@@ -22,7 +22,7 @@ module.exports = function(router) {
     }).then(function([shift, timesheets]) {
       return Promise.all(timesheets.map(function(timesheet) {
         return timesheet.getUser().then(function(user) {
-          if (timesheet.status = 4 && user.id === req.user.id) {
+          if (timesheet.status === 4 && user.id === req.user.id) {
             throw new ClientError('already_booked', { message: 'You are already booked on this shift' });
           }
         }).catch(function(err) {
