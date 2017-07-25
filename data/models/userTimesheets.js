@@ -135,6 +135,7 @@ module.exports = function (sequelize, DataTypes) {
     });
     userTimesheets.addScope('byUser', function (id, required = true) {
       return {
+        attributes: ['id', 'status'],
         include: [
           {
             attributes: [],
@@ -143,15 +144,12 @@ module.exports = function (sequelize, DataTypes) {
             where: {
               id
             },
-            order: [
-              ['updated', 'DESC']
-            ],
           }
         ],
+        order: [
+          ['updated', 'DESC']
+        ],
         required,
-        having: {
-          status: null
-        }
       }
     });
   }

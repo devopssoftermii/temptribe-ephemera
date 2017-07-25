@@ -44,6 +44,14 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(result) {
+      var filtered = result.rows.filter(function(shift) {
+        return !shift.timesheets[0].status;
+      });
+      return {
+        rows: filtered,
+        count: filtered.length
+      }
+    }).then(function(result) {
       var pageInfo = detail === 'metadata'? null: {
         page,
         limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
