@@ -110,12 +110,10 @@ module.exports = function (sequelize, DataTypes) {
         status,
         filters;
       var sortDir = 'ASC';
-      for (var i = 1; i > -1; i--) {
+      for (var i = 4; i > -1; i--) {
         if (args.length > i) {
           if ('string' === typeof(args[i]) && ['confirmed', 'applied', 'cancelled', 'history'].indexOf(args[i]) !== -1) {
             status = args[i];
-          } else if ('favourite' === args[i]) {
-            favourite = true;
           } else if ('notUser' === args[i]) {
             notUser = true;
           } else if ('number' === typeof(args[i])) {
