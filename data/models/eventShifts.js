@@ -106,6 +106,7 @@ module.exports = function (sequelize, DataTypes) {
       .preScope(models);
     eventShifts.addScope('staff', function (detail, era = null, ...args) {
       var user,
+        notUser,
         status,
         filters;
       var sortDir = 'ASC';
@@ -115,6 +116,8 @@ module.exports = function (sequelize, DataTypes) {
             status = args[i];
           } else if ('favourite' === args[i]) {
             favourite = true;
+          } else if ('notUser' === args[i]) {
+            notUser = true;
           } else if ('number' === typeof(args[i])) {
             user = args[i];
           } else if ('object' === typeof(args[i])) {
@@ -174,7 +177,11 @@ module.exports = function (sequelize, DataTypes) {
         attributes.push('qty', 'duration', 'hourlyRate', 'estimatedPay');
       }
       var timesheetScopes = ['refOnly'];
-      if (user) {
+      if (notUser && user) {
+        timesheetScopes.push({
+          method: ['byUser', user, false]
+        });
+      } else if (user) {
         timesheetScopes.push({
           method: ['byUser', user]
         });

@@ -34,7 +34,7 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope({
-        method: ['staff', detail, 'future', filters.scope]
+        method: ['staff', detail, 'future', 'notUser', filters.scope]
       }).findAndCountAll({
         distinct: true,
         col: 'eventShifts.id'
@@ -42,6 +42,20 @@ module.exports = function(router) {
         return cache.pset(key, result);
       }).catch(function(err) {
         throw err;
+      });
+    }).then(function(result) {
+      return Promise.all(result.rows.map(function(shift) {
+        return shift.getTimesheets().then(function(timesheets) {
+          shift.tscount = timesheets.length;
+        });
+      })).then(function(mapped) {
+        var filtered = mapped.filter(function(shift) {
+          return shift.tscount === 0;
+        });
+        return {
+          rows: filtered,
+          count: filtered.length
+        }
       });
     }).then(function(result) {
       var pageInfo = detail === 'metadata'? null: {

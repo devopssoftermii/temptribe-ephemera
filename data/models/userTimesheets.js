@@ -133,7 +133,7 @@ module.exports = function (sequelize, DataTypes) {
         ]
       }
     });
-    userTimesheets.addScope('byUser', function (id, required = false) {
+    userTimesheets.addScope('byUser', function (id, required = true) {
       return {
         include: [
           {
