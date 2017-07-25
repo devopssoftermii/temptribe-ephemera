@@ -41,20 +41,18 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(shift) {
-      return Promise.all([shift, isFullyStaffed(shift)]);
-    }).then(function([shift, fullyStaffed]) {
       var favourites = new Set(req.user.favouritedBy.map(function(client) {
         return client.id;
       }));
-      return Promise.all([shift, bookUserOnShift(
+      return bookUserOnShift(
         models,
         sequelize,
-        shift.id,
+        shift,
         req.user.id,
-        favourites.has(shift.event.client.id) && !fullyStaffed
-      )]);
-    }).then(function([shift, result]) {
-      res.json(result);
+        favourites.has(shift.event.client.id)
+      );
+    }).then(function(shift) {
+      res.json(shift);
     }).catch(function(err) {
       next(err);
     });
