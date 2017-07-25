@@ -145,10 +145,13 @@ module.exports = function (sequelize, DataTypes) {
             },
             order: [
               ['updated', 'DESC']
-            ]
+            ],
           }
         ],
-        required
+        required,
+        having: {
+          status: null
+        }
       }
     });
   }
