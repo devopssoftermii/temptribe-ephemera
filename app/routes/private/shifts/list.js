@@ -44,20 +44,13 @@ module.exports = function(router) {
         throw err;
       });
     }).then(function(result) {
-      return Promise.all(result.rows.map(function(shift) {
-        return shift.getTimesheets().then(function(timesheets) {
-          shift.tscount = timesheets.length;
-          return shift;
-        });
-      })).then(function(mapped) {
-        var filtered = mapped.filter(function(shift) {
-          return shift.tscount === 0;
-        });
-        return {
-          rows: filtered,
-          count: filtered.length
-        }
+      var filtered = result.rows.filter(function(shift) {
+        return !shift.timesheets[0].status;
       });
+      return {
+        rows: filtered,
+        count: filtered.length
+      }
     }).then(function(result) {
       var pageInfo = detail === 'metadata'? null: {
         page,
