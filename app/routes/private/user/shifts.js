@@ -21,15 +21,10 @@ module.exports = function(router) {
       distinct: true,
       col: 'eventShifts.id'
     }).then(function(result) {
-      var pageInfo = {
-        page,
-        limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
-        after
-      }
       var favourites = req.user.favouritedBy.map(function(client) {
         return client.id;
       });
-      res.json(eventHelpers.formatShiftList(result, favourites, 'full', pageInfo));
+      res.json(eventHelpers.formatShiftList(result, favourites, 'full'));
     }).catch(function(err) {
       next(err);
     });
