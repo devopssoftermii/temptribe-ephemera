@@ -45,7 +45,7 @@ module.exports = function(router) {
       });
     }).then(function(result) {
       var filtered = result.rows.filter(function(shift) {
-        return !shift.timesheets[0].status;
+        return !shift.timesheets.length;
       });
       return {
         rows: filtered,
