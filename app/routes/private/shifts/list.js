@@ -47,6 +47,7 @@ module.exports = function(router) {
       return Promise.all(result.rows.map(function(shift) {
         return shift.getTimesheets().then(function(timesheets) {
           shift.tscount = timesheets.length;
+          return shift;
         });
       })).then(function(mapped) {
         var filtered = mapped.filter(function(shift) {
