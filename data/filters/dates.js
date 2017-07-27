@@ -9,7 +9,7 @@ module.exports = function(req, models, output) {
   var filterDates = new Set(req.body.f.d);
   var datesList = [];
   var datesSearch = [];
-  for (var i = 0; i < 14; i++) {
+  for (var i = 0; i < 28; i++) {
     if (filterDates.has(i)) {
       datesList.push(i);
       datesSearch.push(moment().add(i, 'days').format('YYYYMMDD'));

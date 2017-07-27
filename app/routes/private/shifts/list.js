@@ -37,7 +37,10 @@ module.exports = function(router) {
         method: ['staff', detail, 'future', 'notUser', req.user.id, filters.scope]
       }).findAndCountAll({
         distinct: true,
-        col: 'eventShifts.id'
+        col: 'eventShifts.id',
+		where: {
+          status: 1
+        }
       }).then(function(result) {
         return cache.pset(key, result);
       }).catch(function(err) {
