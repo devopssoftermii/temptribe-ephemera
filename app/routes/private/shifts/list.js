@@ -38,16 +38,20 @@ module.exports = function(router) {
       }
       return models.eventShifts.scope({
         method: ['staff', detail, 'future', 'userConfirmed', filters.scope]
-      }).findAndCountAll({
+      }).findAll({
         distinct: true,
         col: 'eventShifts.id',
         where: {
           status: 1
         }
       }).then(function(result) {
-        return cache.pset(key, result.filter(function(shift) {
+        var unstaffedResults = result.filter(function(shift) {
           return shift.timesheets.length < shift.qty;
-        }));
+        })
+        return cache.pset(key, {
+          rows: unstaffedResults,
+          count: unstaffedResults.length
+        });
       }).catch(function(err) {
         throw err;
       });
