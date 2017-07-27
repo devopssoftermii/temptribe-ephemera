@@ -38,7 +38,7 @@ module.exports = function(router) {
       }).findAndCountAll({
         distinct: true,
         col: 'eventShifts.id',
-		where: {
+        where: {
           status: 1
         }
       }).then(function(result) {
