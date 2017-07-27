@@ -71,7 +71,7 @@ module.exports = function(router) {
       });
     })]).then(function([allShifts, userShifts]) {
       var filtered = allShifts.rows.filter(function(shift) {
-        return !userShiftIds.has(shift.id);
+        return !userShifts.has(shift.id);
       });
       return {
         rows: filtered,
