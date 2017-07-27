@@ -77,7 +77,7 @@ module.exports = function (sequelize, DataTypes) {
     freezeTableName: true,
     scopes: {
       refOnly: {
-        attributes: ['status']
+        attributes: ['id', 'status']
       },
       confirmed: {
         where: {
@@ -133,24 +133,27 @@ module.exports = function (sequelize, DataTypes) {
         ]
       }
     });
-    userTimesheets.addScope('byUser', function (id, required = true) {
-      return {
+    userTimesheets.addScope('byUser', function (id = null) {
+      var returnScope = {
         attributes: ['id', 'status'],
         include: [
           {
-            attributes: [],
+            attributes: ['id'],
             model: models.users,
             as: 'user',
-            where: {
-              id
-            },
           }
         ],
         order: [
           ['updated', 'DESC']
         ],
-        required,
+        required: true,
       }
+      if (id) {
+        returnScope.include[0].where = {
+          id
+        }
+      }
+      return returnScope;
     });
   }
   return userTimesheets;

@@ -29,12 +29,15 @@ module.exports = function(router) {
       filters: filters.key,
       detail
     });
-    return cache.pget(key).then(function(result) {
+    var userKey = {
+      userShifts: req.user.id
+    };
+    return Promise.all([cache.pget(key).then(function(result) {
       if (result) {
         return result;
       }
       return models.eventShifts.scope({
-        method: ['staff', detail, 'future', 'notUser', req.user.id, filters.scope]
+        method: ['staff', detail, 'future', 'userConfirmed', filters.scope]
       }).findAndCountAll({
         distinct: true,
         col: 'eventShifts.id',
@@ -42,13 +45,29 @@ module.exports = function(router) {
           status: 1
         }
       }).then(function(result) {
-        return cache.pset(key, result);
+        return cache.pset(key, result.filter(function(shift) {
+          return shift.timesheets.length < shift.qty;
+        }));
       }).catch(function(err) {
         throw err;
       });
-    }).then(function(result) {
-      var filtered = result.rows.filter(function(shift) {
-        return !shift.timesheets.length;
+    }), cache.pget(userKey).then(function(result) {
+      if (result) {
+        return result;
+      }
+      return models.eventShifts.scope([{
+        method: ['staff', 'metadata', 'future', req.user.id]
+      }]).findAll({
+        distinct: true,
+        col: 'eventShifts.id'
+      }).then(function(result) {
+        return cache.pset(userKey, new Set(result.map(function(shift) {
+          return shift.id;
+        })));
+      });
+    })]).then(function([allShifts, userShifts]) {
+      var filtered = allShifts.rows.filter(function(shift) {
+        return !userShiftIds.has(shift.id);
       });
       return {
         rows: filtered,

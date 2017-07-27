@@ -106,7 +106,7 @@ module.exports = function (sequelize, DataTypes) {
       .preScope(models);
     eventShifts.addScope('staff', function (detail, era = null, ...args) {
       var user,
-        notUser,
+        userConfirmed,
         status,
         filters;
       var sortDir = 'ASC';
@@ -114,8 +114,8 @@ module.exports = function (sequelize, DataTypes) {
         if (args.length > i) {
           if ('string' === typeof(args[i]) && ['confirmed', 'applied', 'cancelled', 'history'].indexOf(args[i]) !== -1) {
             status = args[i];
-          } else if ('notUser' === args[i]) {
-            notUser = true;
+          } else if ('userConfirmed' === args[i]) {
+            userConfirmed = true;
           } else if ('number' === typeof(args[i])) {
             user = args[i];
           } else if ('object' === typeof(args[i])) {
@@ -150,6 +150,7 @@ module.exports = function (sequelize, DataTypes) {
       };
       var attributes = [
         'id',
+        'qty',
         [
           sequelize.fn('convert', sequelize.literal('VARCHAR(5)'), sequelize.col('originalStartTime'), 108),
           'startTime'
@@ -172,13 +173,13 @@ module.exports = function (sequelize, DataTypes) {
             .scope(detail),
           as: 'jobRole'
         };
-        attributes.push('qty', 'duration', 'hourlyRate', 'estimatedPay');
+        attributes.push('duration', 'hourlyRate', 'estimatedPay');
       }
       var timesheetScopes = ['refOnly'];
-      if (notUser && user) {
+      if (userConfirmed) {
         timesheetScopes.push({
-          method: ['byUser', user, false]
-        });
+          method: ['byUser']
+        }, 'confirmed');
       } else if (user) {
         timesheetScopes.push({
           method: ['byUser', user]
