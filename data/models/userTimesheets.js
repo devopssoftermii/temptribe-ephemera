@@ -146,7 +146,7 @@ module.exports = function (sequelize, DataTypes) {
         order: [
           ['updated', 'DESC']
         ],
-        required: true,
+        required: !!id,
       }
       if (id) {
         returnScope.include[0].where = {
