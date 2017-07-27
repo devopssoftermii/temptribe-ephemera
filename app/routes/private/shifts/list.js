@@ -29,9 +29,9 @@ module.exports = function(router) {
       filters: filters.key,
       detail
     });
-    var userKey = {
+    var userKey = JSON.stringify({
       userShifts: req.user.id
-    };
+    });
     return Promise.all([cache.pget(key).then(function(result) {
       if (result) {
         return result;
