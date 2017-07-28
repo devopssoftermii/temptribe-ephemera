@@ -24,7 +24,7 @@ module.exports = function(router) {
       var favourites = req.user.favouritedBy.map(function(client) {
         return client.id;
       });
-      res.json(eventHelpers.formatShiftList(result, favourites, 'full'));
+      res.json(eventHelpers.formatShiftList(result, favourites, 'full', false));
     }).catch(function(err) {
       next(err);
     });

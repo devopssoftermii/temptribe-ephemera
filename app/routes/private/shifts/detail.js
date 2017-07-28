@@ -22,7 +22,7 @@ module.exports = function(router) {
         var favourites = req.user.favouritedBy.map(function(client) {
           return client.id;
         });
-        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), favourites));
+        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), favourites, full, true));
       }).catch(function(err) {
         throw err;
       });

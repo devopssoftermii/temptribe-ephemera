@@ -83,7 +83,7 @@ module.exports = function(router) {
         limit: parseInt(process.env.SHIFTLIST_PAGE_SIZE, 10),
         after
       }
-      res.json(eventHelpers.formatShiftList(result, favourites, detail, pageInfo));
+      res.json(eventHelpers.formatShiftList(result, favourites, detail, true, pageInfo));
     }).catch(function(err) {
       next(err);
     });
