@@ -86,6 +86,11 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       },
+      onlyConfirmed: {
+        where: {
+          status: 4
+        }
+      },
       applied: {
         where: {
           status: {

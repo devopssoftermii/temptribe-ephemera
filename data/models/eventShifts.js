@@ -179,7 +179,7 @@ module.exports = function (sequelize, DataTypes) {
       if (userConfirmed) {
         timesheetScopes.push({
           method: ['byUser']
-        }, 'confirmed');
+        }, 'onlyConfirmed');
       } else if (user) {
         timesheetScopes.push({
           method: ['byUser', user]
