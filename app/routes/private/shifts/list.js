@@ -66,14 +66,12 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope([{
-        method: ['staff', 'metadata', req.user.blacklistedBy, 'future', req.user.id]
+        method: ['staff', 'metadata', req.user.blacklistedBy, 'future', req.user.id, 'active']
       }]).findAll({
         distinct: true,
         col: 'eventShifts.id'
       }).then(function(result) {
-        return cache.pset(userKey, new Set(result.filter(function(shift) {
-          return shift.timesheets[0].status !== 2 && shift.timesheets[0].status !== 7;
-        }).map(function(shift) {
+        return cache.pset(userKey, new Set(result.map(function(shift) {
           return shift.id;
         })));
       });

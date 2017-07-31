@@ -110,7 +110,7 @@ module.exports = function (sequelize, DataTypes) {
       var sortDir = 'ASC';
       for (var i = 4; i > -1; i--) {
         if (args.length > i) {
-          if ('string' === typeof(args[i]) && ['confirmed', 'applied', 'cancelled', 'history'].indexOf(args[i]) !== -1) {
+          if ('string' === typeof(args[i]) && ['confirmed', 'applied', 'cancelled', 'history', 'active'].indexOf(args[i]) !== -1) {
             status = args[i];
           } else if ('userConfirmed' === args[i]) {
             userConfirmed = true;

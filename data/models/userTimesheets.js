@@ -98,6 +98,13 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       },
+      active: {
+        where: {
+          status: {
+            $or: [1, 4]
+          }
+        }
+      },
       cancelled: {
         where: {
           status: 7
