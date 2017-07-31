@@ -16,7 +16,7 @@ module.exports = function(router) {
       page = null;
     }
     return models.eventShifts.scope([{
-      method: ['staff', 'full', status === 'history'? 'past': 'future', req.user.blacklistedBy, req.user.id, status]
+      method: ['staff', 'full', req.user.blacklistedBy, status === 'history'? 'past': 'future', req.user.id, status]
     }]).findAndCountAll({
       distinct: true,
       col: 'eventShifts.id'
