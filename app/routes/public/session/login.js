@@ -8,7 +8,9 @@ module.exports = function(router) {
     }
     var models = req.app.locals.models;
     var sequelize = req.app.locals.sequelize;
-    models.users.scope({ method: ['login', req.body] }).findOne().then(function(user) {
+    models.users.scope(['apiUser', {
+      method: ['login', req.body]
+    }]).findOne().then(function(user) {
       if (!user) {
         throw new UnauthorizedError('unknown_credentials', {message: 'Unknown email or password'});
       }

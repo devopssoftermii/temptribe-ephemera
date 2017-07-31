@@ -142,6 +142,13 @@ module.exports = function (sequelize, DataTypes) {
     clients.hasMany(models.events, {foreignKey: 'clientId'});
     clients.belongsToMany(models.users, {
       through: models.clientFavourites,
+      as: 'favourited',
+      foreignKey: 'ClientID',
+      otherKey: 'UserID'
+    });
+    clients.belongsToMany(models.users, {
+      through: models.clientBlacklist,
+      as: 'blacklisted',
       foreignKey: 'ClientID',
       otherKey: 'UserID'
     });

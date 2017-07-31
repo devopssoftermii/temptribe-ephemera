@@ -268,7 +268,23 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     tableName: 'users',
     timestamps: false,
-    freezeTableName: true
+    freezeTableName: true,
+    scopes: {
+      includeOnly: {
+        attributes: [
+          'id'
+        ]
+      },
+      apiUser: {
+        attributes: [
+          'id',
+          'email',
+          'ambassador',
+          'lolaRating',
+          'gender'
+        ],
+      }
+    }
   });
   users.associate = function (models) {
     users.belongsTo(models.venues, {as: 'venue'});
@@ -290,6 +306,12 @@ module.exports = function (sequelize, DataTypes) {
     users.belongsToMany(models.clients, {
       through: models.clientFavourites,
       as: 'favouritedBy',
+      foreignKey: 'UserID',
+      otherKey: 'ClientID'
+    });
+    users.belongsToMany(models.clients, {
+      through: models.clientBlacklist,
+      as: 'blacklistedBy',
       foreignKey: 'UserID',
       otherKey: 'ClientID'
     });
@@ -324,14 +346,8 @@ module.exports = function (sequelize, DataTypes) {
         }
       ]
     });
-    users.addScope('includeOnly', {
-      attributes: ['id']
-    });
     users.addScope('login', function (params) {
       return {
-        attributes: [
-          'id', 'email'
-        ],
         where: {
           $and: {
             email: params.email,

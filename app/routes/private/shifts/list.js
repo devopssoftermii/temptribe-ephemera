@@ -42,7 +42,16 @@ module.exports = function(router) {
         distinct: true,
         col: 'eventShifts.id',
         where: {
-          status: 1
+          status: 1,
+          Ambassador: {
+            $or: [null, 0, req.user.ambassador]
+          },
+          Rating: {
+            $or: [null, req.user.lolaRating]
+          },
+          Gender: {
+            $or: [null, req.user.gender]
+          },
         }
       }).then(function(result) {
         var unstaffedResults = result.filter(function(shift) {

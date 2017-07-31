@@ -15,6 +15,9 @@ app.locals = Object.assign({}, app.locals, {
   shiftlistCache: cache({
     stdTTL: parseInt(process.env.SHIFTLIST_CACHE_TTL, 10)
   }),
+  apiUserCache: cache({
+    stdTTL: parseInt(process.env.USER_CACHE_TTL, 10)
+  }),
 });
 
 // Initialise logging middleware

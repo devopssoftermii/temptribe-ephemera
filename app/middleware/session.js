@@ -15,11 +15,7 @@ function extractSessionFromToken(token, models) {
         id: payload.id
       },
       include: [{
-        model: models.users,
-        attributes: [
-          'id',
-          'email'
-        ],
+        model: models.users.scope('apiUser'),
         required: true
       }]
     });
@@ -35,8 +31,9 @@ function buildTokenUser(user) {
   return Promise.all([
     user.get({ plain: true }),
     user.getSuitabilityTypes(),
-    user.getFavouritedBy()
-  ]).then(function([user, types, favouritedBy]) {
+    user.getFavouritedBy(),
+    user.getBlacklistedBy(),
+  ]).then(function([user, types, favouritedBy, blacklistedBy]) {
     return Object.assign(user, {
       suitabilityTypes: types.map(function(type) {
         return type.get({ plain: true });
@@ -44,11 +41,15 @@ function buildTokenUser(user) {
       favouritedBy: favouritedBy.map(function(client) {
         return client.get({ plain: true });
       }),
+      blacklistedBy: blacklistedBy.map(function(client) {
+        return client.get({ plain: true });
+      }),
     });
   });
 }
 
 module.exports = {
+  buildTokenUser,
   create: function(user, models) {
     return Promise.all([
       buildTokenUser(user),
