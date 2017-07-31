@@ -16,15 +16,12 @@ module.exports = function(router) {
       page = null;
     }
     return models.eventShifts.scope([{
-      method: ['staff', 'full', status === 'history'? 'past': 'future', req.user.id, status]
+      method: ['staff', 'full', status === 'history'? 'past': 'future', req.user.blacklistedBy, req.user.id, status]
     }]).findAndCountAll({
       distinct: true,
       col: 'eventShifts.id'
     }).then(function(result) {
-      var favourites = req.user.favouritedBy.map(function(client) {
-        return client.id;
-      });
-      res.json(eventHelpers.formatShiftList(result, favourites, 'full', false));
+      res.json(eventHelpers.formatShiftList(result, req.user.favouritedBy, 'full', false));
     }).catch(function(err) {
       next(err);
     });

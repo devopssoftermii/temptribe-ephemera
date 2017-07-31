@@ -39,10 +39,10 @@ function buildTokenUser(user) {
         return type.get({ plain: true });
       }),
       favouritedBy: favouritedBy.map(function(client) {
-        return client.get({ plain: true });
+        return client.get({ plain: true }).id;
       }),
       blacklistedBy: blacklistedBy.map(function(client) {
-        return client.get({ plain: true });
+        return client.get({ plain: true }).id;
       }),
     });
   });

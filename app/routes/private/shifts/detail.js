@@ -14,15 +14,12 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope({
-        method: ['staff', 'full', 'future']
+        method: ['staff', 'full', req.user.blacklistedBy, 'future']
       }).findById(id).then(function(shift) {
         if (!shift) {
           return null;
         }
-        var favourites = req.user.favouritedBy.map(function(client) {
-          return client.id;
-        });
-        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), favourites, full, true));
+        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, full, true));
       }).catch(function(err) {
         throw err;
       });

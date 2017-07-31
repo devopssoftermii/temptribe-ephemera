@@ -118,26 +118,6 @@ module.exports = function (sequelize, DataTypes) {
       as: 'shift',
       foreignKey: 'eventShiftId'
     });
-  }
-  userTimesheets.preScope = function (models) {
-    models
-      .eventShifts
-      .preScope(models);
-    userTimesheets.addScope('staff', function (era) {
-      return {
-        attributes: ['id'],
-        include: [
-          {
-            model: models
-              .eventShifts
-              .scope({
-                method: ['staff', 'standard', era]
-              }),
-            as: 'shift'
-          }
-        ]
-      }
-    });
     userTimesheets.addScope('byUser', function (id = null) {
       var returnScope = {
         attributes: ['id', 'status'],

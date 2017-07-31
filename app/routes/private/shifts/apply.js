@@ -13,7 +13,7 @@ module.exports = function(router) {
     var id = req.params.id;
     var cache = req.app.locals.shiftlistCache;
     models.eventShifts.scope({
-      method: ['staff', 'standard', 'future']
+      method: ['staff', 'standard', req.user.blacklistedBy, 'future']
     }).findById(id).then(function(shift) {
       if (!shift) {
         throw new ClientError('invalid_shift', { message: 'No such shift' });
@@ -38,9 +38,7 @@ module.exports = function(router) {
           throw err;
         });
       }).then(function() {
-        var favourites = new Set(req.user.favouritedBy.map(function(client) {
-          return client.id;
-        }));
+        var favourites = new Set(req.user.favouritedBy);
         return bookUserOnShift(
           models,
           sequelize,

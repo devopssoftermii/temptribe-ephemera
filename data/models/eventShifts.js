@@ -99,12 +99,10 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'EventShiftId',
       otherKey: 'SuitabilityTypeId'
     });
-  };
-  eventShifts.preScope = function (models) {
     models
       .events
       .preScope(models);
-    eventShifts.addScope('staff', function (detail, era = null, ...args) {
+    eventShifts.addScope('staff', function (detail, blacklist, era = null, ...args) {
       var user,
         userConfirmed,
         status,
@@ -125,7 +123,7 @@ module.exports = function (sequelize, DataTypes) {
       }
       var favourite = filters? filters.favourite: null;
       var eventScope = [{
-        method: ['staff', detail, favourite]
+        method: ['staff', detail, blacklist, favourite]
       }];
       if (era) {
         eventScope.push(era);
@@ -233,6 +231,6 @@ module.exports = function (sequelize, DataTypes) {
       }
       return result;
     });
-  }
+  };
   return eventShifts;
 };

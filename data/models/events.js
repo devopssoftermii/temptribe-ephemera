@@ -115,7 +115,7 @@ module.exports = function (sequelize, DataTypes) {
   }
   events.preScope = function (models) {
     events
-      .addScope('staff', function (detail, favourite) {
+      .addScope('staff', function (detail, blacklist, favourite = null) {
         var attributes = [
           'id',
           [
@@ -127,14 +127,19 @@ module.exports = function (sequelize, DataTypes) {
           model: models
             .clients
             .scope(detail),
-          as: 'client'
-        };
-        if (favourite) {
-          clientInclude.where = {
+          as: 'client',
+          where: {
             id: {
-              $in: favourite
+              $and: [{
+                $notIn: blacklist
+              }]
             }
           }
+        };
+        if (favourite) {
+          clientInclude.where.id.$and.push({
+            $in: favourite
+          });
         }
         var include = [clientInclude];
         if (detail !== 'metadata') {

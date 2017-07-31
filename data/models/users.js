@@ -315,28 +315,6 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'UserID',
       otherKey: 'ClientID'
     });
-    models
-      .userTimesheets
-      .preScope(models);
-    users.addScope('shifts', function (status) {
-      var era = status === 'history'? 'past': 'future';
-      return {
-        attributes: [],
-        include: [
-          {
-            model: models
-              .userTimesheets
-              .scope([
-                {
-                  method: ['staff', era]
-                },
-                status
-              ]),
-            as: 'timesheets'
-          }
-        ]
-      };
-    });
     users.addScope('profile', {
       attributes: ['id', 'firstname', 'surname', 'email', 'mobile'],
       include: [

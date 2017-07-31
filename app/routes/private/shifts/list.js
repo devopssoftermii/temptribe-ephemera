@@ -8,9 +8,6 @@ module.exports = function(router) {
     var detail = 'standard';
     var page = 1;
     var after = null;
-    var favourites = req.user.favouritedBy.map(function(client) {
-      return client.id;
-    });
     if (req.body.detail && ['full', 'standard', 'metadata'].indexOf(req.body.detail) !== -1) {
       detail = req.body.detail;
     }
@@ -37,7 +34,7 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope({
-        method: ['staff', detail, 'future', 'userConfirmed', filters.scope]
+        method: ['staff', detail, req.user.blacklistedBy, 'future', 'userConfirmed', filters.scope]
       }).findAll({
         distinct: true,
         col: 'eventShifts.id',
@@ -69,7 +66,7 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope([{
-        method: ['staff', 'metadata', 'future', req.user.id]
+        method: ['staff', 'metadata', req.user.blacklistedBy, 'future', req.user.id]
       }]).findAll({
         distinct: true,
         col: 'eventShifts.id'
