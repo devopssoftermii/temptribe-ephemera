@@ -70,6 +70,10 @@ module.exports = function (sequelize, DataTypes) {
     CommentVisible: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    appliedOnPlatform: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     tableName: 'userTimesheets',
