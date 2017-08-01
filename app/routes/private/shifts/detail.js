@@ -19,7 +19,7 @@ module.exports = function(router) {
         if (!shift) {
           return null;
         }
-        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, full, true));
+        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, full, true, true));
       }).catch(function(err) {
         throw err;
       });
