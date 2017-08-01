@@ -20,7 +20,7 @@ module.exports = function(router) {
     var filters = filterQuery(req, models);
     if (req.body.f && req.body.f.fav) {
       filters.key.favourite = true;
-      filters.scope.favourite = favourites;
+      filters.scope.favourite = req.user.favouritedBy;
     }
     var key = JSON.stringify({
       filters: filters.key,
