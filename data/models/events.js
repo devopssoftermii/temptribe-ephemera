@@ -29,7 +29,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true,
       get() {
-        return parse.links(this.getDataValue('comments'));
+        return this.getDataValue('comments')? parse.links(this.getDataValue('comments')): null;
       }
     },
     internalComments: {
