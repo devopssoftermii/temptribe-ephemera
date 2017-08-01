@@ -1,4 +1,5 @@
 /* jshint indent: 1 */
+const parse = require('../../lib/parse');
 
 module.exports = function (sequelize, DataTypes) {
   var users = sequelize.define('users', {
@@ -58,15 +59,24 @@ module.exports = function (sequelize, DataTypes) {
     },
     telephone: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      get() {
+        return parse.phone(this.getDataValue('telephone'));
+      }
     },
     fax: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      get() {
+        return parse.phone(this.getDataValue('fax'));
+      }
     },
     mobile: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      get() {
+        return parse.phone(this.getDataValue('mobile'));
+      }
     },
     email: {
       type: DataTypes.STRING,
