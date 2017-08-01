@@ -1,5 +1,7 @@
 /* jshint indent: 1 */
 
+const parse = require('../../lib/parse');
+
 module.exports = function (sequelize, DataTypes) {
   var events = sequelize.define('events', {
     id: {
@@ -25,7 +27,10 @@ module.exports = function (sequelize, DataTypes) {
     },
     comments: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      get() {
+        return parse.links(this.getDataValue('comments'));
+      }
     },
     internalComments: {
       type: DataTypes.TEXT,
