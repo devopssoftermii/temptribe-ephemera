@@ -61,21 +61,21 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true,
       get() {
-        return parse.phone(this.getDataValue('telephone'));
+        return this.getDataValue('telephone')? parse.phone(this.getDataValue('telephone')): '';
       }
     },
     fax: {
       type: DataTypes.STRING,
       allowNull: true,
       get() {
-        return parse.phone(this.getDataValue('fax'));
+        return this.getDataValue('fax')? parse.phone(this.getDataValue('fax')): '';
       }
     },
     mobile: {
       type: DataTypes.STRING,
       allowNull: true,
       get() {
-        return parse.phone(this.getDataValue('mobile'));
+        return this.getDataValue('mobile')? parse.phone(this.getDataValue('mobile')): '';
       }
     },
     email: {
