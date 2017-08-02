@@ -34,7 +34,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
       defaultValue: 0
     },
-    staffConfirmed: {
+    staffBooked: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0
@@ -83,14 +83,14 @@ module.exports = function (sequelize, DataTypes) {
       refOnly: {
         attributes: ['id', 'status']
       },
-      confirmed: {
+      booked: {
         where: {
           status: {
             $or: [4, 7]
           }
         }
       },
-      onlyConfirmed: {
+      onlyBooked: {
         where: {
           status: 4
         }

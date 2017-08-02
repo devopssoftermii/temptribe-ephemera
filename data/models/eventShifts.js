@@ -104,16 +104,16 @@ module.exports = function (sequelize, DataTypes) {
       .preScope(models);
     eventShifts.addScope('staff', function (detail, blacklist, era = null, ...args) {
       var user,
-        userConfirmed,
+        userBooked,
         status,
         filters;
       var sortDir = 'ASC';
       for (var i = 4; i > -1; i--) {
         if (args.length > i) {
-          if ('string' === typeof(args[i]) && ['confirmed', 'applied', 'cancelled', 'history', 'active'].indexOf(args[i]) !== -1) {
+          if ('string' === typeof(args[i]) && ['booked', 'applied', 'cancelled', 'history', 'active'].indexOf(args[i]) !== -1) {
             status = args[i];
-          } else if ('userConfirmed' === args[i]) {
-            userConfirmed = true;
+          } else if ('userBooked' === args[i]) {
+            userBooked = true;
           } else if ('number' === typeof(args[i])) {
             user = args[i];
           } else if ('object' === typeof(args[i])) {
@@ -174,10 +174,10 @@ module.exports = function (sequelize, DataTypes) {
         attributes.push('duration', 'hourlyRate', 'estimatedPay');
       }
       var timesheetScopes = ['refOnly'];
-      if (userConfirmed) {
+      if (userBooked) {
         timesheetScopes.push({
           method: ['byUser']
-        }, 'onlyConfirmed');
+        }, 'onlyBooked');
       } else if (user) {
         timesheetScopes.push({
           method: ['byUser', user]

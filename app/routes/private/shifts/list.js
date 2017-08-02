@@ -34,7 +34,7 @@ module.exports = function(router) {
         return result;
       }
       return models.eventShifts.scope({
-        method: ['staff', detail, req.user.blacklistedBy, 'future', 'userConfirmed', filters.scope]
+        method: ['staff', detail, req.user.blacklistedBy, 'future', 'userBooked', filters.scope]
       }).findAll({
         distinct: true,
         col: 'eventShifts.id',

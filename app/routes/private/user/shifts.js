@@ -6,8 +6,8 @@ module.exports = function(router) {
     var page = 1;
     var after = null;
     var status = req.params.status;
-    if (['confirmed', 'applied', 'cancelled', 'history'].indexOf(status) === -1) {
-      status = 'confirmed';
+    if (['booked', 'applied', 'cancelled', 'history'].indexOf(status) === -1) {
+      status = 'booked';
     }
     if (req.query.page && !isNaN(parseInt(req.query.page, 10))) {
       page = req.query.page;
