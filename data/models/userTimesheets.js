@@ -34,7 +34,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
       defaultValue: 0
     },
-    staffBooked: {
+    staffConfirmed: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0
