@@ -339,7 +339,8 @@ module.exports = function (sequelize, DataTypes) {
         where: {
           $and: {
             email: params.email,
-            password: sequelize.fn('dbo.udf_CalculateHash', sequelize.fn('concat', params.password, sequelize.col('salt')))
+            password: sequelize.fn('dbo.udf_CalculateHash', sequelize.fn('concat', params.password, sequelize.col('salt'))),
+            status: 1
           }
         }
       };
