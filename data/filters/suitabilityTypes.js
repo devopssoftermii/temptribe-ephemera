@@ -9,7 +9,7 @@ module.exports = function(req, models, output) {
       }
       var selectedSet = new Set(filterSuit);
       var testList = Array.from(new Set(typeList)).filter(function(item) {
-          return selectedSet.has(item.toString());
+          return selectedSet.has(item);
       });
       if (testList.length) {
           typeList = testList;
