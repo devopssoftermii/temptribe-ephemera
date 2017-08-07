@@ -1,7 +1,7 @@
 module.exports = function(router) {
   router.get('/list', function(req, res, next) {
     var models = req.app.locals.models;
-    var count = req.params.count;
+    var count = req.query.count;
     if (!count) {
       count = 1;
     }
