@@ -37,8 +37,12 @@ app.use(require('body-parser').json());
 // CORS
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', process.env.CORS_ORIGIN? process.env.CORS_ORIGIN: '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.send();
+  } else {
+    next();
+  }
 });
 
 // App
