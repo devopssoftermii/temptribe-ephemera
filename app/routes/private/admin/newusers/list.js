@@ -5,7 +5,7 @@ module.exports = function(router) {
       'profile',
       'newRegistration'
     ]).findAll({
-      limit: 100
+      limit: 500
     }).then(function(results) {
       res.json(results);
     }).catch(function(err) {
