@@ -1,5 +1,6 @@
 const ClientError = require('../../../../../lib/errors/ClientError');
 const mailer = require('../../../../../lib/mailer');
+const userHelper = require('../../../../../lib/user');
 
 module.exports = function(router) {
   router.post('/update/:id', function(req, res, next) {
@@ -19,6 +20,10 @@ module.exports = function(router) {
         return user.update({
           status: 3
         }).then(function(result) {
+          return mailer.send('applicationUnsuccessful', user.email, {
+            firstname: user.firstname,
+          });
+        }).then(function(result) {
           return {
             result: 'User deleted'
           }
@@ -29,7 +34,7 @@ module.exports = function(router) {
         }).then(function(result) {
           return mailer.send('newApplicant', user.email, {
             firstname: user.firstname,
-            url: null // TODO: create unique URL
+            url: userHelper.generateURLHash(user, 'inviteToInterview')
           });
         }).then(function(result) {
           return {

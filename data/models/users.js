@@ -1,5 +1,6 @@
 /* jshint indent: 1 */
 const parse = require('../../lib/parse');
+const uuidv4 = require('uuid/v4');
 
 module.exports = function (sequelize, DataTypes) {
   var users = sequelize.define('users', {
@@ -239,6 +240,12 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true
     },
+    userGUID: {
+      type: DataTypes.UUID,
+      defaultValue: function () {
+        return uuidv4();
+      },
+    },
     eventPackNotes: {
       type: DataTypes.TEXT,
       allowNull: true
@@ -304,7 +311,8 @@ module.exports = function (sequelize, DataTypes) {
           'foundthrough',
           'nationality',
           'myExperience',
-          'myProfile'
+          'myProfile',
+          'userGUID'
         ],
         where: {
           status: 0,
