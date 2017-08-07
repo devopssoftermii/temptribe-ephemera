@@ -291,8 +291,15 @@ module.exports = function (sequelize, DataTypes) {
           'email',
           'ambassador',
           'lolaRating',
-          'gender'
+          'gender',
+          'userTypeID'
         ],
+      },
+      newRegistration: {
+        where: {
+          status: 0,
+          userTypeID: 3
+        }
       }
     }
   });
@@ -324,6 +331,12 @@ module.exports = function (sequelize, DataTypes) {
       as: 'blacklistedBy',
       foreignKey: 'UserID',
       otherKey: 'ClientID'
+    });
+    users.belongsToMany(models.trainingSessions, {
+      through: models.userTrainingSessionApplications,
+      as: 'trainingSession',
+      foreignKey: 'UserID',
+      otherKey: 'TrainingSessionID'
     });
     users.addScope('profile', {
       attributes: ['id', 'firstname', 'surname', 'email', 'mobile'],
