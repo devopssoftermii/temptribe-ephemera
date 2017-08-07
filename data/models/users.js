@@ -296,10 +296,22 @@ module.exports = function (sequelize, DataTypes) {
         ],
       },
       newRegistration: {
+        attributes: [
+          'registrationDate',
+          'registrationStatus',
+          'invitedDate',
+          'foundthrough',
+          'nationality',
+          'myExperience',
+          'myProfile'
+        ],
         where: {
           status: 0,
           userTypeID: 3
-        }
+        },
+        order: [
+          ['registrationDate', 'ASC']
+        ]
       }
     }
   });

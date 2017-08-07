@@ -1,7 +1,7 @@
 var eventHelpers = require('../../../../lib/events');
 
 module.exports = function(router) {
-  router.post('/detail/:id', function(req, res, next) {
+  router.get('/detail/:id', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     var id = req.params.id;
