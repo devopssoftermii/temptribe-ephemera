@@ -34,6 +34,13 @@ if (process.env.NODE_ENV === 'development') {
 // JSON parser
 app.use(require('body-parser').json());
 
+// CORS
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', process.env.CORS_ORIGIN? process.env.CORS_ORIGIN: '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 // App
 var version = require('./package.json').version.split('.');
 var apiPath = `${process.env.API_PREFIX}/v${version[0]}`;
