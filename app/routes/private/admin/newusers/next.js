@@ -1,11 +1,15 @@
 module.exports = function(router) {
   router.get('/next', function(req, res, next) {
     var models = req.app.locals.models;
+    var count = req.params.count;
+    if (!count) {
+      count = 1;
+    }
     return models.users.scope([
       'profile',
       'newRegistration'
-    ]).findAll({
-      limit: 1
+    ]).findAndCountAll({
+      limit: count
     }).then(function(results) {
       res.json(results);
     }).catch(function(err) {
