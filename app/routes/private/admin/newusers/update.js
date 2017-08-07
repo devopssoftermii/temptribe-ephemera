@@ -34,7 +34,7 @@ module.exports = function(router) {
         }).then(function(result) {
           return mailer.send('newApplicant', user.email, {
             firstname: user.firstname,
-            url: userHelper.generateURLHash(user, 'inviteToInterview')
+            url: `${process.env.APP_HOST}/recruitment/invite?i=${userHelper.generateURLHash(user, 'inviteToInterview')}`
           });
         }).then(function(result) {
           return {
