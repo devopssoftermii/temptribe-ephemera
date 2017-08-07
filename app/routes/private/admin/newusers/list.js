@@ -8,6 +8,8 @@ module.exports = function(router) {
       limit: 100
     }).then(function(results) {
       res.json(results);
+    }).catch(function(err) {
+      next(err);
     });
   });
 }

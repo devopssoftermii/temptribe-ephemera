@@ -44,6 +44,8 @@ module.exports = function(router) {
       }
     }).then(function(result) {
       res.json(result);
+    }).catch(function(err) {
+      next(err);
     });
   });
 }
