@@ -111,6 +111,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    experienceLevel: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     myExperience: {
       type: DataTypes.TEXT,
       allowNull: true
@@ -316,9 +320,13 @@ module.exports = function (sequelize, DataTypes) {
         ],
         where: {
           status: 0,
-          userTypeID: 3
+          userTypeID: 3,
+          registrationStatus: {
+            $or: [1, null]
+          }
         },
         order: [
+          ['experienceLevel', 'DESC'],
           ['registrationDate', 'ASC']
         ]
       }

@@ -30,7 +30,7 @@ module.exports = function(router) {
         });
       } else {
         return user.update({
-          registrationStatus: 1
+          registrationStatus: 2
         }).then(function(result) {
           return mailer.send('newApplicant', user.email, {
             firstname: user.firstname,
