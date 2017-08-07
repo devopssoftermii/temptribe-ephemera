@@ -314,6 +314,7 @@ module.exports = function (sequelize, DataTypes) {
           'invitedDate',
           'foundthrough',
           'nationality',
+          'experienceLevel',
           'myExperience',
           'myProfile',
           'userGUID'
