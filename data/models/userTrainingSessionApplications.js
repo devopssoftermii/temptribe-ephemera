@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('userTrainingSessionApplications', {
+  var userTrainingSessionApplications =  sequelize.define('userTrainingSessionApplications', {
     ID: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -19,7 +19,8 @@ module.exports = function(sequelize, DataTypes) {
     DateCreated: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: '(getdate())'
+      //TODO need to fix the below line which is currently erroring on create of a new record
+      //defaultValue: '(getdate())'
     },
     Status: {
       type: DataTypes.INTEGER,
@@ -42,4 +43,22 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     freezeTableName: true
   });
+
+  userTrainingSessionApplications.associate = function(models) {
+    userTrainingSessionApplications.belongsTo(models.trainingSessions, {
+      as: 'trainingSession',
+      foreignKey: 'TrainingSessionID',
+      targetKey: 'ID'
+    })
+  }
+
+  // userTrainingSessionApplications.associate = function(models) {
+  //   userTrainingSessionApplications.belongsTo(models.users, {
+  //     as: 'userTrainingSessionApplications',
+  //     foreignKey: 'ID',
+  //     targetKey: 'userID'
+  //   })
+  // }
+
+  return userTrainingSessionApplications
 };

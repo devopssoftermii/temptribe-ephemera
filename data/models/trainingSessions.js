@@ -70,14 +70,27 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'TrainingSessions',
     timestamps: false,
-    freezeTableName: true
+    freezeTableName: true,
   });
   trainingSessions.associate = function(models) {
-    trainingSessions.belongsToMany(models.trainingSessions, {
-      through: models.userTrainingSessionApplications,
-      as: 'trainingSession',
+    trainingSessions.hasMany(models.userTrainingSessionApplications, {
       foreignKey: 'TrainingSessionID',
-      otherKey: 'UserID',
+    });
+  }
+  trainingSessions.addScope('future', {
+    where: {
+      SessionDate: {
+        $gte: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
+      }
+    }
+  });
+  trainingSessions.prototype.full = function() { // checks if the interiew is full or not and returns a promise that will resolve to true or false
+    return this.getUserTrainingSessionApplications().then( result => {
+      var placesFilled = result.filter(function(row) {
+        return row.Status === 4;
+      }).length
+      var isFull = (placesFilled >= this.TotalPlaces)
+      return isFull
     });
   }
   return trainingSessions;

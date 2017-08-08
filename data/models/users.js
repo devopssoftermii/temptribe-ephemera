@@ -362,12 +362,11 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'UserID',
       otherKey: 'ClientID'
     });
-    users.belongsToMany(models.trainingSessions, {
-      through: models.userTrainingSessionApplications,
-      as: 'trainingSession',
-      foreignKey: 'UserID',
-      otherKey: 'TrainingSessionID'
-    });
+    // users.belongsToMany(models.trainingSessions, {
+    //   through: models.userTrainingSessionApplications,
+    //   foreignKey: 'UserID',
+    //   otherKey: 'TrainingSessionID'
+    // });
     users.addScope('profile', {
       attributes: ['id', 'firstname', 'surname', 'email', 'mobile'],
       include: [

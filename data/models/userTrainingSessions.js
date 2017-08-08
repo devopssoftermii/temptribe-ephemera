@@ -16,10 +16,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: '(getdate())'
-    }
+    },
   }, {
     tableName: 'userTrainingSessions',
     timestamps: false,
-    freezeTableName: true
+    freezeTableName: true,
   });
 };
