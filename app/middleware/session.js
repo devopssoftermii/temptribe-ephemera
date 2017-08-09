@@ -24,7 +24,9 @@ function extractSessionFromToken(token, models) {
       throw new UnauthorizedError('invalid_session', {message: 'Invalid session'});
     }
     return session;
-  })
+  }).catch(function(err) {
+    throw err;
+  });
 }
 
 function buildTokenUser(user) {
