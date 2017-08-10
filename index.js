@@ -50,12 +50,12 @@ app.use(function(req, res, next) {
   res.jsend = function(body, err = null) {
     if (err) {
       if (err instanceof ClientError) {
-        res.json({
+        return res.json({
           status: 'fail',
           data: err
         });
       } else {
-        res.json({
+        return res.json({
           status: 'error',
           message: err.message,
           code: err.code,
@@ -63,7 +63,7 @@ app.use(function(req, res, next) {
         });
       }
     } else {
-      res.json({
+      return res.json({
         status: 'success',
         data: body
       });
