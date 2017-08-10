@@ -18,7 +18,7 @@ module.exports = function(router) {
     }).then(function(user) {
       return session.create(user, models);
     }).then(function(sessionResult) {
-      res.json(sessionResult);
+      res.jsend(sessionResult);
     }).catch(function(err) {
       next(err);
     });

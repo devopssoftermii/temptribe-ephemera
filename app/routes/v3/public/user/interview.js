@@ -12,7 +12,7 @@ module.exports = function(router) {
         attributes: ['SessionDate', 'StartTime', 'EndTime']
       }],
     }).then(function(result) {
-      res.json(result || []);
+      res.jsend(result || []);
     }).catch(function(err) {
       next(err);
     });
@@ -42,7 +42,7 @@ module.exports = function(router) {
         });
       }
     }).then(function(result) {
-      res.json(result);
+      res.jsend(result);
     }).catch(function(err) {
       next(err);
     });

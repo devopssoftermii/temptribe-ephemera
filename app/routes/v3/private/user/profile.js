@@ -3,7 +3,7 @@ module.exports = function(router) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     models.users.scope('profile').findById(req.user.id).then(function(result) {
-      res.json(result);
+      res.jsend(result);
     }).catch(function(err) {
       next(err);
     });

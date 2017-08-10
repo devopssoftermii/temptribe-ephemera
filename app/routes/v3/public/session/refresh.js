@@ -7,7 +7,7 @@ module.exports = function(router) {
       throw new UnauthorizedError('missing_refresh_token', {message: 'Missing refresh token'});
     }
     return session.refresh(req.body.token, req.app.locals.models).then(function(refreshResult) {
-      res.json(refreshResult);
+      res.jsend(refreshResult);
     }).catch(function(err) {
       next(err);
     });

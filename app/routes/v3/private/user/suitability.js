@@ -12,7 +12,7 @@ module.exports = function(router) {
       ]);
     }).then(function(result) {
       let userTypes = new Set(result[1].map(b => b.get({ plain: true }).id));
-      res.json(result[0].map(a => {
+      res.jsend(result[0].map(a => {
         a = a.get({ plain: true });
         a.enabled = userTypes.has(a.id);
         return a;

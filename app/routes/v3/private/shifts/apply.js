@@ -48,7 +48,7 @@ module.exports = function(router) {
         );
       });
     }).then(function(status) {
-      res.json({
+      res.jsend({
         result: status
       });
     }).catch(function(err) {

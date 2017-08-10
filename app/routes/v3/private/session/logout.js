@@ -9,9 +9,7 @@ module.exports = function(router) {
     return session.destroy(req.body.token, req.app.locals.models).then(function(logoutResult) {
       return req.app.locals.sessionBlacklist.pset(req.headers.authorization.split(' ')[1], true);
     }).then(function(token) {
-      res.json({
-        success: true
-      });
+      res.jsend(null);
     }).catch(function(err) {
       next(err);
     });

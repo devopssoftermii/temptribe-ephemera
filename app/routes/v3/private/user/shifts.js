@@ -21,7 +21,7 @@ module.exports = function(router) {
       distinct: true,
       col: 'eventShifts.id'
     }).then(function(result) {
-      res.json(eventHelpers.formatShiftList(result, req.user.favouritedBy, 'full', false, true));
+      res.jsend(eventHelpers.formatShiftList(result, req.user.favouritedBy, 'full', false, true));
     }).catch(function(err) {
       next(err);
     });

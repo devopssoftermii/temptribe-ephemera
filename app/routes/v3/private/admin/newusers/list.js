@@ -11,7 +11,7 @@ module.exports = function(router) {
     ]).findAndCountAll({
       limit: count
     }).then(function(results) {
-      res.json(results);
+      res.jsend(results);
     }).catch(function(err) {
       next(err);
     });
