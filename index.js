@@ -1,5 +1,6 @@
 // Import config into process.env
 require('dotenv-safe').config();
+const ClientError = require('./lib/errors/ClientError');
 
 // Import Express
 var express = require('express'),
@@ -44,6 +45,32 @@ app.use(function(req, res, next) {
     next();
   }
 });
+
+app.use(function(req, res, next) {
+  res.jsend = function(body, err = null) {
+    if (err) {
+      if (err instanceof ClientError) {
+        res.json({
+          status: 'fail',
+          data: err
+        });
+      } else {
+        res.json({
+          status: 'error',
+          message: err.message,
+          code: err.code,
+          data: err
+        });
+      }
+    } else {
+      res.json({
+        status: 'success',
+        data: body
+      });
+    }
+  }
+  next();
+})
 
 // App
 app.use(process.env.API_PREFIX, require('./app'));
