@@ -82,7 +82,10 @@ module.exports = function(sequelize, DataTypes) {
       SessionDate: {
         $gte: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
       }
-    }
+    },
+    order: [
+      ['StartTime', 'ASC']
+    ]
   });
   trainingSessions.prototype.full = function() { // checks if the interiew is full or not and returns a promise that will resolve to true or false
     return this.getUserTrainingSessionApplications().then( result => {
