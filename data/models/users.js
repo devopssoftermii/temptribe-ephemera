@@ -331,6 +331,13 @@ module.exports = function (sequelize, DataTypes) {
           ['experienceLevel', 'DESC'],
           ['registrationDate', 'ASC']
         ]
+      },
+      testOnly: {
+        where: {
+          email: {
+            $like: process.env.INVITE_TEST_EMAIL_MATCH
+          }
+        }
       }
     }
   });

@@ -5,10 +5,14 @@ module.exports = function(router) {
     if (isNaN(count) || !count) {
       count = 1;
     }
-    return models.users.scope([
+    var scopes = [
       'profile',
       'newRegistration'
-    ]).findAndCountAll({
+    ];
+    if (process.env.INVITE_TEST_MODE === 'true') {
+      scopes.push('testOnly');
+    }
+    return models.users.scope(scopes).findAndCountAll({
       limit: count
     }).then(function(results) {
       res.jsend(results);
