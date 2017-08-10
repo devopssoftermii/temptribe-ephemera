@@ -2,7 +2,7 @@ var router    = require('express').Router(),
     path      = require('path'),
     fs        = require('fs');
 
-require('../../../middleware/admin')(router);
+require('../../../../middleware/admin')(router);
 
 fs.readdirSync(__dirname).forEach(function(filename) {
   var route = path.basename(filename, '.js');

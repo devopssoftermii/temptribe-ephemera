@@ -1,5 +1,5 @@
-var filterQuery = require('../../../../data/filters');
-var eventHelpers = require('../../../../lib/events');
+var filterQuery = require('../../../../../data/filters');
+var eventHelpers = require('../../../../../lib/events');
 
 module.exports = function(router) {
   router.post('/list', function(req, res, next) {

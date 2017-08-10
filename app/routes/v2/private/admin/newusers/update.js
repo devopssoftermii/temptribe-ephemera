@@ -1,6 +1,6 @@
-const ClientError = require('../../../../../lib/errors/ClientError');
-const mailer = require('../../../../../lib/mailer');
-const userHelper = require('../../../../../lib/user');
+const ClientError = require('../../../../../../lib/errors/ClientError');
+const mailer = require('../../../../../../lib/mailer');
+const userHelper = require('../../../../../../lib/user');
 
 module.exports = function(router) {
   router.post('/update/:id', function(req, res, next) {

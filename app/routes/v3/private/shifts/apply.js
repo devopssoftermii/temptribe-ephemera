@@ -1,10 +1,10 @@
 var moment = require('moment');
-var ClientError = require('../../../../lib/errors/ClientError');
+var ClientError = require('../../../../../lib/errors/ClientError');
 var {
   getClashingShifts,
   isFullyStaffed,
   bookUserOnShift
-} = require('../../../../lib/events');
+} = require('../../../../../lib/events');
 
 module.exports = function(router) {
   router.post('/apply/:id', function(req, res, next) {

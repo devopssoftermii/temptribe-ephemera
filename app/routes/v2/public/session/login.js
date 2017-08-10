@@ -1,5 +1,5 @@
-var session = require('../../../middleware/session');
-const UnauthorizedError = require('../../../../lib/errors/UnauthorizedError');
+var session = require('../../../../middleware/session');
+const UnauthorizedError = require('../../../../../lib/errors/UnauthorizedError');
 
 module.exports = function(router) {
   router.post('/login', function(req, res, next) {

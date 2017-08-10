@@ -1,4 +1,4 @@
-var eventHelpers = require('../../../../lib/events');
+var eventHelpers = require('../../../../../lib/events');
 
 module.exports = function(router) {
   router.get('/detail/:id', function(req, res, next) {
