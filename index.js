@@ -46,9 +46,7 @@ app.use(function(req, res, next) {
 });
 
 // App
-var version = require('./package.json').version.split('.');
-var apiPath = `${process.env.API_PREFIX}/v${version[0]}`;
-app.use(apiPath, require('./app'));
+app.use(process.env.API_PREFIX, require('./app'));
 
 // Post-request error handling
 logging.after(app);
@@ -59,7 +57,7 @@ const port = process.env.PORT || 3002;
 const host = process.env.HOST || 'localhost';
 require('http').createServer(app).listen(port, host, function (err) {
   console.log(`
->>  Listening for requests on http://${host}:${port}${apiPath}
+>>  Listening for requests on http://${host}:${port}${process.env.API_PREFIX}
 >>  Logging access requests locally, exceptions to Sentry if configured
 
 Ready.
