@@ -3,7 +3,7 @@ const UnauthorizedError = require('../lib/errors/UnauthorizedError');
 
 module.exports = function(app) {
   app.use(function(err, req, res, next) {
-    if (req.match(/\/v2\//)) {
+    if (req.originalUrl.match(/\/v2\//)) {
       var status = err.status || err.status_code || 500;
       var stack = err.stack || null;
       var name = err.name || 'ServerError';
