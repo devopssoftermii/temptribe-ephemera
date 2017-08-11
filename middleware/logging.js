@@ -40,7 +40,9 @@ module.exports = {
     if (Raven) {
       app.use(function(err, req, res, next) {
         if (err.name && err.name === 'JsonWebTokenError') {
-          err.status = 403;
+          err = new UnauthorizedError('token_invalid', {
+            message: 'Invalid authorization token'
+          });
         }
         next(err);
       });
