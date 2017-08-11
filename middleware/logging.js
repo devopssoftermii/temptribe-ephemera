@@ -40,7 +40,7 @@ module.exports = {
     if (Raven) {
       ravenHandler = Raven.errorHandler();
       app.use(function(err, req, res, next) {
-        if ('JsonWebTokenError' === typeof(err)) {
+        if (err.name && err.name === 'JsonWebTokenError') {
           next();
         } else {
           ravenHandler(err, req, res, next);
