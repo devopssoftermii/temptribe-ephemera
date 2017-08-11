@@ -1,4 +1,5 @@
 const ClientError = require('../../../../../lib/errors/ClientError');
+const moment = require('moment');
 
 getUserInterview = function(models, userId) {
   return models.userTrainingSessionApplications.findOne({
@@ -26,6 +27,7 @@ module.exports = function(router) {
   router.post('/interview', function(req, res, next) {
     var models = req.app.locals.models;
     var trainingSessionID = req.body.trainingSessionID;
+    var session = null;
     return getUserInterview(models, req.user.id).then(function(result) {
       if (result) {
         throw new ClientError('already_booked', {
@@ -36,6 +38,7 @@ module.exports = function(router) {
     }).then(function() {
       return models.trainingSessions.findById(trainingSessionID);
     }).then((trainingSession) => {
+      session = trainingSession;
       return trainingSession.full();
     }).then((full) => {
       if (full === true) {
@@ -49,6 +52,12 @@ module.exports = function(router) {
         UserID: req.user.id,
         TrainingSessionID: trainingSessionID,
         Status: 4,
+      });
+    }).then(function(result) {
+      return mailer.send('interviewAndPolicy', req.user.email, {
+        firstname: req.user.firstname,
+        date: moment(session.SessionDate).format('dddd Do MMMM YYYY'),
+        time: moment(session.StartTime).format('ha'),
       });
     }).then(function(result) {
       res.jsend(result);
