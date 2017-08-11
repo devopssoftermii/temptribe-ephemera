@@ -323,9 +323,7 @@ module.exports = function (sequelize, DataTypes) {
         where: {
           status: 0,
           userTypeID: 3,
-          registrationStatus: {
-            $or: [1, null]
-          }
+          registrationStatus: 1
         },
         order: [
           ['experienceLevel', 'DESC'],
