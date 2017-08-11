@@ -3,8 +3,8 @@ const UnauthorizedError = require('../lib/errors/UnauthorizedError');
 
 module.exports = function(app) {
   app.use(function(err, req, res, next) {
+    var status = err.status || err.status_code || 500;
     if (req.originalUrl.match(/\/v2\//)) {
-      var status = err.status || err.status_code || 500;
       var stack = err.stack || null;
       var name = err.name || 'ServerError';
       var code = err.code || 'internal_error';
@@ -26,7 +26,6 @@ module.exports = function(app) {
         res.status(status).json(err).end();
       }
     } else {
-      var status = err.status || err.status_code || 500;
       if (process.env.NODE_ENV !== 'development' && status === 500) {
         err = new ServerError();
       }
