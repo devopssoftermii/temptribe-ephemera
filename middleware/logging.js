@@ -41,7 +41,7 @@ module.exports = {
       ravenHandler = Raven.errorHandler();
       app.use(function(err, req, res, next) {
         if (err.name && err.name === 'JsonWebTokenError') {
-          next();
+          next(err);
         } else {
           ravenHandler(err, req, res, next);
         }
