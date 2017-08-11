@@ -38,7 +38,14 @@ module.exports = {
   after: function(app) {
     // Sentry logging
     if (Raven) {
-      app.use(Raven.errorHandler());
+      ravenHandler = Raven.errorHandler();
+      app.use(function(err, req, res, next) {
+        if ('JsonWebTokenError' === typeof(err)) {
+          next();
+        } else {
+          ravenHandler(err, req, res, next);
+        }
+      });
     }
   }
 }
