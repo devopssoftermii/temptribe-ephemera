@@ -1,8 +1,10 @@
 var morgan    = require('morgan'),
     rfs       = require('rotating-file-stream'),
-    path 			= require('path'),
-    fs 				= require('fs');
+    path      = require('path'),
+    fs        = require('fs'),
     Raven     = null;
+
+const UnauthorizedError = require('../lib/errors/UnauthorizedError');
 
 if (process.env.SENTRY_DSN) {
   Raven = require('raven');
