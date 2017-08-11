@@ -17,7 +17,7 @@ getUserInterview = function(models, userId) {
 module.exports = function(router) {
   router.get('/interview', function(req, res, next) {
     return getUserInterview(req.app.locals.models, req.user.id).then(function(result) {
-      res.jsend(result || []);
+      res.jsend(result);
     }).catch(function(err) {
       next(err);
     });
