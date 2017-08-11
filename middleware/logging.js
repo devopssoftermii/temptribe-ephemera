@@ -38,14 +38,13 @@ module.exports = {
   after: function(app) {
     // Sentry logging
     if (Raven) {
-      ravenHandler = Raven.errorHandler();
       app.use(function(err, req, res, next) {
         if (err.name && err.name === 'JsonWebTokenError') {
-          next(err);
-        } else {
-          ravenHandler(err, req, res, next);
+          err.status = 403;
         }
+        next(err);
       });
+      app.use(Raven.errorHandler());
     }
   }
 }
