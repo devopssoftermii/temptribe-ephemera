@@ -58,7 +58,7 @@ module.exports = function(router) {
       return mailer.send('interviewAndPolicy', req.user.email, {
         firstname: req.user.firstname,
         date: moment(session.SessionDate).format('dddd Do MMMM YYYY'),
-        time: moment(session.StartTime).format('ha'),
+        time: moment.utc(session.StartTime).format('ha'),
       });
     }).then(function(result) {
       res.jsend(result);
