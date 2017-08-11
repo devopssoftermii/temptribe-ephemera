@@ -59,6 +59,8 @@ module.exports = function(router) {
         firstname: req.user.firstname,
         date: moment(session.SessionDate).format('dddd Do MMMM YYYY'),
         time: moment.utc(session.StartTime).format('ha'),
+      }).then(function() {
+        return result.get({ plain: true });
       });
     }).then(function(result) {
       res.jsend(result);
