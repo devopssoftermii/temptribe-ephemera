@@ -1,4 +1,5 @@
 const ClientError = require('../../../../../lib/errors/ClientError');
+const mailer = require('../../../../../lib/mailer');
 const moment = require('moment');
 
 getUserInterview = function(models, userId) {
