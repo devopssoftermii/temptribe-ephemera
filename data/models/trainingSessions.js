@@ -80,7 +80,7 @@ module.exports = function(sequelize, DataTypes) {
   trainingSessions.addScope('future', {
     where: {
       SessionDate: {
-        $gt: sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))
+        $gte: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')))
       }
     },
     order: [
