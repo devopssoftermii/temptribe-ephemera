@@ -1,7 +1,6 @@
 const ClientError = require('../../../../../../lib/errors/ClientError');
 const mailer = require('../../../../../../lib/mailer');
 const userHelper = require('../../../../../../lib/user');
-const moment = require('moment');
 
 const userStatuses = new Map([
   ['new', 0],
@@ -33,6 +32,7 @@ module.exports = function(router) {
       throw new ClientError('no_result', {message: 'Missing status'});
     }
     var models = req.app.locals.models;
+    var sequelize = req.app.locals.sequelize;
     return models.users.find({
       attributes: [
         'id',
@@ -55,7 +55,7 @@ module.exports = function(router) {
               previousStatus: user.status,
               status: 1,
               registrationStatus: 4,
-              StatusChangeDate: moment.utc()
+              StatusChangeDate: sequelize.fn('convert', sequelize.literal('date'), sequelize.fn('getdate'))
             }).then(function(result) {
               return {
                 result: 'User activated'
