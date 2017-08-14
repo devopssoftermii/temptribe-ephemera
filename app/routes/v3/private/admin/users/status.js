@@ -1,6 +1,7 @@
 const ClientError = require('../../../../../../lib/errors/ClientError');
 const mailer = require('../../../../../../lib/mailer');
 const userHelper = require('../../../../../../lib/user');
+const moment = require('moment');
 
 const userStatuses = new Map([
   ['new', 0],
