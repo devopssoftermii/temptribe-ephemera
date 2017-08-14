@@ -4,7 +4,7 @@ const userHelper = require('../../../../../../lib/user');
 
 module.exports = function(router) {
   router.post('/update/:id', function(req, res, next) {
-    var status = req.body.status.toLowerCase();
+    var status = req.body.status && req.body.status.toLowerCase();
     if (!status || !status.match(/^pass|fail$/)) {
       throw new ClientError('no_result', {message: 'Missing pass / fail'});
     }
