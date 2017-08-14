@@ -27,7 +27,7 @@ module.exports = function(router) {
     });
   });
   router.post('/status/:id', function(req, res, next) {
-    var status = req.body.status && req.body.status.toLowerCase();
+    var status = 'string' === typeof(req.body.status) && req.body.status.toLowerCase();
     if (!status || !userStatuses.has(status)) {
       throw new ClientError('no_result', {message: 'Missing status'});
     }
