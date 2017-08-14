@@ -36,6 +36,7 @@ module.exports = function(router) {
     return models.users.find({
       attributes: [
         'id',
+        'firstname',
         'status',
         'email',
         'userGUID',
