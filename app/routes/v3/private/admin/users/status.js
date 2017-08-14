@@ -33,7 +33,13 @@ module.exports = function(router) {
     }
     var models = req.app.locals.models;
     return models.users.find({
-      attributes: ['id', 'status'],
+      attributes: [
+        'id',
+        'status',
+        'email',
+        'userGUID',
+        'registrationStatus'
+      ],
       where: {
         id: req.params.id
       }
@@ -43,24 +49,41 @@ module.exports = function(router) {
       }
       switch (status) {
         case 'active':
-          return user.update({
-            status: 1
-          }).then(function(result) {
-            return {
-              result: 'User activated'
-            }
-          });
+          var updateUser = function() {
+            return user.update({
+              previousStatus: user.status,
+              status: 1,
+              registrationStatus: 4,
+              StatusChangeDate: moment.utc()
+            }).then(function(result) {
+              return {
+                result: 'User activated'
+              }
+            });
+          }
+          if (user.status === 0) {
+            return mailer.send('accountActive', user.email, {
+              firstname: user.firstname,
+              userguid: user.userGUID
+            }).then(updateUser);
+          } else {
+            return updateUser();
+          }
         case 'inactive':
           return user.update({
-            status: 2
+            previousStatus: user.status,
+            status: 2,
+            StatusChangeDate: moment.utc()
           }).then(function(result) {
             return {
-              result: 'User marked for delete'
+              result: 'User marked for deletion'
             }
           });
         case 'deleted':
           return user.update({
-            status: 3
+            previousStatus: user.status,
+            status: 3,
+            StatusChangeDate: moment.utc()
           }).then(function(result) {
             return {
               result: 'User deleted'
