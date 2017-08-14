@@ -56,6 +56,7 @@ module.exports = function(router) {
               previousStatus: user.status,
               status: 1,
               registrationStatus: 4,
+              ChangePasswordAtNextLogon: 0,
               StatusChangeDate: sequelize.fn('convert', sequelize.literal('date'), sequelize.fn('getdate'))
             }).then(function(result) {
               return {
