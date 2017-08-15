@@ -60,6 +60,7 @@ module.exports = {
       return {
         success: true,
         userId: user.id,
+        admin: user.userTypeID === 2,
         access: jwt.sign(user, process.env.JWT_SECRET, { expiresIn: parseInt(process.env.JWT_TTL, 10) }),
         refresh: jwt.sign(session.get({ plain: true }), process.env.JWT_SECRET, { expiresIn: '1y' })
       }

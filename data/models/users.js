@@ -374,7 +374,13 @@ module.exports = function (sequelize, DataTypes) {
     //   otherKey: 'TrainingSessionID'
     // });
     users.addScope('profile', {
-      attributes: ['id', 'firstname', 'surname', 'email', 'mobile'],
+      attributes: [
+        'id',
+        'firstname',
+        'surname',
+        'email',
+        'mobile'
+      ],
       include: [
         {
           model: models.userPhotos,
