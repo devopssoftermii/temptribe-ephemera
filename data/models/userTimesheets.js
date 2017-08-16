@@ -89,7 +89,6 @@ module.exports = function (sequelize, DataTypes) {
             $or: [4, 7]
           }
         },
-        limit: 1
       },
       onlyBooked: {
         where: {
@@ -102,7 +101,6 @@ module.exports = function (sequelize, DataTypes) {
             $or: [1, 2]
           }
         },
-        limit: 1
       },
       active: {
         where: {
@@ -110,7 +108,6 @@ module.exports = function (sequelize, DataTypes) {
             $or: [1, 4]
           }
         },
-        limit: 1
       },
       cancelled: {
         where: {
@@ -123,7 +120,6 @@ module.exports = function (sequelize, DataTypes) {
             status: 2
           }
         },
-        limit: 1
       }
     }
   });
