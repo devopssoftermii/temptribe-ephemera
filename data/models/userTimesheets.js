@@ -92,6 +92,7 @@ module.exports = function (sequelize, DataTypes) {
         order: [
           ['dateStamp', 'desc']
         ],
+        offset: 0,
         limit: 1
       },
       onlyBooked: {
@@ -108,6 +109,7 @@ module.exports = function (sequelize, DataTypes) {
         order: [
           ['dateStamp', 'desc']
         ],
+        offset: 0,
         limit: 1
       },
       active: {
@@ -119,6 +121,7 @@ module.exports = function (sequelize, DataTypes) {
         order: [
           ['dateStamp', 'desc']
         ],
+        offset: 0,
         limit: 1
       },
       cancelled: {
@@ -135,6 +138,7 @@ module.exports = function (sequelize, DataTypes) {
         order: [
           ['dateStamp', 'desc']
         ],
+        offset: 0,
         limit: 1
       }
     }
