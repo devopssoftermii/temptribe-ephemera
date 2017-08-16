@@ -88,7 +88,11 @@ module.exports = function (sequelize, DataTypes) {
           status: {
             $or: [4, 7]
           }
-        }
+        },
+        order: [
+          ['dateStamp', 'desc']
+        ],
+        limit: 1
       },
       onlyBooked: {
         where: {
@@ -100,14 +104,22 @@ module.exports = function (sequelize, DataTypes) {
           status: {
             $or: [1, 2]
           }
-        }
+        },
+        order: [
+          ['dateStamp', 'desc']
+        ],
+        limit: 1
       },
       active: {
         where: {
           status: {
             $or: [1, 4]
           }
-        }
+        },
+        order: [
+          ['dateStamp', 'desc']
+        ],
+        limit: 1
       },
       cancelled: {
         where: {
@@ -119,7 +131,11 @@ module.exports = function (sequelize, DataTypes) {
           $not: {
             status: 2
           }
-        }
+        },
+        order: [
+          ['dateStamp', 'desc']
+        ],
+        limit: 1
       }
     }
   });
