@@ -41,7 +41,7 @@ module.exports = {
     // Sentry logging
     if (Raven) {
       app.use(function(err, req, res, next) {
-        if (err.name && err.name === 'JsonWebTokenError') {
+        if (err.name && (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError')) {
           err = new UnauthorizedError('token_invalid', {
             message: 'Invalid authorization token'
           });
