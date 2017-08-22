@@ -61,8 +61,7 @@ module.exports = function(router) {
           });
         }
       }).then(function(user) {
-        return Object.assign(req.user, user);
-      }).then(function() {
+        req.user = user;
         next();
       });
     } else {
