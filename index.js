@@ -31,6 +31,7 @@ if (process.env.NODE_ENV === 'development') {
   app.set('json spaces', 2);
   app.use(process.env.API_PREFIX + '/static', express.static('static'));
 }
+app.set('trust proxy', true);
 
 // JSON parser
 app.use(require('body-parser').json());
