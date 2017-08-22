@@ -7,6 +7,10 @@ var {
 } = require('../../../../../lib/events');
 
 module.exports = function(router) {
+  router.use(function(req, res, next) {
+    res.locals.forceUserCheck = true;
+  });
+  require('../../../../middleware/auth')(router);
   router.post('/apply/:id', function(req, res, next) {
     var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;

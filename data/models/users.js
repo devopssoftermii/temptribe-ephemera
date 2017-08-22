@@ -304,8 +304,12 @@ module.exports = function (sequelize, DataTypes) {
           'ambassador',
           'lolaRating',
           'gender',
-          'userTypeID'
+          'userTypeID',
+          'status'
         ],
+        where: {
+          status: 1
+        }
       },
       newRegistration: {
         attributes: [

@@ -2,6 +2,16 @@ const UnauthorizedError = require('../../lib/errors/UnauthorizedError');
 const ServerError = require('../../lib/errors/ServerError');
 const session = require('./session');
 
+function fetchUser(models, id) {
+  return models.users.scope('apiUser').findOne({
+    where: {
+      id
+    }
+  }).then(function(user) {
+    return session.buildTokenUser(user);
+  })
+}
+
 module.exports = function(router) {
   if (process.env.SKIP_LOGIN === 'true') {
     return;
@@ -17,21 +27,29 @@ module.exports = function(router) {
     });
   });
   router.use(function(req, res, next) {
-    if (process.env.FETCH_USER_FROM_JWT === 'false') {
+    if (process.env.FETCH_USER_FROM_JWT === 'false' || res.locals.forceUserCheck) {
       var models = req.app.locals.models;
       var cache = req.app.locals.apiUserCache;
-      var userKey = JSON.stringify({
-        userId: req.user.id,
-      });
-      cache.pget(userKey).then(function(result) {
-        if (result) {
-          return result;
+      return new Promise(function(resolve, reject) {
+        if (res.locals.forceUserCheck) {
+          return fetchUser(models, req.user.id).then(function(user) {
+            resolve(user);
+          });
+        } else {
+          var userKey = JSON.stringify({
+            userId: req.user.id,
+          });
+          cache.pget(userKey).then(function(result) {
+            if (result) {
+              return result;
+            }
+            return fetchUser(models, req.user.id).then(function(user) {
+              return cache.pset(userKey, user);
+            });
+          }).then(function(user) {
+            resolve(user);
+          });
         }
-        return models.users.scope('apiUser').findById(req.user.id).then(function(user) {
-          return session.buildTokenUser(user);
-        }).then(function(user) {
-          return cache.pset(userKey, user);
-        });
       }).then(function(user) {
         return Object.assign(req.user, user);
       }).then(function() {
