@@ -8,7 +8,11 @@ function fetchUser(models, id) {
       id
     }
   }).then(function(user) {
-    return session.buildTokenUser(user);
+    if (user) {
+      return session.buildTokenUser(user);
+    } else {
+      return user;
+    }
   })
 }
 
@@ -44,7 +48,13 @@ module.exports = function(router) {
               return result;
             }
             return fetchUser(models, req.user.id).then(function(user) {
-              return cache.pset(userKey, user);
+              if (user) {
+                return cache.pset(userKey, user);
+              } else {
+                return cache.pdel(userKey).then(function(count) {
+                  return null;
+                });
+              }
             });
           }).then(function(user) {
             resolve(user);
