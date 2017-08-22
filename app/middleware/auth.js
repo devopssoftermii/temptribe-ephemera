@@ -31,11 +31,12 @@ module.exports = function(router) {
     });
   });
   router.use(function(req, res, next) {
-    if (process.env.FETCH_USER_FROM_JWT === 'false' || res.locals.forceUserCheck) {
+    var forceCheck = req.method === 'POST';
+    if (forceCheck || process.env.FETCH_USER_FROM_JWT === 'false') {
       var models = req.app.locals.models;
       var cache = req.app.locals.apiUserCache;
       return new Promise(function(resolve, reject) {
-        if (res.locals.forceUserCheck) {
+        if (forceCheck) {
           return fetchUser(models, req.user.id).then(function(user) {
             resolve(user);
           });
