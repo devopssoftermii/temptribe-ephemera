@@ -70,7 +70,7 @@ module.exports = function(router) {
   });
   router.use(function(req, res, next) {
     if (!req.user || !req.user.id) {
-      next(new ServerError('failed_user', {message: 'Authenticated but no user set'}));
+      next(new UnauthorizedError('failed_user_recheck', {message: 'No user set after user recheck'}));
     } else {
       next();
     }
