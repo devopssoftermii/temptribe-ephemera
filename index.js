@@ -74,7 +74,7 @@ app.use(function(req, res, next) {
 })
 
 // App
-app.post(function(req, res, next) {
+app.post('/', function(req, res, next) {
   res.locals.forceUserCheck = true;
   next();
 });
