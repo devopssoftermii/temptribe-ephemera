@@ -21,8 +21,8 @@ module.exports = function(router) {
       return shift.getTimesheets().then(function(timesheets) {
         return Promise.all(timesheets.map(function(timesheet) {
           return timesheet.getUser().then(function(user) {
-            if (timesheet.status === 4 && user.id === req.user.id) {
-              throw new ClientError('already_booked', { message: 'You are already booked on this shift' });
+            if ((timesheet.status === 4 || timesheet.status === 1) && user.id === req.user.id) {
+              throw new ClientError('already_booked', { message: `You ${timesheet.status === 4? 'are already booked on' : 'have already applied to'} this shift` });
             }
           }).catch(function(err) {
             throw err;

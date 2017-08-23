@@ -129,7 +129,7 @@ module.exports = function (sequelize, DataTypes) {
       as: 'shift',
       foreignKey: 'eventShiftId'
     });
-    userTimesheets.addScope('byUser', function (id = null) {
+    userTimesheets.addScope('byUser', function(id = null) {
       var returnScope = {
         attributes: ['id', 'status'],
         include: [
@@ -150,6 +150,25 @@ module.exports = function (sequelize, DataTypes) {
         }
       }
       return returnScope;
+    });
+    userTimesheets.addScope('applying', function(userId, eventShiftId) {
+      return {
+        attributes: [
+          'id',
+          'status',
+          'eventShiftId',
+          'userId',
+          'appliedOnPlatform'
+        ],
+        where: {
+          userId,
+          eventShiftId
+        },
+        order: [
+          ['updated', 'DESC']
+        ],
+        limit: 1
+      }
     });
   }
   return userTimesheets;
