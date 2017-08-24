@@ -12,7 +12,6 @@ module.exports = function (sequelize, DataTypes) {
     userTypeID: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      primaryKey: true
     },
     gender: {
       type: DataTypes.CHAR,
@@ -263,6 +262,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true
     },
+    invitedBy: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     foundthrough: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -285,7 +288,7 @@ module.exports = function (sequelize, DataTypes) {
     staffTermsAcceptedDate: {
       type: DataTypes.DATE,
       allowNull: true
-    }
+    },
   }, {
     tableName: 'users',
     timestamps: false,
@@ -322,7 +325,8 @@ module.exports = function (sequelize, DataTypes) {
           'experienceLevel',
           'myExperience',
           'myProfile',
-          'userGUID'
+          'userGUID',
+          'invitedBy'
         ],
         where: {
           status: 0,
@@ -345,6 +349,7 @@ module.exports = function (sequelize, DataTypes) {
   });
   users.associate = function (models) {
     users.belongsTo(models.venues, {as: 'venue'});
+    users.belongsTo(models.users, {as: 'invitedBy', foreignKey: 'invitedBy'});
     users.hasMany(models.events, {foreignKey: 'clientContactId'});
     users.hasMany(models.userPhotos, {
       foreignKey: 'UserId',

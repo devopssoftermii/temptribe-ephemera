@@ -30,7 +30,8 @@ module.exports = function(router) {
         });
       } else {
         return user.update({
-          registrationStatus: 2
+          registrationStatus: 2,
+          invitedBy: req.user.id
         }).then(function(result) {
           return mailer.send('newApplicant', user.email, {
             firstname: user.firstname,
