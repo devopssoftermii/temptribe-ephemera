@@ -349,7 +349,7 @@ module.exports = function (sequelize, DataTypes) {
   });
   users.associate = function (models) {
     users.belongsTo(models.venues, {as: 'venue'});
-    users.belongsTo(models.users, {as: 'invitedBy', foreignKey: 'invitedBy'});
+    users.belongsTo(models.users, {foreignKey: 'invitedBy'});
     users.hasMany(models.events, {foreignKey: 'clientContactId'});
     users.hasMany(models.userPhotos, {
       foreignKey: 'UserId',
