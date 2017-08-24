@@ -81,7 +81,8 @@ module.exports = function(sequelize, DataTypes) {
     where: {
       SessionDate: {
         $gte: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')))
-      }
+      },
+      status: 2
     },
     order: [
       ['StartTime', 'ASC']
