@@ -35,7 +35,8 @@ module.exports = function(router) {
         }).then(function(result) {
           return mailer.send('newApplicantUSA', user.email, {
             firstname: user.firstname,
-            userguid: user.userGUID
+            userguid: user.userGUID,
+            domain: process.env.NODE_ENV === 'production'? 'app': 'test'
           });
         }).then(function(result) {
           return {
