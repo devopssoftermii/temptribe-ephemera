@@ -33,11 +33,11 @@ module.exports = function(router) {
           registrationStatus: 2,
           invitedBy: req.user.id
         }).then(function(result) {
-          return mailer.send('accountActive', user.email, {
+          return mailer.send('newApplicantUSA', user.email, {
             firstname: user.firstname,
             userguid: user.userGUID
           });
-      }).then(function(result) {
+        }).then(function(result) {
           return {
             result: 'User invited to interview'
           }

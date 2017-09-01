@@ -65,9 +65,8 @@ module.exports = function(router) {
             });
           }
           if (user.status === 0) {
-            return mailer.send('accountActive', user.email, {
+            return mailer.send('accountActiveUSA', user.email, {
               firstname: user.firstname,
-              userguid: 'active'
             }).then(updateUser);
           } else {
             return updateUser();
