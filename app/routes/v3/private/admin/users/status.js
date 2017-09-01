@@ -67,6 +67,7 @@ module.exports = function(router) {
           if (user.status === 0) {
             return mailer.send('accountActiveUSA', user.email, {
               firstname: user.firstname,
+              domain: process.env.NODE_ENV === 'production'? 'app': 'test'
             }).then(updateUser);
           } else {
             return updateUser();
