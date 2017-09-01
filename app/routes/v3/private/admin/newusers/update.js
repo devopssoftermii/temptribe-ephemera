@@ -33,11 +33,11 @@ module.exports = function(router) {
           registrationStatus: 2,
           invitedBy: req.user.id
         }).then(function(result) {
-          return mailer.send('newApplicant', user.email, {
+          return mailer.send('accountActive', user.email, {
             firstname: user.firstname,
-            url: `${process.env.STAFF_APP_HOST}${process.env.STAFF_APP_RECRUIT_PATH}?i=${userHelper.generateURLHash(user, 'inviteToInterview')}`
+            userguid: user.userGUID
           });
-        }).then(function(result) {
+      }).then(function(result) {
           return {
             result: 'User invited to interview'
           }

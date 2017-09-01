@@ -67,7 +67,7 @@ module.exports = function(router) {
           if (user.status === 0) {
             return mailer.send('accountActive', user.email, {
               firstname: user.firstname,
-              userguid: user.userGUID
+              userguid: 'active'
             }).then(updateUser);
           } else {
             return updateUser();
