@@ -71,11 +71,11 @@ module.exports = function (sequelize, DataTypes) {
         return this.getDataValue('fax')? parse.phone(this.getDataValue('fax')): '';
       }
     },
-    mobile: {
+    cell: {
       type: DataTypes.STRING,
       allowNull: true,
       get() {
-        return this.getDataValue('mobile')? parse.phone(this.getDataValue('mobile')): '';
+        return this.getDataValue('cell')? parse.phone(this.getDataValue('cell')): '';
       }
     },
     email: {
@@ -388,7 +388,7 @@ module.exports = function (sequelize, DataTypes) {
         'firstname',
         'surname',
         'email',
-        'mobile'
+        'cell'
       ],
       include: [
         {
