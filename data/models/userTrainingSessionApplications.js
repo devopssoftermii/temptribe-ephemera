@@ -52,13 +52,13 @@ module.exports = function(sequelize, DataTypes) {
     })
   }
 
-  // userTrainingSessionApplications.associate = function(models) {
-  //   userTrainingSessionApplications.belongsTo(models.users, {
-  //     as: 'userTrainingSessionApplications',
-  //     foreignKey: 'ID',
-  //     targetKey: 'userID'
-  //   })
-  // }
+  userTrainingSessionApplications.associate = function(models) {
+    userTrainingSessionApplications.belongsTo(models.users, {
+      as: 'user',
+      foreignKey: 'ID',
+      targetKey: 'userID'
+    })
+  }
 
   return userTrainingSessionApplications
 };
