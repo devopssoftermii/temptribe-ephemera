@@ -2,6 +2,7 @@
 require('dotenv-safe').config();
 const ClientError = require('./lib/errors/ClientError');
 const mailer = require('./lib/mailer');
+const moment = require('moment');
 
 var app = {};
 
@@ -36,7 +37,7 @@ models.trainingSessions.findAll({
           to: 'ashleigh+' + application.user.firstname + '@temptribe.co.uk',
           data: {
             firstname: application.user.firstname,
-            time: session.StartTime.format('hhaa')
+            time: moment(session.StartTime).format('hhaa')
           }
         });
       });
