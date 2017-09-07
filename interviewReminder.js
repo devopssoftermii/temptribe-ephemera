@@ -30,7 +30,7 @@ models.trainingSessions.findAll({
 }).then(function(results) {
   if (results) {
     results.forEach(function(session) {
-      console.log(session.userTrainingSessionApplications.user.email);
+      console.log(session.userTrainingSessionApplications);
     });
   }
   process.exit();
