@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize'),
     fs = require('fs');
 
-module.exports = function(host) {
+module.exports = function(app) {
   var sequelize = new Sequelize({
     dialect: process.env.DB_DIALECT,
     database: process.env.DB_DATABASE,
@@ -26,7 +26,7 @@ module.exports = function(host) {
     }
   });
 
-  host = Object.assign({}, host, {
+  app.locals = Object.assign({}, app.locals, {
     sequelize,
     models
   });

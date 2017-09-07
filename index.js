@@ -25,7 +25,7 @@ app.locals = Object.assign({}, app.locals, {
 logging.before(app);
 
 // Initialise DB
-require('./data')(app.locals);
+require('./data')(app);
 
 if (process.env.NODE_ENV === 'development') {
   app.set('json spaces', 2);

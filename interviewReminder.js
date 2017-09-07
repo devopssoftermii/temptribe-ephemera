@@ -7,9 +7,8 @@ var app = {};
 
 // Initialise DB
 require('./data')(app);
-console.log(app.models)
 
-const { sequelize, models } = app;
+const { sequelize, models } = app.locals;
 models.trainingSessions.find({
   attributes: ['id', 'SessionDate'],
   include: [{
