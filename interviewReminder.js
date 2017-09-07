@@ -9,20 +9,7 @@ var app = {};
 require('./data')(app);
 
 const { sequelize, models } = app.locals;
-models.trainingSessions.find({
-  include: [{
-    model: models.userTrainingSessionApplications,
-    attributes: ['id', 'status'],
-    where: {
-      status: 4
-    },
-    required: false
-  }],
-  where: {
-    SessionDate: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')))
-  }
-}).then(function(results) {
-  console.log(results);
+models.trainingSessions.scope('future').findAll().then(function(results) {
   results.forEach(function(session) {
     console.log(session.id);
   });
