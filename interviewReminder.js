@@ -10,7 +10,7 @@ require('./data')(app);
 
 const { sequelize, models } = app.locals;
 models.trainingSessions.findAll({
-  attributes: ['id'],
+  attributes: ['ID'],
   where: {
     SessionDate: {
       $gte: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
@@ -20,7 +20,7 @@ models.trainingSessions.findAll({
 }).then(function(results) {
   if (results) {
     results.forEach(function(session) {
-      console.log(session.id);
+      console.log(session.ID);
     });
   }
   process.exit();
