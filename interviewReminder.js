@@ -11,6 +11,14 @@ require('./data')(app);
 const { sequelize, models } = app;
 models.trainingSessions.find({
   attributes: ['id', 'SessionDate'],
+  include: [{
+    model: models.userTrainingSessionApplications,
+    attributes: ['id', 'status'],
+    where: {
+      status: 4
+    },
+    required: false
+  }],
   where: {
     SessionDate: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')))
   }

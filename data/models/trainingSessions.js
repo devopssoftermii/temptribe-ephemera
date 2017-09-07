@@ -76,12 +76,12 @@ module.exports = function(sequelize, DataTypes) {
     trainingSessions.hasMany(models.userTrainingSessionApplications, {
       foreignKey: 'TrainingSessionID',
     });
-    trainingSessions.belongsToMany(models.users, {
-      through: models.userTrainingSessionApplications,
-      as: 'users',
-      foreignKey: 'TrainingSessionID',
-      otherKey: 'UserID'
-    });
+    // trainingSessions.belongsToMany(models.users, {
+    //   through: models.userTrainingSessionApplications,
+    //   as: 'users',
+    //   foreignKey: 'TrainingSessionID',
+    //   otherKey: 'UserID'
+    // });
   }
   trainingSessions.addScope('future', {
     where: {
