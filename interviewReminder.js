@@ -29,10 +29,15 @@ models.trainingSessions.findAll({
   }
 }).then(function(results) {
   if (results) {
-    results.forEach(function(session) {
-      session.userTrainingSessionApplications.forEach(function(application) {
-        console.log(application.user.email);
-      });
+    return Promise.all(results.map(function(session) {
+      return Promise.all(session.userTrainingSessionApplications.map(function(application) {
+        return new Promise(function(resolve, reject) {
+          console.log(application.user.email);
+          resolve();
+        });
+      }));
+    })).then(function() {
+      process.exit();
     });
   }
 });
