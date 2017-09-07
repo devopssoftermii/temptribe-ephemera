@@ -29,23 +29,23 @@ models.trainingSessions.findAll({
   }
 }).then(function(results) {
   if (results) {
-    return Promise.all(results.map(function(session) {
-      return Promise.all(session.userTrainingSessionApplications.map(function(application) {
-        return new Promise(function(resolve, reject) {
-          resolve({
-            to: 'ashleigh+' + application.user.firstname + '@temptribe.co.uk',
-            data: {
-              firstname: application.user.firstname,
-              date: session.SessionDate,
-              time: session.StartTime
-            }
-          });
+    var emails = [];
+    results.forEach(function(session) {
+      session.userTrainingSessionApplications.forEach(function(application) {
+        emails.push({
+          to: 'ashleigh+' + application.user.firstname + '@temptribe.co.uk',
+          data: {
+            firstname: application.user.firstname,
+            date: session.SessionDate,
+            time: session.StartTime
+          }
         });
-      }));
-    })).then(function(emails) {
-      mailer.sendBatch('interviewReminder', emails).finally(function() {
-        process.exit();
       });
+    })
+    mailer.sendBatch('interviewReminder', emails).finally(function() {
+      process.exit();
     });
+  } else {
+    process.exit();
   }
 });
