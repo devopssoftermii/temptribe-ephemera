@@ -42,7 +42,9 @@ models.trainingSessions.findAll({
         });
       });
     })
-    mailer.sendBatch('interviewReminder', emails).finally(function() {
+    mailer.sendBatch('interviewReminder', emails).then(function() {
+      process.exit();
+    }).catch(function() {
       process.exit();
     });
   } else {
