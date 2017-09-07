@@ -10,6 +10,7 @@ require('./data')(app);
 
 const { sequelize, models } = app.locals;
 models.trainingSessions.find({
+  attributes: ['id', 'SessionDate'],
   include: [{
     model: models.userTrainingSessionApplications,
     attributes: ['id', 'status'],
@@ -22,6 +23,7 @@ models.trainingSessions.find({
     SessionDate: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')))
   }
 }).then(function(results) {
+  console.log(results);
   results.forEach(function(session) {
     console.log(session.id);
   });
