@@ -2,7 +2,7 @@ var repl = require("repl");
 
 require('dotenv-safe').config();
 
-var app = {locals: 'foo'};
+var app = {};
 
 require('./data')(app);
 
@@ -12,6 +12,6 @@ require('./data')(app);
     prompt: "repl> ",
   });
 
-replServer.context.db = app.locals
+replServer.context.db = app
 
 //db.models.trainingSessions.findById(3608).then(x => x.full()).then(x => {console.log(x)})

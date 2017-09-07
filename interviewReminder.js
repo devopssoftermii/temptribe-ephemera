@@ -3,34 +3,19 @@ require('dotenv-safe').config();
 const ClientError = require('./lib/errors/ClientError');
 const mailer = require('./lib/mailer');
 
-var app = {
-  locals: {}
-}
+var app = {};
 
 // Initialise DB
 require('./data')(app);
 
-mailer.sendBatch('newApplicant', [
-  {
-    to: 'ashleigh+1@temptribe.co.uk',
-    data: {
-      firstname: 'foo',
-      url: 'doom'
-    }
-  },
-  {
-    to: 'ashleigh+2@temptribe.co.uk',
-    data: {
-      firstname: 'bar',
-      url: 'doom'
-    }
-  },
-  {
-    to: 'ashleigh+3@temptribe.co.uk',
-    data: {
-      firstname: 'baz',
-      url: 'doom'
-    }
-  },
-]);
-
+const { sequelize, models } = app;
+models.trainingSessions.find({
+  attributes: ['id', 'SessionDate'],
+  where: {
+    SessionDate: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')))
+  }
+}).then(function(results) {
+  results.forEach(function(session) {
+    console.log(session.id);
+  });
+});
