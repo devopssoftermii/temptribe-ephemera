@@ -7,6 +7,7 @@ var app = {};
 
 // Initialise DB
 require('./data')(app);
+console.log(app.models)
 
 const { sequelize, models } = app;
 models.trainingSessions.find({
