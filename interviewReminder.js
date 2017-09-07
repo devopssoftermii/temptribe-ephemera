@@ -9,8 +9,15 @@ var app = {};
 require('./data')(app);
 
 const { sequelize, models } = app.locals;
-models.trainingSessions.scope('future').findAll().then(function(results) {
-  results.forEach(function(session) {
-    console.log(session.id);
-  });
+models.trainingSessions.findAll({
+  attributes: ['id'],
+  where: {
+    SessionDate: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')))
+  }
+}).then(function(results) {
+  if (results) {
+    results.forEach(function(session) {
+      console.log(session.id);
+    });
+  }
 });
