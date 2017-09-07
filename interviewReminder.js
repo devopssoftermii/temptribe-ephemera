@@ -12,7 +12,10 @@ const { sequelize, models } = app.locals;
 models.trainingSessions.findAll({
   attributes: ['id'],
   where: {
-    SessionDate: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')))
+    SessionDate: {
+      $gte: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
+      $lt: sequelize.fn('dateadd', sequelize.literal('DAY'), 2, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
+    }
   }
 }).then(function(results) {
   if (results) {
@@ -20,4 +23,5 @@ models.trainingSessions.findAll({
       console.log(session.id);
     });
   }
+  process.exit();
 });
