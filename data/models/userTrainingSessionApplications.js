@@ -53,7 +53,7 @@ module.exports = function(sequelize, DataTypes) {
     userTrainingSessionApplications.belongsTo(models.users, {
       as: 'user',
       foreignKey: 'UserID',
-      targetKey: 'ID'
+      targetKey: 'id'
     });
   }
 
