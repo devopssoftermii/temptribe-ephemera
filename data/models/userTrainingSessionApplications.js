@@ -56,7 +56,7 @@ module.exports = function(sequelize, DataTypes) {
     userTrainingSessionApplications.belongsTo(models.users, {
       as: 'user',
       foreignKey: 'ID',
-      targetKey: 'userID'
+      targetKey: 'UserID'
     })
   }
 
