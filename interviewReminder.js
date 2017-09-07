@@ -36,8 +36,7 @@ models.trainingSessions.findAll({
           to: 'ashleigh+' + application.user.firstname + '@temptribe.co.uk',
           data: {
             firstname: application.user.firstname,
-            date: session.SessionDate,
-            time: session.StartTime
+            time: session.StartTime.format('hhaa')
           }
         });
       });
