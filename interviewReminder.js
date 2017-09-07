@@ -30,8 +30,9 @@ models.trainingSessions.findAll({
 }).then(function(results) {
   if (results) {
     results.forEach(function(session) {
-      console.log(session.userTrainingSessionApplications.user);
+      session.userTrainingSessionApplications.forEach(function(application) {
+        console.log(application.user.email);
+      });
     });
   }
-  process.exit();
 });
