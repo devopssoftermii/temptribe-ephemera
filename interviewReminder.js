@@ -34,7 +34,7 @@ models.trainingSessions.findAll({
     results.forEach(function(session) {
       session.userTrainingSessionApplications.forEach(function(application) {
         emails.push({
-          to: 'ashleigh+' + application.user.firstname + '@temptribe.co.uk',
+          to: application.user.email,
           data: {
             firstname: application.user.firstname,
             time: moment(session.StartTime).format('hha')
