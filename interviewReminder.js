@@ -10,7 +10,6 @@ require('./data')(app);
 
 const { sequelize, models } = app.locals;
 models.trainingSessions.find({
-  attributes: ['id', 'SessionDate'],
   include: [{
     model: models.userTrainingSessionApplications,
     attributes: ['id', 'status'],
