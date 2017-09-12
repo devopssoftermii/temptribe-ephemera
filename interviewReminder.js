@@ -37,7 +37,7 @@ models.trainingSessions.findAll({
           to: application.user.email,
           data: {
             firstname: application.user.firstname,
-            time: moment(session.StartTime).format('hha')
+            time: moment(session.StartTime).format('ha')
           }
         });
       });
