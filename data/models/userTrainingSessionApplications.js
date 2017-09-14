@@ -49,16 +49,13 @@ module.exports = function(sequelize, DataTypes) {
       as: 'trainingSession',
       foreignKey: 'TrainingSessionID',
       targetKey: 'ID'
-    })
+    });
+    userTrainingSessionApplications.belongsTo(models.users, {
+      as: 'user',
+      foreignKey: 'UserID',
+      targetKey: 'id'
+    });
   }
 
-  // userTrainingSessionApplications.associate = function(models) {
-  //   userTrainingSessionApplications.belongsTo(models.users, {
-  //     as: 'userTrainingSessionApplications',
-  //     foreignKey: 'ID',
-  //     targetKey: 'userID'
-  //   })
-  // }
-
-  return userTrainingSessionApplications
+  return userTrainingSessionApplications;
 };

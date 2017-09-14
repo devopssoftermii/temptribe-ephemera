@@ -379,6 +379,7 @@ module.exports = function (sequelize, DataTypes) {
     });
     // users.belongsToMany(models.trainingSessions, {
     //   through: models.userTrainingSessionApplications,
+    //   as: 'trainingSessions',
     //   foreignKey: 'UserID',
     //   otherKey: 'TrainingSessionID'
     // });
