@@ -9,6 +9,24 @@ const userStatuses = new Map([
   ['deleted', 3]
 ]);
 
+const sendMail = (function() {
+  if (process.env.USA === 'true') {
+    return function(user) {
+      return mailer.send('accountActiveUSA', user.email, {
+        firstname: user.firstname,
+        domain: process.env.NODE_ENV === 'production'? 'app': 'test'
+      });
+    }
+  } else {
+    return function(user) {
+      return mailer.send('accountActive', user.email, {
+        firstname: user.firstname,
+        userguid: user.userGUID
+      });
+    }
+  }
+})();
+
 module.exports = function(router) {
   router.get('/status/:id', function(req, res, next) {
     var models = req.app.locals.models;
@@ -65,10 +83,7 @@ module.exports = function(router) {
             });
           }
           if (user.status === 0) {
-            return mailer.send('accountActiveUSA', user.email, {
-              firstname: user.firstname,
-              domain: process.env.NODE_ENV === 'production'? 'app': 'test'
-            }).then(updateUser);
+            return sendMail(user).then(updateUser);
           } else {
             return updateUser();
           }
