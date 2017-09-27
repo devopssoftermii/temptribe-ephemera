@@ -377,7 +377,7 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'UserID',
       otherKey: 'ClientID'
     });
-    user.belongsToMany(models.notification, {
+    users.belongsToMany(models.notification, {
       through: models.notificationByUser,
       foreignKey: 'userId'
     });
