@@ -17,6 +17,11 @@ module.exports = function (sequelize, DataTypes) {
         model: 'notification',
         key: 'id'
       }
+    },
+    received: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      default: false
     }
   }, {
     tableName: 'notificationByDevice',
