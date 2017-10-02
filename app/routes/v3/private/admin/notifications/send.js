@@ -29,7 +29,7 @@ module.exports = function(router) {
           }
           return Promise.all([
             user.addNotification(notification),
-            user.getSessions().then(function(sessions) {
+            user.getApiSessions().then(function(sessions) {
               return Promise.all(sessions.map(function(session) {
                 return session.getDevices().then(function(devices) {
                   return Promise.all(devices.map(function(device) {
