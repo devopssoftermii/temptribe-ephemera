@@ -17,6 +17,7 @@ module.exports = function(router) {
       body: req.body.body
     }).then(function(notification) {
       return models.users.findAll({
+        attributes: ['id'],
         where: {
           id: {
             $in: req.body.to
