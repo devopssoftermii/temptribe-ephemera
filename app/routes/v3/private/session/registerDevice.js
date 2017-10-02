@@ -1,5 +1,5 @@
 var session = require('../../../../middleware/session');
-const UnauthorizedError = require('../../../../../lib/errors/UnauthorizedError');
+const ClientError = require('../../../../../lib/errors/ClientError');
 
 module.exports = function(router) {
   router.post('/registerdevice', function(req, res, next) {
