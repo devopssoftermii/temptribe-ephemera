@@ -70,15 +70,25 @@ module.exports = {
   },
   registerDevice: function(token, device, models) {
     return extractSessionFromToken(token, models).then(function(session) {
-      return models.apiSession.destroy({
+      return models.apiSession.findAll({
         include: [{
           model: models.device,
           where: {
             id: device.id
           }
         }],
+      }).then(function(sessions) {
+        console.log(sessions);
+        if (!sessions) {
+          return true;
+        }
+        return Promise.all(sessions.map(function(session) {
+          return session.destroy();
+        }));
       }).then(function() {
         return session.setDevice(device);
+      }).catch(function(err) {
+        throw err;
       });
     }).catch(function(err) {
       throw err;

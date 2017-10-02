@@ -11,7 +11,7 @@ module.exports = function(router) {
     return models.device.findById(req.body.device).then(function(device) {
       var register = function(device) {
         return session.registerDevice(req.body.token, device, models).then(function() {
-          res.send(201);
+          res.sendStatus(201);
         });
       }
       if (device) {
