@@ -22,10 +22,13 @@ module.exports = function (sequelize, DataTypes) {
   notification.associate = function (models) {
     notification.belongsToMany(models.users, {
       through: models.notificationByUser,
+      foreignKey: 'notificationId',
       otherKey: 'userId'
     });
     notification.belongsToMany(models.device, {
-      through: models.notificationByDevice
+      through: models.notificationByDevice,
+      foreignKey: 'notificationId',
+      otherKey: 'deviceId'
     });
   }
   return notification;
