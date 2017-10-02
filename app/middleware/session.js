@@ -78,12 +78,13 @@ module.exports = {
           }
         }],
       }).then(function(sessions) {
-        console.log(sessions);
         if (!sessions) {
           return true;
         }
-        return Promise.all(sessions.map(function(session) {
-          return session.destroy();
+        return Promise.all(sessions.map(function(otherSession) {
+          if (otherSession.id !== session.id) {
+            return otherSession.destroy();
+          }
         }));
       }).then(function() {
         return session.setDevice(device);
