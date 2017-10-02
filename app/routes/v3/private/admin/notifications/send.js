@@ -38,10 +38,18 @@ module.exports = function(router) {
                 });
               }));
             })
-          ]);
-        })).filter(function(user) {
-          return user !== null;
+          ]).then(function() {
+            return user;
+          });
+        })).then(function(users) {
+          return users.filter(function(user) {
+            return user !== null;
+          });
         });
+      });
+    }).then(function(users) {
+      res.jsend({
+        sentTo: users
       });
     }).catch(function(err) {
       next(err);
