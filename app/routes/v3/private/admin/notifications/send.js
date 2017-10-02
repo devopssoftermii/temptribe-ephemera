@@ -16,32 +16,32 @@ module.exports = function(router) {
       title: req.body.title,
       body: req.body.body
     }).then(function(notification) {
-      return models.users.find({
+      return models.users.findAll({
         where: {
           id: {
             $in: req.body.to
           }
         },
-      });
-    }).then(function(users) {
-      return Promise.all(users.map(function(user) {
-        if (!user) {
-          return null;
-        }
-        return Promise.all([
-          user.addNotification(notification),
-          user.getSessions().then(function(sessions) {
-            return Promise.all(sessions.map(function(session) {
-              return session.getDevices().then(function(devices) {
-                return Promise.all(devices.map(function(device) {
-                  return device.addNotification(notification);
-                }));
-              });
-            }));
-          })
-        ]);
-      })).filter(function(user) {
-        return user !== null;
+      }).then(function(users) {
+        return Promise.all(users.map(function(user) {
+          if (!user) {
+            return null;
+          }
+          return Promise.all([
+            user.addNotification(notification),
+            user.getSessions().then(function(sessions) {
+              return Promise.all(sessions.map(function(session) {
+                return session.getDevices().then(function(devices) {
+                  return Promise.all(devices.map(function(device) {
+                    return device.addNotification(notification);
+                  }));
+                });
+              }));
+            })
+          ]);
+        })).filter(function(user) {
+          return user !== null;
+        });
       });
     }).catch(function(err) {
       next(err);
