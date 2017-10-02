@@ -68,8 +68,11 @@ module.exports = {
       throw err;
     });
   },
-  registerDevice: function(token, device, models) {
+  registerDevice: function(user, token, device, models) {
     return extractSessionFromToken(token, models).then(function(session) {
+      if (session.user.id !== user.id) {
+        throw new UnauthorizedError('invalid_session', {message: 'Invalid session'});        
+      }
       return models.apiSession.findAll({
         include: [{
           model: models.device,

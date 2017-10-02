@@ -10,7 +10,7 @@ module.exports = function(router) {
     var sequelize = req.app.locals.sequelize;
     return models.device.findById(req.body.device).then(function(device) {
       var register = function(device) {
-        return session.registerDevice(req.body.token, device, models).then(function() {
+        return session.registerDevice(req.user, req.body.token, device, models).then(function() {
           res.sendStatus(201);
         });
       }
