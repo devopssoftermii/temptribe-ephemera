@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
     tableName: 'device'
   });
   device.associate = function (models) {
-    device.belongsTo(models.apiSession);
+    device.hasOne(models.apiSession);
     device.belongsToMany(models.notification, {
       through: models.notificationByDevice
     });

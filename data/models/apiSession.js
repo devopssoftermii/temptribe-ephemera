@@ -18,7 +18,7 @@ module.exports = function (sequelize, DataTypes) {
   });
   apiSession.associate = function (models) {
     apiSession.belongsTo(models.users);
-    apiSession.hasOne(models.device);
+    apiSession.belongsTo(models.device);
   }
   return apiSession;
 }
