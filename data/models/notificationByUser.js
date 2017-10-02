@@ -22,7 +22,10 @@ module.exports = function (sequelize, DataTypes) {
     tableName: 'notificationByUser',
     freezeTableName: true,
     defaultScope: {
-      attributes: []
+      attributes: [
+        'notificationId',
+        'userId'
+      ]
     }
   });
 };
