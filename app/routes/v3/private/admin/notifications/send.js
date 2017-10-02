@@ -7,7 +7,7 @@ module.exports = function(router) {
     if (!req.body || !req.body.to || !req.body.title || !req.body.body) {
       throw new ClientError('invalid_notification', {message: 'Missing notification data'});
     }
-    if (!Array.isArray(req.body.to) || req.body.some(function(id) {
+    if (!Array.isArray(req.body.to) || req.body.to.some(function(id) {
       return isNaN(parseInt(id));
     })) {
       throw new ClientError('invalid_notification', {message: 'Invalid to: data'});
