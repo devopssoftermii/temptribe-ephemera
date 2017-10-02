@@ -32,6 +32,9 @@ module.exports = function(router) {
             user.getApiSessions().then(function(sessions) {
               return Promise.all(sessions.map(function(session) {
                 return session.getDevice().then(function(device) {
+                  if (!device) {
+                    return null;
+                  }
                   return device.addNotification(notification);
                 });
               }));
