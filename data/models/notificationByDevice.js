@@ -27,7 +27,11 @@ module.exports = function (sequelize, DataTypes) {
     tableName: 'notificationByDevice',
     freezeTableName: true,
     defaultScope: {
-      attributes: []
+      attributes: [
+        'notificationId',
+        'deviceId',
+        'received'
+      ]
     }
   });
 };
