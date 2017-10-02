@@ -15,7 +15,10 @@ module.exports = function(router) {
       if (device) {
         return register(device);
       } else {
-        return models.device.create(req.body).then(function(device) {
+        var deviceInput = Object.assign({
+          id: req.body.device
+        }, req.body);
+        return models.device.create(deviceInput).then(function(device) {
           register(device);
         });
       }
