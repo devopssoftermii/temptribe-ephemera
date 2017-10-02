@@ -15,7 +15,9 @@ module.exports = function(router) {
       if (device) {
         return register(device);
       } else {
-        return models.device.create(req.body).then(register(device));
+        return models.device.create(req.body).then(function(device) {
+          register(device);
+        });
       }
     }).catch(function(err) {
       next(err);

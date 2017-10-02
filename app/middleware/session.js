@@ -70,6 +70,7 @@ module.exports = {
   },
   registerDevice: function(token, device, models) {
     return extractSessionFromToken(token, models).then(function(session) {
+      return session.setDevice(device);
     }).catch(function(err) {
       throw err;
     });      
