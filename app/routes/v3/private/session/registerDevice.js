@@ -2,7 +2,7 @@ var session = require('../../../../middleware/session');
 const UnauthorizedError = require('../../../../../lib/errors/UnauthorizedError');
 
 module.exports = function(router) {
-  router.post('/registerDevice', function(req, res, next) {
+  router.post('/registerdevice', function(req, res, next) {
     if (!req.body.token || !req.body.device || !req.body.type || req.body.os) {
       throw new ClientError('invalid_credentials', { message: 'Invalid device credentials' });
     }
