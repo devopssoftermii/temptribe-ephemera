@@ -68,6 +68,12 @@ module.exports = {
       throw err;
     });
   },
+  registerDevice: function(token, device, models) {
+    return extractSessionFromToken(token, models).then(function(session) {
+    }).catch(function(err) {
+      throw err;
+    });      
+  },
   destroy: function(token, models) {
     return extractSessionFromToken(token, models).then(function(session) {
       return session.destroy();
