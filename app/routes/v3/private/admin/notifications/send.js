@@ -51,7 +51,9 @@ module.exports = function(router) {
       });
     }).then(function(users) {
       res.jsend({
-        sentTo: users
+        sentTo: users.map(function(user) {
+          return user.id;
+        })
       });
     }).catch(function(err) {
       next(err);
