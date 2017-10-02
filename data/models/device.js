@@ -3,7 +3,15 @@ module.exports = function (sequelize, DataTypes) {
     id: {
       type: DataTypes.STRING,
       primaryKey: true
-    }
+    },
+    type: {
+      type: DataTypes.STRING,
+      nullable: true
+    },
+    os: {
+      type: DataTypes.STRING,
+      nullable: true
+    },
   }, {
     tableName: 'device'
   });
