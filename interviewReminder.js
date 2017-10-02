@@ -20,13 +20,17 @@ models.trainingSessions.findAll({
       attributes: ['email', 'firstname'],
       required: true
     }],
+    where: {
+      status: 4
+    },
     required: true,
   }],
   where: {
     SessionDate: {
       $gte: sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
       $lt: sequelize.fn('dateadd', sequelize.literal('DAY'), 2, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
-    }
+    },
+    status: 2
   }
 }).then(function(results) {
   if (results) {
