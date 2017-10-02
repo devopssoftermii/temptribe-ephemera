@@ -21,7 +21,7 @@ module.exports = function (sequelize, DataTypes) {
     received: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: false
+      defaultValue: false
     }
   }, {
     tableName: 'notificationByDevice',
