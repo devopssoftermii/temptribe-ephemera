@@ -379,7 +379,8 @@ module.exports = function (sequelize, DataTypes) {
     });
     users.belongsToMany(models.notification, {
       through: models.notificationByUser,
-      foreignKey: 'userId'
+      foreignKey: 'userId',
+      otherKey: 'notificationId'
     });
     // users.belongsToMany(models.trainingSessions, {
     //   through: models.userTrainingSessionApplications,

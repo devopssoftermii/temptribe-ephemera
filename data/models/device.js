@@ -18,7 +18,9 @@ module.exports = function (sequelize, DataTypes) {
   device.associate = function (models) {
     device.hasOne(models.apiSession);
     device.belongsToMany(models.notification, {
-      through: models.notificationByDevice
+      through: models.notificationByDevice,
+      foreignKey: 'deviceId',
+      otherKey: 'notificationId'
     });
   }
   return device;
