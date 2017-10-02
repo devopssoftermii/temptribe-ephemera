@@ -31,10 +31,8 @@ module.exports = function(router) {
             user.addNotification(notification),
             user.getApiSessions().then(function(sessions) {
               return Promise.all(sessions.map(function(session) {
-                return session.getDevice().then(function(devices) {
-                  return Promise.all(devices.map(function(device) {
-                    return device.addNotification(notification);
-                  }));
+                return session.getDevice().then(function(device) {
+                  return device.addNotification(notification);
                 });
               }));
             })
