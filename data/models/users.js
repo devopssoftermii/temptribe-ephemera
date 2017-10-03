@@ -366,7 +366,7 @@ module.exports = function (sequelize, DataTypes) {
         this.getDevices().then(function(devices) {
           return Promise.all(devices.map(function(device) {
             return device.addNotification(notification);              
-          })).then(function(devices) {
+          })).then(function() {
             return devices;
           });
         })
