@@ -8,7 +8,7 @@ function validateString(...args) {
 }
 
 module.exports = function(router) {
-  router.post('/sendtousers', function(req, res, next) {
+  router.post('/sendto', function(req, res, next) {
     var { to, title, body } = req.body;
     if (!to || !validateString(title, body)) {
       throw new ClientError('invalid_notification', {message: 'Missing notification data'});
