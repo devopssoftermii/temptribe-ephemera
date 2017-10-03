@@ -1,48 +1,27 @@
 const ClientError = require('../../../../../../lib/errors/ClientError');
-const userHelper = require('../../../../../../lib/user');
+const notifications = require('../../../../../../lib/notifications');
+
+function validateString(...args) {
+  return args.every(function(arg) {
+    return typeof(arg) === 'string' && arg;
+  });
+}
 
 module.exports = function(router) {
   router.post('/send', function(req, res, next) {
-    var models = req.app.locals.models;
-    if (!req.body || !req.body.to || !req.body.title || !req.body.body) {
+    var { to, title, body } = req.body;
+    if (!to || !validateString(title, body)) {
       throw new ClientError('invalid_notification', {message: 'Missing notification data'});
     }
-    if (!Array.isArray(req.body.to) || req.body.to.some(function(id) {
+    if (!Array.isArray(to)) {
+      to = [to];
+    }
+    if (to.some(function(id) {
       return isNaN(parseInt(id));
     })) {
       throw new ClientError('invalid_notification', {message: 'Invalid to: data'});
     }
-    models.notification.create({
-      title: req.body.title,
-      body: req.body.body
-    }).then(function(notification) {
-      return models.users.findAll({
-        attributes: ['id'],
-        where: {
-          id: {
-            $in: req.body.to
-          }
-        },
-      }).then(function(users) {
-        return Promise.all(users.map(function(user) {
-          if (!user) {
-            return null;
-          }
-          return Promise.all([
-            user.addNotification(notification),
-            userHelper.getDevices(user, models).then(function(devices) {
-              return device.addNotification(notification);              
-            })
-          ]).then(function() {
-            return user;
-          });
-        })).then(function(users) {
-          return users.filter(function(user) {
-            return user !== null;
-          });
-        });
-      });
-    }).then(function(users) {
+    return notifications.send(req.app.locals.models, to, title, body).then(function(users) {
       res.jsend({
         sentTo: users.map(function(user) {
           return user.id;
