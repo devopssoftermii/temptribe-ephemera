@@ -347,29 +347,29 @@ module.exports = function (sequelize, DataTypes) {
       }
     }
   });
-  users.prototype.getDevices = function() {
-    return this.getApiSessions({
-      include: [{
-        model: models.device,
-        required: true
-      }]
-    }).then(function(sessions) {
-      return sessions.map(function(session) {
-        return session.device;
-      });
-    });
-  };
-  users.prototype.recordNotification = function(notification) {
-    return Promise.all([
-      this.addNotification(notification),
-      this.getDevices().then(function(devices) {
-        return devices.map(function(device) {
-          return device.addNotification(notification);              
-        });
-      })
-    ]);
-  }
   users.associate = function (models) {
+    users.prototype.getDevices = function() {
+      return this.getApiSessions({
+        include: [{
+          model: models.device,
+          required: true
+        }]
+      }).then(function(sessions) {
+        return sessions.map(function(session) {
+          return session.device;
+        });
+      });
+    };
+    users.prototype.recordNotification = function(notification) {
+      return Promise.all([
+        this.addNotification(notification),
+        this.getDevices().then(function(devices) {
+          return devices.map(function(device) {
+            return device.addNotification(notification);              
+          });
+        })
+      ]);
+    }
     users.belongsTo(models.venues, {as: 'venue'});
     users.belongsTo(models.users, {foreignKey: 'invitedBy'});
     users.hasMany(models.events, {foreignKey: 'clientContactId'});
