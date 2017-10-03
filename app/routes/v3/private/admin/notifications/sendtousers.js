@@ -8,7 +8,7 @@ function validateString(...args) {
 }
 
 module.exports = function(router) {
-  router.post('/send', function(req, res, next) {
+  router.post('/sendtousers', function(req, res, next) {
     var { to, title, body } = req.body;
     if (!to || !validateString(title, body)) {
       throw new ClientError('invalid_notification', {message: 'Missing notification data'});
@@ -21,12 +21,8 @@ module.exports = function(router) {
     })) {
       throw new ClientError('invalid_notification', {message: 'Invalid to: data'});
     }
-    return notifications.send(req.app.locals.models, to, title, body).then(function(users) {
-      res.jsend({
-        sentTo: users.map(function(user) {
-          return user.id;
-        })
-      });
+    return notifications.send(req.app.locals.models, to, title, body).then(function(result) {
+      res.jsend(result);
     }).catch(function(err) {
       next(err);
     });

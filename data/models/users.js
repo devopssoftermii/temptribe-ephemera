@@ -368,7 +368,9 @@ module.exports = function (sequelize, DataTypes) {
             return device.addNotification(notification);              
           });
         })
-      ]);
+      ]).then(function([promise, devices]) {
+        return devices;
+      });
     }
     users.belongsTo(models.venues, {as: 'venue'});
     users.belongsTo(models.users, {foreignKey: 'invitedBy'});
