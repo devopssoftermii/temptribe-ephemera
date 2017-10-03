@@ -345,6 +345,20 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       }
+    },
+    instanceMethods: {
+      getDevices: function() {
+        return this.getApiSessions({
+          include: [{
+            model: models.device,
+            required: true
+          }]
+        }).then(function(sessions) {
+          return sessions.map(function(session) {
+            return session.device;
+          });
+        });
+      }
     }
   });
   users.associate = function (models) {
