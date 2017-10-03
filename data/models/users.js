@@ -364,8 +364,10 @@ module.exports = function (sequelize, DataTypes) {
       return Promise.all([
         this.addNotification(notification),
         this.getDevices().then(function(devices) {
-          return devices.map(function(device) {
+          return Promise.all(devices.map(function(device) {
             return device.addNotification(notification);              
+          })).then(function(devices) {
+            return devices;
           });
         })
       ]).then(function([promise, devices]) {
