@@ -1,8 +1,8 @@
 const ClientError = require('../../../../../../lib/errors/ClientError');
+const userHelper = require('../../../../../../lib/user');
 
 module.exports = function(router) {
   router.post('/send', function(req, res, next) {
-    var sequelize = req.app.locals.sequelize;
     var models = req.app.locals.models;
     if (!req.body || !req.body.to || !req.body.title || !req.body.body) {
       throw new ClientError('invalid_notification', {message: 'Missing notification data'});
@@ -30,15 +30,8 @@ module.exports = function(router) {
           }
           return Promise.all([
             user.addNotification(notification),
-            user.getApiSessions().then(function(sessions) {
-              return Promise.all(sessions.map(function(session) {
-                return session.getDevice().then(function(device) {
-                  if (!device) {
-                    return null;
-                  }
-                  return device.addNotification(notification);
-                });
-              }));
+            userHelper.getDevices(user, models).then(function(devices) {
+              return device.addNotification(notification);              
             })
           ]).then(function() {
             return user;
