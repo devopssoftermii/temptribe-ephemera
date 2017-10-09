@@ -361,17 +361,24 @@ module.exports = function (sequelize, DataTypes) {
       });
     };
     users.prototype.recordNotification = function(notification) {
-      return Promise.all([
-        this.addNotification(notification),
-        this.getDevices().then(function(devices) {
-          return Promise.all(devices.map(function(device) {
+      return this.getDevices().then(function(devices) {
+        if (!devices.length) {
+          return {
+            user: this,
+            devices: []
+          };
+        }
+        return Promise.all([
+          this.addNotification(notification),
+          Promise.all(devices.map(function(device) {
             return device.addNotification(notification);              
-          })).then(function() {
-            return devices;
-          });
-        })
-      ]).then(function([promise, devices]) {
-        return devices;
+          }))
+        ]).then(function([notification, devices]) {
+          return {
+            user: this,
+            devices
+          };
+        });
       });
     }
     users.belongsTo(models.venues, {as: 'venue'});
