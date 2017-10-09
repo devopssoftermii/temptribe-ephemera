@@ -14,14 +14,14 @@ module.exports = function(router) {
       throw new ClientError('invalid_shift', {message: 'Missing shift ID ({ shiftId })'});
     }
     var models = req.app.locals.models;
-    models.eventShifts.findById(shiftId, {
-      attributes: [],
+    models.eventShifts.find({
+      where: {
+        id: shiftId
+      },
       include: [{
-        attributes: [],
         model: models.events,
         as: 'event',
         include: [{
-          attributes: [],
           model: models.clients,
           as: 'client',
           include: [{
@@ -31,7 +31,6 @@ module.exports = function(router) {
           }]
         }]
       }, {
-        attributes: [],
         model: models.userTimesheets,
         as: 'timesheets',
         include: [{
@@ -43,7 +42,7 @@ module.exports = function(router) {
     }).then(function(shift) {
       res.jsend({
         favourites: shift.event.client.favourited.map((user) => user.id),
-        applied: shift.timesheets.user.map((user) => user.id)
+        applied: shift.timesheets.map((ts) => ts.user.id)
       });
     }).catch(function(err) {
       next(err);
