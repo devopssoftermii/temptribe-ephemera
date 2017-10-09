@@ -361,7 +361,7 @@ module.exports = function (sequelize, DataTypes) {
       });
     };
     users.prototype.recordNotification = function(notification) {
-      return this.getDevices().then(function(devices) {
+      return this.getDevices().then((devices) => {
         if (!devices.length) {
           return {
             user: this,
@@ -373,7 +373,7 @@ module.exports = function (sequelize, DataTypes) {
           Promise.all(devices.map(function(device) {
             return device.addNotification(notification);              
           }))
-        ]).then(function([notification, devices]) {
+        ]).then(([notification, devices]) => {
           return {
             user: this,
             devices
