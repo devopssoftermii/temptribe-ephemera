@@ -33,9 +33,12 @@ module.exports = function (sequelize, DataTypes) {
       }
     }
   });
-  tubeStations.belongsToMany(models.venues,{
-      through: 'venueTubeLink',
-      foreignKey: 'tubeStationID'
-    });
+  tubeStations.associate = function (models) {
+    tubeStations.belongsToMany(models.venues,{
+        through: 'venueTubeLink',
+        foreignKey: 'tubeStationID'
+      });
+  };
+
   return tubeStations;
 };

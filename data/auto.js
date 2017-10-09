@@ -27,6 +27,8 @@ var auto = new SequelizeAuto(process.env.DB_DATABASE, process.env.DB_USERNAME, p
 			'dressCodes',
 			'jobRoles',
       'trainingSessions',
+      'tubeStations',
+      'venueTubeLink'
     ]
 });
 
