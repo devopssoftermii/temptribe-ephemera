@@ -36,7 +36,7 @@ module.exports = function(router) {
         as: 'timesheets',
         include: [{
           attributes: ['id'],
-          model: model.users,
+          model: models.users,
           as: 'user',
         }]
       }]
