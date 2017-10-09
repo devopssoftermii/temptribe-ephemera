@@ -9,7 +9,7 @@ function validateString(...args) {
 
 module.exports = function(router) {
   router.post('/sendto', function(req, res, next) {
-    var { to, title, body } = req.body;
+    var { to, title, body, format } = req.body;
     if (!to || !validateString(title, body)) {
       throw new ClientError('invalid_notification', {message: 'Missing notification data'});
     }
@@ -22,10 +22,23 @@ module.exports = function(router) {
       throw new ClientError('invalid_notification', {message: 'Invalid to: data'});
     }
     return notifications.send(req.app.locals.models, to, title, body).then(function(result) {
-      res.jsend(result);
+      res.jsend(formatResponse(result, format));
     }).catch(function(err) {
       next(err);
     });
   });
+}
+
+function formatResponse(response, format) {
+  if ('object' !== typeof(response.to)) {
+    return response;
+  }
+  if (!format || (format === 'users' && response.to.deviceIds)) {
+    delete response.to.deviceIds;
+  }
+  if (format === 'devices' && response.to.userIds) {
+    delete response.to.userIds;
+  }
+  return response;
 }
   
