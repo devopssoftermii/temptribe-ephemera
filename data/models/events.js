@@ -153,7 +153,10 @@ module.exports = function (sequelize, DataTypes) {
             model: models
               .venues
               .scope(detail),
-            as: 'venue'
+            as: 'venue',
+            include: [
+              {model: models.tubeStations}
+            ]
           });
         }
         if (detail === 'full') {

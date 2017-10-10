@@ -9,6 +9,7 @@ module.exports = function(router) {
     var key = JSON.stringify({
       shiftId: id,
     });
+
     cache.pget(key).then(function(result) {
       if (result) {
         return result;
@@ -16,10 +17,12 @@ module.exports = function(router) {
       return models.eventShifts.scope({
         method: ['staff', 'full', req.user.blacklistedBy, 'future']
       }).findById(id).then(function(shift) {
+
         if (!shift) {
           return null;
         }
-        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, full, true, true));
+        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, 'full', true, true));
+
       }).catch(function(err) {
         throw err;
       });

@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    tubeStationsID: {
+    tubeStationID: {
       type: DataTypes.INTEGER,
       allowNull: true
     }
