@@ -5,7 +5,8 @@ fs        = require('fs');
 fs.readdirSync(__dirname).forEach(function(filename) {
   var route = path.basename(filename, '.js');
   if (route !== path.basename(__filename, '.js')) {
-    require(`${__dirname}/${route}`)(router);
+    // Disable for now
+    // require(`${__dirname}/${route}`)(router);
   }
 });
 
