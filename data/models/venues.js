@@ -94,7 +94,6 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     tableName: 'venues',
-    timestamps: false,
     freezeTableName: true,
     scopes: {
       standard: {

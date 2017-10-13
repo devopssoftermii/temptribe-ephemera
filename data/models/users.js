@@ -291,7 +291,6 @@ module.exports = function (sequelize, DataTypes) {
     },
   }, {
     tableName: 'users',
-    timestamps: false,
     freezeTableName: true,
     hasTrigger: true,
     scopes: {
