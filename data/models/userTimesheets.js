@@ -95,6 +95,11 @@ module.exports = function (sequelize, DataTypes) {
           status: 4
         }
       },
+      onlyApplied: {
+        where: {
+          status: 1
+        }
+      },
       applied: {
         where: {
           status: {
