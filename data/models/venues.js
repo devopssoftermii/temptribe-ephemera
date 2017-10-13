@@ -1,4 +1,5 @@
 /* jshint indent: 1 */
+var moment = require('moment');
 
 module.exports = function (sequelize, DataTypes) {
   var venues = sequelize.define('venues', {
@@ -86,10 +87,10 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     },
     imageURL: {
-      type: DataTypes.VIRTUAL,
+      type: DataTypes.VIRTUAL(DataTypes.STRING, ['id', 'updatedAt']),
       allowNull: false,
       get() {
-        return `/images/venuePhotos/${this.get('id')}.jpg`;
+        return `/images/venuePhotos/${this.get('id')}.jpg?c=${moment.utc(this.get('updatedAt')).unix()}`;
       }
     }
   }, {
