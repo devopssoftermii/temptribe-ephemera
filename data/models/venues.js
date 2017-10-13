@@ -117,7 +117,11 @@ module.exports = function (sequelize, DataTypes) {
   });
   venues.associate = function (models) {
     venues.hasMany(models.events, {foreignKey: 'venueId'});
-    venues.hasMany(models.users, {foreignKey: 'venueId'});
-  }
+    venues.hasMany(models.users, {foreignKey: 'venueID'});
+    venues.belongsToMany(models.tubeStations,{
+      through: 'venueTubeLink',
+      foreignKey: 'venueID'
+    });
+  };
   return venues;
 };

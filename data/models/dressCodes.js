@@ -38,7 +38,8 @@ module.exports = function(sequelize, DataTypes) {
     defaultScope: {
       attributes: [
         ['ShortDescription', 'shortDescription'],
-        'description'
+        'description',
+        'title'
       ]
     },
     scopes: {
@@ -48,7 +49,8 @@ module.exports = function(sequelize, DataTypes) {
       full: {
         attributes: [
           ['ShortDescription', 'shortDescription'],
-          'description'
+          'description',
+          'title'
         ]
       },
     }
