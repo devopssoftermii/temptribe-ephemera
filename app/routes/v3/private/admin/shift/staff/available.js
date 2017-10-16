@@ -12,6 +12,8 @@ module.exports = function(router) {
       replacements: {
         shiftId
       }
+    }).then(function(result) {
+      res.send(result);
     }).catch(function(err) {
       next(err);
     });
