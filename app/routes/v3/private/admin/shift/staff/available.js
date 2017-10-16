@@ -6,8 +6,8 @@ module.exports = function(router) {
       replacements: {
         shiftId
       }
-    }).then(function(result) {
-      return !!result[0].IsFullyStaffed;
+    }).catch(function(err) {
+      next(err);
     });
   });
 }
