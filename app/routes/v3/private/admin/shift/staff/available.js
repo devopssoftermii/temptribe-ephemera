@@ -1,4 +1,4 @@
-import ClientError from '../../../../../../../lib/errors/ClientError'
+const ClientError = require('../../../../../../../lib/errors/ClientError');
 
 module.exports = function(router) {
   router.get('/available', function(req, res, next) {
