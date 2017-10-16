@@ -156,7 +156,7 @@ module.exports = function (sequelize, DataTypes) {
       }
       return returnScope;
     });
-    userTimesheets.addScope('applying', function(userId, eventShiftId) {
+    userTimesheets.addScope('fetchOne', function(userId, eventShiftId) {
       return {
         attributes: [
           'id',
