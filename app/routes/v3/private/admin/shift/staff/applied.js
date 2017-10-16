@@ -15,7 +15,6 @@ module.exports = function(router) {
           as: 'user',
           required: true
         }],
-        required: true
       }]
     }).then(function(shift) {
       res.jsend(shift.timesheets.map((timesheet) => timesheet.user.id));
