@@ -13,7 +13,9 @@ module.exports = function(router) {
         shiftId
       }
     }).then(function(result) {
-      res.send(result);
+      res.send(result[0].map(function(user) {
+        return user.userid
+      }));
     }).catch(function(err) {
       next(err);
     });
