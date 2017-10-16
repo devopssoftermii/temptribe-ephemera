@@ -2,7 +2,7 @@ module.exports = function(router) {
   router.get('/applied', function(req, res, next) {
     var { shiftId } = req.params;
     var models = req.app.locals.models;
-    models.eventShifts.find({
+    models.eventShifts.findOne({
       where: {
         id: shiftId
       },
