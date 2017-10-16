@@ -35,16 +35,11 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'dressCodes',
     timestamps: false,
     freezeTableName: true,
-    defaultScope: {
-      attributes: [
-        ['ShortDescription', 'shortDescription'],
-        'description',
-        'title'
-      ]
-    },
     scopes: {
       standard: {
-        attributes: []
+        attributes: [
+          ['ShortDescription', 'shortDescription'],
+        ]
       },
       full: {
         attributes: [
