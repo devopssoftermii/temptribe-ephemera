@@ -1,4 +1,4 @@
-var router    = require('express').Router(),
+var router    = require('express').Router({ mergeParams: true }),
 path      = require('path'),
 fs        = require('fs');
 
