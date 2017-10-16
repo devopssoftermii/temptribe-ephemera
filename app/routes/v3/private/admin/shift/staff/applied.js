@@ -1,6 +1,10 @@
 module.exports = function(router) {
   router.get('/applied', function(req, res, next) {
     var { shiftId } = req.params;
+    shiftId = parseInt(shiftId);
+    if (isNaN(shiftId)) {
+      throw new ClientError('missing_shift', {message: 'Invalid or missing shiftId'});
+    }
     var models = req.app.locals.models;
     models.eventShifts.findOne({
       where: {
