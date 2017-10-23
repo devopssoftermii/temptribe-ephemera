@@ -9,9 +9,10 @@ function validateString(...args) {
 
 module.exports = function(router) {
   router.post('/sendto', function(req, res, next) {
-    var { to, title, body, format } = req.body;
+    var { to, title, body, format, data } = req.body;
+    data = data || null;
     if (!to || !validateString(title, body)) {
-      throw new ClientError('invalid_notification', {message: 'Missing notification data'});
+      throw new ClientError('invalid_notification', { message: 'Missing notification data' });
     }
     if (!Array.isArray(to)) {
       to = [to];
@@ -19,9 +20,9 @@ module.exports = function(router) {
     if (to.some(function(id) {
       return isNaN(parseInt(id));
     })) {
-      throw new ClientError('invalid_notification', {message: 'Invalid to: data'});
+      throw new ClientError('invalid_notification', { message: 'Invalid to: data' });
     }
-    return notifications.send(req.app.locals.models, to, title, body).then(function(result) {
+    return notifications.send(req.app.locals.models, to, title, body, data).then(function(result) {
       res.jsend(formatResponse(result, format));
     }).catch(function(err) {
       next(err);
@@ -41,4 +42,3 @@ function formatResponse(response, format) {
   }
   return response;
 }
-  
