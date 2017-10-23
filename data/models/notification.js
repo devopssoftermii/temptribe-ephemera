@@ -18,7 +18,17 @@ module.exports = function (sequelize, DataTypes) {
     },
     data: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      get() {
+        try {
+          return JSON.parse(this.getDataValue('data'));
+        } catch(ex) {
+          return this.getDataValue('data');
+        }
+      },
+      set(val) {
+        this.setDataValue('data', JSON.stringify(val));
+      },
     },
     icon: {
       type: DataTypes.STRING,
