@@ -16,6 +16,14 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
+    data: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    icon: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
   }, {
     tableName: 'notification'
   });
