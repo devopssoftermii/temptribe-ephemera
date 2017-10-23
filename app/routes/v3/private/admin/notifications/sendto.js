@@ -9,8 +9,9 @@ function validateString(...args) {
 
 module.exports = function(router) {
   router.post('/sendto', function(req, res, next) {
-    var { to, title, body, format, data } = req.body;
+    var { to, title, body, format, data, icon } = req.body;
     data = data || null;
+    icon = icon || null;
     if (!to || !validateString(title, body)) {
       throw new ClientError('invalid_notification', { message: 'Missing notification data' });
     }
@@ -22,7 +23,7 @@ module.exports = function(router) {
     })) {
       throw new ClientError('invalid_notification', { message: 'Invalid to: data' });
     }
-    return notifications.send(req.app.locals.models, to, title, body, data).then(function(result) {
+    return notifications.send(req.app.locals.models, to, title, body, data, icon).then(function(result) {
       res.jsend(formatResponse(result, format));
     }).catch(function(err) {
       next(err);
