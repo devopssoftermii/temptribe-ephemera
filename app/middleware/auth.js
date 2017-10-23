@@ -31,7 +31,7 @@ module.exports = function(router) {
     });
   });
   router.use(function(req, res, next) {
-    var forceCheck = req.method.match(/^POST|PUT|PATCH|DELETE$/);
+    var forceCheck = req.user.id > 0 && req.method.match(/^POST|PUT|PATCH|DELETE$/);
     if (forceCheck || process.env.FETCH_USER_FROM_JWT === 'false') {
       var models = req.app.locals.models;
       var cache = req.app.locals.apiUserCache;
