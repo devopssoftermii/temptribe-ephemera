@@ -11,8 +11,9 @@ require('./data')(app);
 
 const { sequelize, models } = app.locals;
 models.eventShifts.findAll({
-  attributes: [],
+  attributes: ['originalStartTime'],
   include: [{
+    attributes: ['eventDate'],
     model: models.events,
     as: 'event',
     where: {
@@ -28,6 +29,12 @@ models.eventShifts.findAll({
       model: models.venues,
       as: 'venue',
       attributes: ['name'],
+      required: true
+    }],
+    include: [{
+      model: models.clients,
+      as: 'client',
+      attributes: ['clientName'],
       required: true
     }],
   }, {
