@@ -30,8 +30,7 @@ models.eventShifts.findAll({
       as: 'venue',
       attributes: ['name'],
       required: true
-    }],
-    include: [{
+    }, {
       model: models.clients,
       as: 'client',
       attributes: ['clientName'],
@@ -60,7 +59,7 @@ models.eventShifts.findAll({
     }
   }
 }).then(function(results) {
-  if (results) {
+  if (results.length) {
     var emails = [];
     results.forEach(function(shift) {
       shift.timesheets.forEach(function(timesheet) {
