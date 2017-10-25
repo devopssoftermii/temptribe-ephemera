@@ -44,7 +44,7 @@ models.eventShifts.findAll({
     }],
   }],
   where: {
-    startTime: {
+    originalStartTime: {
       $gte: sequelize.fn('dateadd', sequelize.literal('HOUR'), -1, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate'))),
       $lt: sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')),
     },
