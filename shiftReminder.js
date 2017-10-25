@@ -104,7 +104,7 @@ Promise.all([remindShifts(
   function(startTime, client, venue) {
     return `You’ve got a shift tomorrow at ${startTime} for ${client} at ${venue}! Make sure you read the shift notes carefully to help you to get ready!`
   },
-  'ic_shift_reminder',
+  'ic_shift_reminder'
 ), remindShifts(
   sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')),
   sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
@@ -114,7 +114,7 @@ Promise.all([remindShifts(
   function(startTime, client, venue) {
     return `Your shift today starts at ${startTime}! Make sure you know when to arrive, what to wear and where to meet your tribe!`
   },
-  'ic_shift_reminder',
+  'ic_shift_reminder'
 )]).then(function() {
   process.exit();
 }).catch(function() {
