@@ -9,21 +9,28 @@ module.exports = function(router) {
     var key = JSON.stringify({
       shiftId: id,
     });
-    cache.pget(key).then(function(result) {
-      if (result) {
-        return result;
-      }
-      return models.eventShifts.scope({
-        method: ['staff', 'full', req.user.blacklistedBy, 'future']
-      }).findById(id).then(function(shift) {
-        if (!shift) {
-          return null;
+    Promise.all([
+      cache.pget(key).then(function(result) {
+        if (result) {
+          return result;
         }
-        return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, full, true, true));
-      }).catch(function(err) {
-        throw err;
-      });
-    }).then(function(result) {
+        return models.eventShifts.scope({
+          method: ['staff', 'full', req.user.blacklistedBy, 'future']
+        }).findById(id).then(function(shift) {
+          if (!shift) {
+            return null;
+          }
+          return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, 'full', true, true));
+        }).catch(function(err) {
+          throw err;
+        });
+      }), models.userTimesheets.scope({
+        method: ['fetchOne', req.user.id, id]
+      }).findOne()
+    ]).then(function([result, timesheet]) {
+      if (timesheet) {
+        result.timesheets = [timesheet];
+      }
       res.jsend(result);
     }).catch(function(err) {
       next(err);

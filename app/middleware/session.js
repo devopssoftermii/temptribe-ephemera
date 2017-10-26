@@ -68,6 +68,36 @@ module.exports = {
       throw err;
     });
   },
+  registerDevice: function(user, token, device, models) {
+    return extractSessionFromToken(token, models).then(function(session) {
+      if (session.user.id !== user.id) {
+        throw new UnauthorizedError('invalid_session', {message: 'Invalid session'});        
+      }
+      return models.apiSession.findAll({
+        include: [{
+          model: models.device,
+          where: {
+            id: device.id
+          }
+        }],
+      }).then(function(sessions) {
+        if (!sessions) {
+          return true;
+        }
+        return Promise.all(sessions.map(function(otherSession) {
+          if (otherSession.id !== session.id) {
+            return otherSession.destroy();
+          }
+        }));
+      }).then(function() {
+        return session.setDevice(device);
+      }).catch(function(err) {
+        throw err;
+      });
+    }).catch(function(err) {
+      throw err;
+    });      
+  },
   destroy: function(token, models) {
     return extractSessionFromToken(token, models).then(function(session) {
       return session.destroy();

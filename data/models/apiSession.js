@@ -8,10 +8,17 @@ module.exports = function (sequelize, DataTypes) {
         return uuidv4();
       },
       primaryKey: true
+    },
+    deviceId: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
-  }, {tableName: 'apiSession'});
+  }, {
+    tableName: 'apiSession'
+  });
   apiSession.associate = function (models) {
     apiSession.belongsTo(models.users);
+    apiSession.belongsTo(models.device);
   }
   return apiSession;
 }

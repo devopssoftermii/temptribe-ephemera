@@ -99,9 +99,9 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'EventShiftId',
       otherKey: 'SuitabilityTypeId'
     });
-    models
-      .events
-      .preScope(models);
+
+    models.events.preScope(models);
+
     eventShifts.addScope('staff', function (detail, blacklist, era = null, ...args) {
       var user,
         userBooked,

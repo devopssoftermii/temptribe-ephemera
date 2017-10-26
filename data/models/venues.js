@@ -1,4 +1,5 @@
 /* jshint indent: 1 */
+var moment = require('moment');
 
 module.exports = function (sequelize, DataTypes) {
   var venues = sequelize.define('venues', {
@@ -86,15 +87,14 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     },
     imageURL: {
-      type: DataTypes.VIRTUAL,
+      type: DataTypes.VIRTUAL(DataTypes.STRING, ['id', 'updatedAt']),
       allowNull: false,
       get() {
-        return `/images/venuePhotos/${this.get('id')}.jpg`;
+        return `/images/venuePhotos/${this.get('id')}.jpg?c=${moment.utc(this.get('updatedAt')).unix()}`;
       }
     }
   }, {
     tableName: 'venues',
-    timestamps: false,
     freezeTableName: true,
     scopes: {
       standard: {
@@ -117,7 +117,11 @@ module.exports = function (sequelize, DataTypes) {
   });
   venues.associate = function (models) {
     venues.hasMany(models.events, {foreignKey: 'venueId'});
-    venues.hasMany(models.users, {foreignKey: 'venueId'});
-  }
+    venues.hasMany(models.users, {foreignKey: 'venueID'});
+    venues.belongsToMany(models.tubeStations,{
+      through: 'venueTubeLink',
+      foreignKey: 'venueID'
+    });
+  };
   return venues;
 };

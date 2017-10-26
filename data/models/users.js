@@ -291,7 +291,6 @@ module.exports = function (sequelize, DataTypes) {
     },
   }, {
     tableName: 'users',
-    timestamps: false,
     freezeTableName: true,
     hasTrigger: true,
     scopes: {
@@ -348,6 +347,39 @@ module.exports = function (sequelize, DataTypes) {
     }
   });
   users.associate = function (models) {
+    users.prototype.getDevices = function() {
+      return this.getApiSessions({
+        include: [{
+          model: models.device,
+          required: true
+        }]
+      }).then(function(sessions) {
+        return sessions.map(function(session) {
+          return session.device;
+        });
+      });
+    };
+    users.prototype.recordNotification = function(notification) {
+      return this.getDevices().then((devices) => {
+        if (!devices.length) {
+          return {
+            user: this,
+            devices: []
+          };
+        }
+        return Promise.all([
+          this.addNotification(notification),
+          Promise.all(devices.map(function(device) {
+            return device.addNotification(notification);              
+          }))
+        ]).then(() => {
+          return {
+            user: this,
+            devices
+          };
+        });
+      });
+    }
     users.belongsTo(models.venues, {as: 'venue'});
     users.belongsTo(models.users, {foreignKey: 'invitedBy'});
     users.hasMany(models.events, {foreignKey: 'clientContactId'});
@@ -376,6 +408,11 @@ module.exports = function (sequelize, DataTypes) {
       as: 'blacklistedBy',
       foreignKey: 'UserID',
       otherKey: 'ClientID'
+    });
+    users.belongsToMany(models.notification, {
+      through: models.notificationByUser,
+      foreignKey: 'userId',
+      otherKey: 'notificationId'
     });
     // users.belongsToMany(models.trainingSessions, {
     //   through: models.userTrainingSessionApplications,
