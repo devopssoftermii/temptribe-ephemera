@@ -16,7 +16,7 @@ module.exports = function(router) {
         favourites
       }
     }).then(function(result) {
-      res.send(result[0].map(function(user) {
+      res.jsend(result[0].map(function(user) {
         return user.userid
       }));
     }).catch(function(err) {
