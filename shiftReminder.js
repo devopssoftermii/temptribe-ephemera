@@ -68,7 +68,7 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, i
         var userIds = shift.timesheets.map(function(timesheet) {
           return timesheet.user.id;
         });
-        var body = bodyFunc(shift.originalStartTime, shift.event.client.clientName, shift.event.venue.name);
+        var body = bodyFunc(moment.utc(shift.originalStartTime).format('h:mma'), shift.event.client.clientName, shift.event.venue.name);
         var data = {
           routeName: 'EventDetails',
           params: {
