@@ -120,7 +120,7 @@ Promise.all([remindShifts(
   'ic_shift_reminder',
   false
 )]).then(function() {
-  process.exit();
+  process.exit(0);
 }).catch(function() {
-  process.exit();
+  process.exit(1);
 });
