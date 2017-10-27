@@ -12,7 +12,7 @@ require('./data')(app);
 
 const { sequelize, models } = app.locals;
 
-function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, icon, mail) {
+function remindShifts(dateStart, dateEnd, timeStart, timeEnd, unc, icon, mail) {
   return models.eventShifts.findAll({
     attributes: ['originalStartTime'],
     include: [{
@@ -75,7 +75,7 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, i
             shiftId: shift.id
           }
         };
-        return notifications.send(models, userIds, notificationTitle, body, data, icon).then(function(result) {
+        return notifications.send(models, userIds, title, body, data, icon).then(function(result) {
           shift.timesheets.forEach(function(timesheet) {
             if (result.to.userIds.indexOf(timesheet.user.id) === -1) {
               emails.push({
