@@ -110,6 +110,7 @@ module.exports = function (sequelize, DataTypes) {
           'county',
           'postcode',
           'mapLink',
+          'directions',
           'imageURL'
         ]
       }
