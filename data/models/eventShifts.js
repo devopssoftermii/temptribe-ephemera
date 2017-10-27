@@ -67,6 +67,14 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true
     },
+    notifiedAll: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    notifiedReg: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     duration: {
       type: DataTypes.VIRTUAL(DataTypes.FLOAT, ['originalStartTime', 'originalFinishTime']),
       allowNull: false,
