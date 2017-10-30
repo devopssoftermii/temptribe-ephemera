@@ -14,7 +14,7 @@ const { sequelize, models } = app.locals;
 
 function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, icon, mail) {
   return models.eventShifts.findAll({
-    attributes: ['originalStartTime'],
+    attributes: ['id', 'originalStartTime'],
     include: [{
       attributes: ['eventDate'],
       model: models.events,
