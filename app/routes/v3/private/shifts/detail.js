@@ -8,6 +8,7 @@ module.exports = function(router) {
     var cache = req.app.locals.shiftlistCache;
     var key = JSON.stringify({
       shiftId: id,
+      user: req.user.id
     });
     Promise.all([
       cache.pget(key).then(function(result) {
