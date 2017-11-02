@@ -163,7 +163,8 @@ module.exports = function (sequelize, DataTypes) {
           'status',
           'eventShiftId',
           'userId',
-          'appliedOnPlatform'
+          'appliedOnPlatform',
+          'updated'
         ],
         where: {
           userId,
