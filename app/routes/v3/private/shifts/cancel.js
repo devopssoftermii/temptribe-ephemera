@@ -39,7 +39,7 @@ module.exports = function(router) {
       });
     }).then(function() {
       res.jsend({
-        result: 'cancelled'
+        result: 7
       });
     }).catch(function(err) {
       next(err);
