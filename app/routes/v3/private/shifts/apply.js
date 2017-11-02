@@ -13,7 +13,7 @@ module.exports = function(router) {
     var id = req.params.id;
     var cache = req.app.locals.shiftlistCache;
     models.eventShifts.scope({
-      method: ['staff', 'standard', req.user.blacklistedBy, 'future']
+      method: ['staff', 'standard', req.user.blacklistedBy, 'future', 'userBooked']
     }).findById(id).then(function(shift) {
       if (!shift) {
         throw new ClientError('invalid_shift', { message: 'No such shift' });
