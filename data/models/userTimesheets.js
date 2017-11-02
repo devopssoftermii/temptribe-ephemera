@@ -144,9 +144,6 @@ module.exports = function (sequelize, DataTypes) {
             as: 'user',
           }
         ],
-        order: [
-          ['dateStamp', 'DESC']
-        ],
         required: !!id,
       }
       if (id) {

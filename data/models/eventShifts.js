@@ -234,6 +234,9 @@ module.exports = function (sequelize, DataTypes) {
           ['originalStartTime', sortDir]
         ]
       };
+      if (include.userTimesheets) {
+        result.order.push([include.userTimesheets, 'dateStamp', 'DESC'])
+      }
       if (where) {
         result.where = where;
       }
