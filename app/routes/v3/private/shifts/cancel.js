@@ -37,6 +37,18 @@ module.exports = function(router) {
       }, {
         fields: ['status']
       });
+    }).then(function(result) {
+      if (result) {
+        return cache.pdel(JSON.stringify({
+          userShifts: req.user.id
+        })).then(function() {
+          return result;
+        }).catch(function(err) {
+          throw err;
+        });
+      } else {
+        return result;
+      }
     }).then(function() {
       res.jsend({
         result: 7

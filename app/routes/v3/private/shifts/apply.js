@@ -50,6 +50,18 @@ module.exports = function(router) {
         );
       });
     }).then(function(status) {
+      if (status === 1 || status === 4) {
+        return cache.pdel(JSON.stringify({
+          userShifts: req.user.id
+        })).then(function() {
+          return status;
+        }).catch(function(err) {
+          throw err;
+        });
+      } else {
+        return status;
+      }
+    }).then(function(status) {
       res.jsend({
         result: status
       });
