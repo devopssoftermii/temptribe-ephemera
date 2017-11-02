@@ -13,12 +13,14 @@ module.exports = function(router) {
     var id = req.params.id;
     var cache = req.app.locals.shiftlistCache;
     var foundTimesheet = null;
+    var foundShift = null;
     models.eventShifts.scope({
       method: ['staff', 'full', req.user.blacklistedBy, 'future']
     }).findById(id).then(function(shift) {
       if (!shift) {
         throw new ClientError('invalid_shift', { message: 'No such shift' });
       }
+      foundShift = shift;
       return shift.getTimesheets().then(function(timesheets) {
         return Promise.all(timesheets.map(function(timesheet) {
           return timesheet.getUser().then(function(user) {
@@ -32,7 +34,7 @@ module.exports = function(router) {
       if (foundTimesheet === null) {
         throw new ClientError('not_booked', { message: 'You are not booked on this shift' });
       }
-      var actualStartTime = moment.utc(moment.utc(shift.event.eventDate).format('YYYY-MM-DD') + ' ' + shift.startTime, 'YYYY-MM-DD HH:mm');
+      var actualStartTime = moment.utc(moment.utc(foundShift.event.eventDate).format('YYYY-MM-DD') + ' ' + foundShift.startTime, 'YYYY-MM-DD HH:mm');
       if (!moment.utc().add(parseInt(process.env.STAFF_CANCELLATION_CUTOFF, 10), 'hours').isBefore(actualStartTime)) {
         throw new ClientError('too_late', { message: `You cannot cancel this shift as it is less than ${process.env.STAFF_CANCELLATION_CUTOFF} hours away` });
       }
