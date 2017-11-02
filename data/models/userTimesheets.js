@@ -136,7 +136,7 @@ module.exports = function (sequelize, DataTypes) {
     });
     userTimesheets.addScope('byUser', function(id = null) {
       var returnScope = {
-        attributes: ['id', 'status', 'updated'],
+        attributes: ['id', 'status', 'dateStamp'],
         include: [
           {
             attributes: ['id'],
@@ -145,7 +145,7 @@ module.exports = function (sequelize, DataTypes) {
           }
         ],
         order: [
-          ['updated', 'DESC']
+          ['dateStamp', 'DESC']
         ],
         required: !!id,
       }
@@ -164,14 +164,14 @@ module.exports = function (sequelize, DataTypes) {
           'eventShiftId',
           'userId',
           'appliedOnPlatform',
-          'updated'
+          'dateStamp'
         ],
         where: {
           userId,
           eventShiftId
         },
         order: [
-          ['updated', 'DESC']
+          ['dateStamp', 'DESC']
         ],
         limit: 1
       }

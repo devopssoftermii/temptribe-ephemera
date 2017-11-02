@@ -25,9 +25,10 @@ module.exports = function(router) {
         throw new ClientError('too_late', { message: `You cannot cancel this shift as it is less than ${process.env.STAFF_CANCELLATION_CUTOFF} hours away` });
       }
       return shift.timesheets[0].update({
-        status: 7
+        status: 7,
+        dateStamp: moment.utc()
       }, {
-        fields: ['status']
+        fields: ['status', 'dateStamp']
       });
     }).then(function(timesheet) {
       return cache.pdel(JSON.stringify({
