@@ -33,7 +33,7 @@ module.exports = function(router) {
         throw new ClientError('not_booked', { message: 'You are not booked on this shift' });
       }
       var actualStartTime = moment.utc(moment.utc(shift.event.eventDate).format('YYYY-MM-DD') + ' ' + shift.startTime, 'YYYY-MM-DD HH:mm');
-      if (!moment.utc().add(process.env.STAFF_CANCELLATION_CUTOFF, 'hours').isBefore(actualStartTime)) {
+      if (!moment.utc().add(parseInt(process.env.STAFF_CANCELLATION_CUTOFF, 10), 'hours').isBefore(actualStartTime)) {
         throw new ClientError('too_late', { message: `You cannot cancel this shift as it is less than ${process.env.STAFF_CANCELLATION_CUTOFF} hours away` });
       }
       return foundTimesheet.update({
