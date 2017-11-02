@@ -26,7 +26,7 @@ module.exports = function(router) {
       }
       return shift.timesheets[0].update({
         status: 7,
-        dateStamp: moment.utc()
+        dateStamp: moment.utc().format('YYYY-MM-DD HH:mm:ss')
       }, {
         fields: ['status', 'dateStamp']
       });
