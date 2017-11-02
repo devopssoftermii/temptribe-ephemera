@@ -14,7 +14,7 @@ module.exports = function(router) {
     var cache = req.app.locals.shiftlistCache;
     var foundTimesheet = null;
     models.eventShifts.scope({
-      method: ['staff', 'standard', req.user.blacklistedBy, 'future']
+      method: ['staff', 'full', req.user.blacklistedBy, 'future']
     }).findById(id).then(function(shift) {
       if (!shift) {
         throw new ClientError('invalid_shift', { message: 'No such shift' });
@@ -30,28 +30,28 @@ module.exports = function(router) {
       });
     }).then(function() {
       if (foundTimesheet === null) {
-        return null;
+        throw new ClientError('not_booked', { message: 'You are not booked on this shift' });
+      }
+      var actualStartTime = moment.utc(moment.utc(shift.event.eventDate).format('YYYY-MM-DD') + ' ' + shift.startTime, 'YYYY-MM-DD HH:mm');
+      if (!moment.utc().add(process.env.STAFF_CANCELLATION_CUTOFF, 'hours').isBefore(actualStartTime)) {
+        throw new ClientError('too_late', { message: `You cannot cancel this shift as it is less than ${process.env.STAFF_CANCELLATION_CUTOFF} hours away` });
       }
       return foundTimesheet.update({
         status: 7
       }, {
         fields: ['status']
       });
-    }).then(function(result) {
-      if (result) {
-        return cache.pdel(JSON.stringify({
-          userShifts: req.user.id
-        })).then(function() {
-          return result;
-        }).catch(function(err) {
-          throw err;
-        });
-      } else {
-        return result;
-      }
-    }).then(function() {
+    }).then(function(timesheet) {
+      return cache.pdel(JSON.stringify({
+        userShifts: req.user.id
+      })).then(function() {
+        return timesheet;
+      }).catch(function(err) {
+        throw err;
+      });
+    }).then(function(timesheet) {
       res.jsend({
-        result: 7
+        result: timesheet.result
       });
     }).catch(function(err) {
       next(err);
