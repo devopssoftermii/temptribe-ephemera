@@ -21,10 +21,10 @@ module.exports = function(router) {
       return shift;
     }).then(function(shift) {
       var actualStartTime = moment.utc(moment.utc(shift.event.eventDate).format('YYYY-MM-DD') + ' ' + shift.startTime, 'YYYY-MM-DD HH:mm');
-      if (shift.timesheet.status === 4 && !moment.utc().add(parseInt(process.env.STAFF_CANCELLATION_CUTOFF, 10), 'hours').isBefore(actualStartTime)) {
+      if (shift.timesheets[0].status === 4 && !moment.utc().add(parseInt(process.env.STAFF_CANCELLATION_CUTOFF, 10), 'hours').isBefore(actualStartTime)) {
         throw new ClientError('too_late', { message: `You cannot cancel this shift as it is less than ${process.env.STAFF_CANCELLATION_CUTOFF} hours away` });
       }
-      return shift.timesheet.update({
+      return shift.timesheets[0].update({
         status: 7
       }, {
         fields: ['status']
