@@ -10,7 +10,7 @@ module.exports = function(router) {
       shiftId: id,
       user: req.user.id
     });
-    Promise.all([
+    return Promise.all([
       cache.pget(key).then(function(result) {
         if (result) {
           return result;
@@ -29,7 +29,7 @@ module.exports = function(router) {
         method: ['fetchOne', req.user.id, id]
       }).findOne()
     ]).then(function([result, timesheet]) {
-      if (timesheet) {
+      if (result && timesheet) {
         result.timesheets = [timesheet];
       }
       res.jsend(result);
