@@ -39,18 +39,6 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, i
         attributes: ['clientName'],
         required: true
       }],
-    }, {
-      model: models.userTimesheets,
-      as: 'timesheets',
-      where: {
-        status: 4
-      },
-      include: [{
-        model: models.users,
-        as: 'user',
-        attributes: ['id', 'firstname', 'email'],
-        required: true
-      }],
     }],
     where: {
       originalStartTime: {
@@ -63,30 +51,35 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, i
     }
   }).then(function(results) {
     if (results.length) {
-      var emails = [];
       Promise.all(results.map(function(shift) {
-        var userIds = shift.timesheets.map(function(timesheet) {
-          return timesheet.user.id;
-        });
-        var body = bodyFunc(moment.utc(shift.originalStartTime).format('h:mma'), shift.event.client.clientName, shift.event.venue.name);
-        var data = {
-          routeName: 'EventDetails',
-          params: {
-            shiftId: shift.id
+        return sequelize.query('select * from dbo.udf_getCurrentTimesheetsForShift(:shiftId) where status = 4', {
+          replacements: {
+            shiftId: shift.id,
           }
-        };
-        return notifications.send(models, userIds, title, body, data, icon).then(function(result) {
-          shift.timesheets.forEach(function(timesheet) {
-            if (result.to.userIds.indexOf(timesheet.user.id) === -1) {
-              emails.push({
-                to: timesheet.user.email,
-                data: {
-                  firstname: timesheet.user.firstname,
-                  venue: shift.event.venue.name
-                }
-              });
-            }
+        }).then(function(timesheets) {
+          if (!timesheets.length) {
+            return true;
+          }
+          var userIds = timesheets.map(function(timesheet) {
+            return timesheet.userID;
           });
+          var body = bodyFunc(moment.utc(shift.originalStartTime).format('h:mma'), shift.event.client.clientName, shift.event.venue.name);
+          var data = {
+            routeName: 'EventDetails',
+            params: {
+              shiftId: shift.id
+            }
+          };
+          timesheets.forEach(function(timesheet) {
+            emails.push({
+              to: timesheet.user.email,
+              data: {
+                firstname: timesheet.user.firstname,
+                venue: shift.event.venue.name
+              }
+            });
+          });
+          return notifications.send(models, userIds, title, body, data, icon);
         });
       })).then(function() {
         if (mail) {
