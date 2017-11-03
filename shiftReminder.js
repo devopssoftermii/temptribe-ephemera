@@ -50,43 +50,47 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, i
       }
     }
   }).then(function(results) {
-    if (results.length) {
-      Promise.all(results.map(function(shift) {
-        return sequelize.query('select * from dbo.udf_getCurrentTimesheetsForShift(:shiftId) where status = 4', {
-          replacements: {
-            shiftId: shift.id,
-          }
-        }).then(function(timesheets) {
-          if (!timesheets.length) {
-            return true;
-          }
-          var userIds = timesheets.map(function(timesheet) {
-            return timesheet.userID;
-          });
-          var body = bodyFunc(moment.utc(shift.originalStartTime).format('h:mma'), shift.event.client.clientName, shift.event.venue.name);
-          var data = {
-            routeName: 'EventDetails',
-            params: {
-              shiftId: shift.id
-            }
-          };
-          timesheets.forEach(function(timesheet) {
-            emails.push({
-              to: timesheet.user.email,
-              data: {
-                firstname: timesheet.user.firstname,
-                venue: shift.event.venue.name
-              }
-            });
-          });
-          return notifications.send(models, userIds, title, body, data, icon);
-        });
-      })).then(function() {
-        if (mail) {
-          mailer.sendBatch('shiftReminder', emails);
-        }
-      });
+    if (!results.length) {
+      return true;
     }
+    var emails = [];
+    return Promise.all(results.map(function(shift) {
+      return sequelize.query('select * from dbo.udf_getCurrentTimesheetsForShift(:shiftId) where status = 4', {
+        replacements: {
+          shiftId: shift.id,
+        }
+      }).then(function(timesheets) {
+        return timesheets[0];
+      }).then(function(timesheets) {
+        if (!timesheets.length) {
+          return true;
+        }
+        var userIds = timesheets.map(function(timesheet) {
+          return timesheet.userID;
+        });
+        var body = bodyFunc(moment.utc(shift.originalStartTime).format('h:mma'), shift.event.client.clientName, shift.event.venue.name);
+        var data = {
+          routeName: 'EventDetails',
+          params: {
+            shiftId: shift.id
+          }
+        };
+        timesheets.forEach(function(timesheet) {
+          emails.push({
+            to: timesheet.email,
+            data: {
+              firstname: timesheet.firstname,
+              venue: shift.event.venue.name
+            }
+          });
+        });
+        return notifications.send(models, userIds, title, body, data, icon);
+      });
+    })).then(function() {
+      if (mail) {
+        mailer.sendBatch('shiftReminder', emails);
+      }
+    });
   });
 }
 
