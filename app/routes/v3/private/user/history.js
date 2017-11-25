@@ -22,7 +22,7 @@ module.exports = function(router) {
       staffStartTime, staffEndTime, staffBreaks, staffWorked,
       clientStartTime, clientEndTime, clientBreaks, clientWorked,
       originalStartTime, originalEndTime, originalBreaks,
-      hourlyRate, date, eventTitle, eventSubtitle, venueName
+      hourlyRate, [date], eventTitle, eventSubtitle, venueName
     from dbo.udf_userWorkHistory(:userId, :status, :page, :size)`, {
       replacements: {
         userId: req.user.id,
