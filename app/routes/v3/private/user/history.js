@@ -20,7 +20,6 @@ module.exports = function(router) {
     return sequelize.query(`select
       rownum as num, paid, timesheetStatus,
       staffStartTime, staffEndTime, staffBreaks, staffWorked,
-      clientStartTime, clientEndTime, clientBreaks, clientWorked,
       originalStartTime, originalEndTime, originalBreaks,
       hourlyRate, [date], eventTitle, eventSubtitle, venueName
     from dbo.udf_userWorkHistory(:userId, :status, :page, :size)`, {
