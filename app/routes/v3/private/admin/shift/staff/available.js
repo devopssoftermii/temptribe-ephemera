@@ -14,9 +14,10 @@ module.exports = function(router) {
       replacements: {
         shiftId,
         favourites
-      }
+      },
+      type: sequelize.QueryTypes.SELECT
     }).then(function(result) {
-      res.jsend(result[0].map(function(user) {
+      res.jsend(result.map(function(user) {
         return user.userid
       }));
     }).catch(function(err) {

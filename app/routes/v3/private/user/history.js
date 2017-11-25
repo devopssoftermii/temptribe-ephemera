@@ -29,9 +29,10 @@ module.exports = function(router) {
         status: HISTORY_STATUSES.get(status),
         page,
         size
-      }
+      },
+      type: sequelize.QueryTypes.SELECT
     }).then(function(result) {
-      res.jsend(result[0]);
+      res.jsend(result);
     }).catch(function(err) {
       next(err);
     });

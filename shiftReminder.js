@@ -58,9 +58,8 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, i
       return sequelize.query('select * from dbo.udf_getCurrentTimesheetsForShift(:shiftId) where status = 4', {
         replacements: {
           shiftId: shift.id,
-        }
-      }).then(function(timesheets) {
-        return timesheets[0];
+        },
+        type: sequelize.QueryTypes.SELECT
       }).then(function(timesheets) {
         if (!timesheets.length) {
           return true;
