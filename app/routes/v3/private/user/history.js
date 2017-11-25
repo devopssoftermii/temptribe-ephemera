@@ -6,7 +6,7 @@ const HISTORY_STATUSES = new Map([
 
 module.exports = function(router) {
   router.get('/history', function(req, res, next) {
-    var sequelize = req.app.locals.sequelize;
+    var { sequelize } = req.app.locals;
     var { status, page, size } = req.query;
     if (!status || !HISTORY_STATUSES.has(status)) {
       status = 'complete';
