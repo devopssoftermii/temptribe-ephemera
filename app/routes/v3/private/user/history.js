@@ -7,11 +7,13 @@ const HISTORY_STATUSES = new Map([
 module.exports = function(router) {
   router.get('/history', function(req, res, next) {
     var { sequelize } = req.app.locals;
-    var { status, page, size } = req.query;
+    var { status } = req.query;
+    var page = parseInt(req.query.page);
+    var size = parseInt(req.query.size);
     if (!status || !HISTORY_STATUSES.has(status)) {
       status = 'complete';
     }
-    if ('undefined' === typeof(page)) {
+    if ('undefined' === typeof(page) || isNaN(page)) {
       page = 1;
     }
     if (!size) {
