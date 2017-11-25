@@ -31,9 +31,7 @@ module.exports = function(router) {
         size
       }
     }).then(function(result) {
-      res.jsend(result[0].map(function(user) {
-        return user.userid
-      }));
+      res.jsend(result[0]);
     }).catch(function(err) {
       next(err);
     });
