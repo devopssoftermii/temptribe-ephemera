@@ -22,8 +22,8 @@ module.exports = function(router) {
     return sequelize.query(`select rownum as num, paid, timesheetStatus,
       staffStartTime, staffEndTime, staffBreaks, staffWorked,
       originalStartTime, originalEndTime, originalBreaks,
-      hourlyRate, [date], eventTitle, eventSubtitle, jobRole, venueID,
-      venueName from dbo.udf_userWorkHistory(:userId, :status, :page, :size)`,
+      hourlyRate, [date], eventTitle, eventSubtitle, jobRole, venueID, venueName,
+      venueImage from dbo.udf_userWorkHistory(:userId, :status, :page, :size)`,
     {
       replacements: {
         userId: req.user.id,
