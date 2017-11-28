@@ -19,7 +19,12 @@ module.exports = function(router) {
     if (!size) {
       size = 10;
     }
-    return sequelize.query('select rownum as num, paid, timesheetStatus, staffStartTime, staffEndTime, staffBreaks, staffWorked, originalStartTime, originalEndTime, originalBreaks, hourlyRate, [date], eventTitle, eventSubtitle, venueID, venueName from dbo.udf_userWorkHistory(:userId, :status, :page, :size)', {
+    return sequelize.query(`select rownum as num, paid, timesheetStatus,
+      staffStartTime, staffEndTime, staffBreaks, staffWorked,
+      originalStartTime, originalEndTime, originalBreaks,
+      hourlyRate, [date], eventTitle, eventSubtitle, jobRole, venueID,
+      venueName from dbo.udf_userWorkHistory(:userId, :status, :page, :size)`,
+    {
       replacements: {
         userId: req.user.id,
         status: HISTORY_STATUSES.get(status),
