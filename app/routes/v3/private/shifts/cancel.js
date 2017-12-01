@@ -3,7 +3,8 @@ var ClientError = require('../../../../../lib/errors/ClientError');
 var {
   getClashingShifts,
   isFullyStaffed,
-  bookUserOnShift
+  bookUserOnShift,
+  checkAndUpdateEventStatusFromEventId
 } = require('../../../../../lib/events');
 
 var getEventShift = function(id,blacklistedBy,userId,models) {
@@ -21,18 +22,17 @@ var updateTimesheetsOnShift = function (shift,sequelize) {
   }
   return shift.timesheets[0].update({
     status: 7,
-    dateStamp: sequelize.fn('getdate')
+    dateStamp: sequelize.fn('getdate'),
+    actionedBy: 'staff'
   }, {
-    fields: ['status', 'dateStamp']
+    fields: ['status', 'dateStamp','actionedBy']
   });
 }
 
-var deleteCache = function (timesheet,userId,cache) {
+var deleteCache = function (userId,cache) {
   return cache.pdel(JSON.stringify({
     userShifts: userId
-  })).then(function() {
-    return timesheet;
-  }).catch(function(err)
+  })).catch(function(err) {
     throw err;
   });
 }
@@ -47,8 +47,18 @@ module.exports = function(router) {
     var userId = req.user.id;
 
     getEventShift(id,blacklistedBy,userId,models)
-    .then(shifts => updateTimesheetsOnShift(shifts,sequelize))
-    .then(timesheet =>  deleteCache(timesheet,userId,cache))
+    .then(shift => {
+      var eventId = shift.event.id
+      return updateTimesheetsOnShift(shift,sequelize)
+      .then(timesheet => {
+        return deleteCache(userId,cache)
+        .then((v) => checkAndUpdateEventStatusFromEventId(models, sequelize, eventId))
+        .then((v) => timesheet)
+        .catch(function(err) {
+          next(err);
+        });
+      })
+    })
     .then(timesheet => {
       res.jsend({
         result: timesheet.result

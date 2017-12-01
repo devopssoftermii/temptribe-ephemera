@@ -74,6 +74,10 @@ module.exports = function (sequelize, DataTypes) {
     appliedOnPlatform: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    actionedBy: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     tableName: 'userTimesheets',
