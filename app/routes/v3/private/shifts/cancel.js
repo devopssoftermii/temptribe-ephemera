@@ -12,6 +12,14 @@ var getEventShift = function(id,blacklistedBy,userId,models) {
   return models.eventShifts.scope(eventShiftScope).findById(id)
 }
 
+var getNewCancelledStatus = function (oldStatus) {
+  if (oldStatus == 1) {
+    return 2
+  } else {
+    return 7
+  }
+}
+
 var updateTimesheetsOnShift = function (shift,sequelize) {
   if (!shift) {
     throw new ClientError('invalid_shift', { message: 'No such shift' });
@@ -21,7 +29,7 @@ var updateTimesheetsOnShift = function (shift,sequelize) {
     throw new ClientError('too_late', { message: `You cannot cancel this shift as it is less than ${process.env.STAFF_CANCELLATION_CUTOFF} hours away` });
   }
   return shift.timesheets[0].update({
-    status: 7,
+    status: getNewCancelledStatus(shift.timesheets[0].status),
     dateStamp: sequelize.fn('getdate'),
     actionedBy: 'staff'
   }, {
