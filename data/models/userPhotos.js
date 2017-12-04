@@ -34,7 +34,10 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     tableName: 'userPhotos',
     timestamps: false,
-    freezeTableName: true
+    freezeTableName: true,
+    defaultScope: {
+      Status: 1
+    }
   });
   userPhotos.associate = function (models) {
     userPhotos.belongsTo(models.users, {as: 'User'});
@@ -43,7 +46,8 @@ module.exports = function (sequelize, DataTypes) {
         ['FileName', 'filename']
       ],
       where: {
-        IsMainImage: 1
+        IsMainImage: 1,
+        Status: 1
       }
     });
   }
