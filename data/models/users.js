@@ -437,9 +437,6 @@ module.exports = function (sequelize, DataTypes) {
         {
           model: models.userPhotos,
           as: 'photos',
-          where: {
-            Status: 1
-          }
         },
         {
           model: models.userPhotos.scope('mainPhoto'),

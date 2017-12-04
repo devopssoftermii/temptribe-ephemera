@@ -35,6 +35,11 @@ module.exports = function (sequelize, DataTypes) {
     tableName: 'userPhotos',
     timestamps: false,
     freezeTableName: true,
+    defaultScope: {
+      where: {
+        Status: 1
+      }
+    }
   });
   userPhotos.associate = function (models) {
     userPhotos.belongsTo(models.users, {as: 'User'});
