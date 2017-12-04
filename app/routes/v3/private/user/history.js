@@ -8,28 +8,33 @@ module.exports = function(router) {
   router.get('/history', function(req, res, next) {
     var { sequelize } = req.app.locals;
     var { status } = req.query;
-    var page = parseInt(req.query.page);
-    var size = parseInt(req.query.size);
+    var limit = parseInt(req.query.limit);
+    var month = parseInt(req.query.month);
+    var year = parseInt(req.query.year);
     if (!status || !HISTORY_STATUSES.has(status)) {
       status = 'complete';
     }
-    if ('undefined' === typeof(page) || isNaN(page)) {
-      page = 1;
+    if (isNaN(limit)) {
+      limit = 50;
     }
-    if (!size) {
-      size = 10;
+    if (isNaN(month)) {
+      month = null;
+    }
+    if (isNaN(year)) {
+      year = null;
     }
     return sequelize.query(`select rownum as num, paid, timesheetStatus,
       staffStartTime, staffEndTime, staffBreaks, staffWorked,
       originalStartTime, originalEndTime, originalBreaks,
       hourlyRate, [date], eventTitle, eventSubtitle, jobRole, venueID, venueName,
-      venueImage from dbo.udf_userWorkHistory(:userId, :status, :page, :size)`,
+      venueImage from dbo.udf_userWorkHistory(:userId, :status, :limit, :month, :year)`,
     {
       replacements: {
         userId: req.user.id,
         status: HISTORY_STATUSES.get(status),
-        page,
-        size
+        limit,
+        month,
+        year
       },
       type: sequelize.QueryTypes.SELECT
     }).then(function(result) {
