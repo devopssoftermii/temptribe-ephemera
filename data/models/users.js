@@ -385,7 +385,10 @@ module.exports = function (sequelize, DataTypes) {
     users.hasMany(models.events, {foreignKey: 'clientContactId'});
     users.hasMany(models.userPhotos, {
       foreignKey: 'UserId',
-      as: 'photos'
+      as: 'photos',
+      where: {
+        Status: 1
+      }
     });
     users.hasMany(models.userTimesheets, {
       foreignKey: 'userId',
