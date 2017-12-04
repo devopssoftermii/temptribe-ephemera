@@ -386,9 +386,6 @@ module.exports = function (sequelize, DataTypes) {
     users.hasMany(models.userPhotos, {
       foreignKey: 'UserId',
       as: 'photos',
-      where: {
-        Status: 1
-      }
     });
     users.hasMany(models.userTimesheets, {
       foreignKey: 'userId',
@@ -435,7 +432,10 @@ module.exports = function (sequelize, DataTypes) {
       include: [
         {
           model: models.userPhotos,
-          as: 'photos'
+          as: 'photos',
+          where: {
+            Status: 1
+          }
         }
       ]
     });
