@@ -426,7 +426,8 @@ module.exports = function (sequelize, DataTypes) {
         'firstname',
         'surname',
         'email',
-        'mobile'
+        'mobile',
+        'registrationDate'
       ],
       include: [
         {
