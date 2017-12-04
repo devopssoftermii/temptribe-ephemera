@@ -24,7 +24,7 @@ module.exports = function(router) {
       year = null;
     }
     return sequelize.query(`select rownum as num, paid, timesheetStatus,
-      staffStartTime, staffEndTime, staffBreaks, staffWorked,
+      staffStartTime, staffEndTime, staffBreaks, staffWorked, shiftID,
       originalStartTime, originalEndTime, originalBreaks,
       hourlyRate, [date], eventID, eventTitle, eventSubtitle, jobRole, venueID, venueName,
       venueImage from dbo.udf_userWorkHistory(:userId, :status, :limit, :month, :year)`,
