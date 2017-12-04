@@ -387,6 +387,10 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'UserId',
       as: 'photos',
     });
+    users.hasMany(models.userPhotos, {
+      foreignKey: 'UserId',
+      as: 'mainPhoto',
+    });
     users.hasMany(models.userTimesheets, {
       foreignKey: 'userId',
       as: 'timesheets'
@@ -436,7 +440,11 @@ module.exports = function (sequelize, DataTypes) {
           where: {
             Status: 1
           }
-        }
+        },
+        {
+          model: models.userPhotos.scope('mainPhoto'),
+          as: 'mainPhoto',
+        },
       ]
     });
     users.addScope('login', function (params) {
