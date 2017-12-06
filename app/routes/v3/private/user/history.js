@@ -23,7 +23,7 @@ module.exports = function(router) {
     if (isNaN(year)) {
       year = null;
     }
-    return sequelize.query(`select rownum as num, paid, timesheetStatus,
+    return sequelize.query(`select paid, timesheetStatus,
       staffStartTime, staffEndTime, staffBreaks, staffWorked, shiftID,
       originalStartTime, originalEndTime, originalBreaks,
       hourlyRate, [date], eventID, eventTitle, eventSubtitle, jobRole, venueID, venueName,
