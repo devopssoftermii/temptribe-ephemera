@@ -126,7 +126,7 @@ Promise.all([remindShifts(
   sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), 5, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
   'originalFinishTime',
   'Complete your timesheet',
-  function(startTime, client, venue) {
+  function(finishTime, client, venue) {
     return `Don't forget to complete the timesheet for your shift!`
   },
   'ic_timesheet_reminder',
