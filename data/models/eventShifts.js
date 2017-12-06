@@ -45,6 +45,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    eventId: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     dateCreated: {
       type: DataTypes.DATE,
       allowNull: true,
