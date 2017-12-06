@@ -1,5 +1,5 @@
 module.exports = function(router) {
-  router.get('/incompleteDetail/:id', function(req, res, next) {
+  router.get('/staffTimesheet/:id', function(req, res, next) {
     var { sequelize } = req.app.locals;
     var shiftId = req.params.id;
     var cache = req.app.locals.timesheetCache;
