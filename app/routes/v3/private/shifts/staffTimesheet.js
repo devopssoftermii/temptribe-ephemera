@@ -7,17 +7,24 @@ module.exports = function(router) {
       shiftId,
       user: req.user.id
     });
-    return sequelize.query(`select paid, timesheetStatus,
-      staffStartTime, staffEndTime, staffBreaks, staffWorked, shiftID,
-      originalStartTime, originalEndTime, originalBreaks,
-      hourlyRate, [date], eventID, eventTitle, eventSubtitle, jobRole, venueID, venueName,
-      venueImage from dbo.udf_userWorkHistory(:userId, 0, 50, null, null) where shiftID = :shiftId`,
-    {
-      replacements: {
-        userId: req.user.id,
-        shiftId
-      },
-      type: sequelize.QueryTypes.SELECT
+    return cache.pget(key).then(function(result) {
+      if (result) {
+        return result;
+      }
+      return sequelize.query(`select paid, timesheetStatus,
+        staffStartTime, staffEndTime, staffBreaks, staffWorked, shiftID,
+        originalStartTime, originalEndTime, originalBreaks,
+        hourlyRate, [date], eventID, eventTitle, eventSubtitle, jobRole, venueID, venueName,
+        venueImage from dbo.udf_userWorkHistory(:userId, 0, 50, null, null) where shiftID = :shiftId`,
+      {
+        replacements: {
+          userId: req.user.id,
+          shiftId
+        },
+        type: sequelize.QueryTypes.SELECT
+      }).then(function(result) {
+        return cache.pset(key, result);
+      })
     }).then(function(result) {
       if (result.length) {
         res.jsend(result[0]);
