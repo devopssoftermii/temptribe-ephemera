@@ -12,9 +12,9 @@ require('./data')(app);
 
 const { sequelize, models } = app.locals;
 
-function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, icon, mail) {
+function remindShifts(dateStart, dateEnd, timeStart, timeEnd, timeField, title, bodyFunc, icon, routeName, mail) {
   return models.eventShifts.findAll({
-    attributes: ['id', 'originalStartTime'],
+    attributes: ['id', timeField],
     include: [{
       attributes: ['eventDate'],
       model: models.events,
@@ -41,7 +41,7 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, i
       }],
     }],
     where: {
-      originalStartTime: {
+      [timeField]: {
         $gte: timeStart,
         $lt: timeEnd,
       },
@@ -67,9 +67,9 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, title, bodyFunc, i
         var userIds = timesheets.map(function(timesheet) {
           return timesheet.userID;
         });
-        var body = bodyFunc(moment.utc(shift.originalStartTime).format('h:mma'), shift.event.client.clientName, shift.event.venue.name);
+        var body = bodyFunc(moment.utc(shift[timeField]).format('h:mma'), shift.event.client.clientName, shift.event.venue.name);
         var data = {
-          routeName: 'EventDetails',
+          routeName,
           params: {
             shiftId: shift.id
           }
@@ -98,22 +98,39 @@ Promise.all([remindShifts(
   sequelize.fn('dateadd', sequelize.literal('DAY'), 2, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
   sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), -1, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
   sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate'))),
+  'originalStartTime',
   'Shift Reminder 🔔',
   function(startTime, client, venue) {
     return `You’ve got a shift tomorrow at ${startTime} for ${client} at ${venue}! Make sure you read the shift notes carefully to help you to get ready!`
   },
   'ic_shift_reminder',
+  'EventDetails',
   true
 ), remindShifts(
   sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')),
   sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
   sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), 4, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
   sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), 5, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
+  'originalStartTime',
   'Time to Get Ready ⏱',
   function(startTime, client, venue) {
     return `Your shift today starts at ${startTime}! Make sure you know when to arrive, what to wear and where to meet your tribe!`
   },
   'ic_shift_reminder',
+  'EventDetails',
+  false
+), remindShifts(
+  sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')),
+  sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
+  sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), 4, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
+  sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), 5, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
+  'originalFinishTime',
+  'Complete your timesheet',
+  function(finishTime, client, venue) {
+    return `Don't forget to complete the timesheet for your shift!`
+  },
+  'ic_timesheet_reminder',
+  'TimesheetDetails',
   false
 )]).then(function() {
   process.exit(0);
