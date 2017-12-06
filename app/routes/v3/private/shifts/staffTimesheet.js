@@ -20,7 +20,7 @@ module.exports = function(router) {
       type: sequelize.QueryTypes.SELECT
     }).then(function(result) {
       if (result.length) {
-        res.jsend(result);
+        res.jsend(result[0]);
       } else {
         res.jsend(null);
       }
