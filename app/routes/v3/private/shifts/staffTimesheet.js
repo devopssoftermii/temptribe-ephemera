@@ -7,10 +7,7 @@ module.exports = function(router) {
       shiftId,
       user: req.user.id
     });
-    return cache.pget(key).then(function(result) {
-      if (result) {
-        return result;
-      }
+    return cache.getOrSet(key, function(result) {
       return sequelize.query(`select paid, timesheetStatus,
         staffStartTime, staffEndTime, staffBreaks, staffWorked, shiftID,
         originalStartTime, originalEndTime, originalBreaks,
@@ -22,8 +19,6 @@ module.exports = function(router) {
           shiftId
         },
         type: sequelize.QueryTypes.SELECT
-      }).then(function(result) {
-        return cache.pset(key, result);
       })
     }).then(function(result) {
       if (result.length) {

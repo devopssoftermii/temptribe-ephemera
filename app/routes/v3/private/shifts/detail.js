@@ -11,17 +11,14 @@ module.exports = function(router) {
       user: req.user.id
     });
     return Promise.all([
-      cache.pget(key).then(function(result) {
-        if (result) {
-          return result;
-        }
+      cache.getOrSet(key, function(result) {
         return models.eventShifts.scope({
           method: ['staff', 'full', req.user.blacklistedBy, 'future']
         }).findById(id).then(function(shift) {
           if (!shift) {
             return null;
           }
-          return cache.pset(key, eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, 'full', true, true));
+          return eventHelpers.formatShift(shift.get({ plain: true }), req.user.favouritedBy, 'full', true, true);
         }).catch(function(err) {
           throw err;
         });
