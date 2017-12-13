@@ -62,8 +62,8 @@ module.exports = function(router) {
     if (checkFields(timesheet, ['timesheetID', 'staffWorked']) !== true) {
       throw new ClientError('no_timesheet', {message: 'Must supply a value for timesheetID and staffWorked'});
     }
-    var checkFields = timesheet.staffWorked? workedFields: noWorkedFields;
-    var field = checkFields(timesheet, checkFields);
+    var fields = timesheet.staffWorked? workedFields: noWorkedFields;
+    var field = checkFields(timesheet, fields);
     if (field !== true) {
       throw new ClientError(`no_${field}`, {message: `If you did${timesheet.staffWorked? '': "n't"} work, you must supply a value for ${field}`});
     }
