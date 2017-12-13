@@ -57,7 +57,7 @@ module.exports = function(router) {
       next(err);
     });
   });
-  router.post('/staffTimesheet/:id', function(req, res, next) {
+  router.post('/staffTimesheet', function(req, res, next) {
     var { models, sequelize } = req.app.locals;
     var timesheet = req.body;
     if (checkFields(timesheet, ['timesheetID', 'staffWorked']) !== true) {
@@ -68,7 +68,11 @@ module.exports = function(router) {
     if (field !== true) {
       throw new ClientError(`no_${field}`, {message: `If you did${timesheet.staffWorked? '': "n't"} work, you must supply a value for ${field}`});
     }
-    models.userTimesheets.findOne({
+    return Promise.all([models.user.findOne({
+      where: {
+        id: req.user.id
+      }
+    }), models.userTimesheets.findOne({
       where: {
         id: timesheet.timesheetID
       },
@@ -83,12 +87,46 @@ module.exports = function(router) {
           }
         }],
         required: false
+      }, {
+        model: models.eventShifts,
+        as: 'shift',
+        include: [{
+          model: models.events,
+          as: 'event'
+        }]
       }]
-    }).then(function(originalTimesheet) {
+    })]).then(function([user, originalTimesheet]) {
       if (!originalTimesheet) {
         throw new ClientError('no_timesheet', {message: 'No such timesheet'});
       }
-      res.jsend(originalTimesheet.timesheetsCompleted)
+      if (originalTimesheet.timesheetsCompleted.length > 0) {
+        throw new ClientError('already_completed', {message: 'You have already completed this timesheet'});
+      }
+      return Promise.all([models.userTimesheetsCompleted.create({
+        startTime: timesheet.staffStartTime,
+        endTime: timesheet.staffEndTime,
+        breaks: timesheet.staffBreaks,
+        worked: timesheet.staffWorked,
+        comments: '',
+        status: originalTimesheet.status,
+        staffEnjoyed: timesheet.enjoyed,
+        staffManagerComments: timesheet.managerComments,
+        staffVenueComments: timesheet.venueComments,
+        staffGeneralComments: timesheet.generalComments,
+      }), user, originalTimesheet]);
+    }).then(function([timesheetCompleted, user, originalTimesheet]) {
+      return Promise.all([
+        timesheetCompleted,
+        timesheetCompleted.setTimesheet(originalTimesheet),
+        timesheetCompleted.setShift(originalTimesheet.shift),
+        timesheetCompleted.setEvent(originalTimesheet.shift.event),
+        timesheetCompleted.setUser(user),
+        timesheetCompleted.setUserModified(user),
+      ])
+    }).then(function([timesheetCompleted, ...promises]) {
+      res.jsend({
+        completedID: timesheetCompleted.id
+      })
     }).catch(function(err) {
       next(err);
     })

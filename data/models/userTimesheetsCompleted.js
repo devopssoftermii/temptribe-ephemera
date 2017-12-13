@@ -51,11 +51,13 @@ module.exports = function (sequelize, DataTypes) {
     },
     FeedbackDescription: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      defaultValue: null
     },
     CommentVisible: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      defaultValue: null
     },
     staffEnjoyed: {
       type: DataTypes.INTEGER,
