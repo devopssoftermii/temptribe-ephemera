@@ -74,6 +74,7 @@ module.exports = function(router) {
         id: req.user.id
       }
     }), models.userTimesheets.findOne({
+      attributes: ['id', 'status'],
       where: {
         id: timesheet.timesheetID
       },
@@ -103,7 +104,7 @@ module.exports = function(router) {
       if (originalTimesheet.timesheetsCompleted.length > 0) {
         throw new ClientError('already_completed', {message: 'You have already completed this timesheet'});
       }
-      return Promise.all([models.userTimesheetsCompleted.create({
+      return models.userTimesheetsCompleted.create({
         startTime: sequelize.literal(moment.utc(timesheet.staffStartTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
         endTime: sequelize.literal(moment.utc(timesheet.staffEndTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
         breaks: timesheet.staffBreaks,
@@ -114,20 +115,14 @@ module.exports = function(router) {
         staffManagerComments: timesheet.managerComments,
         staffVenueComments: timesheet.venueComments,
         staffGeneralComments: timesheet.generalComments,
-      }), user, originalTimesheet]);
-    }).then(function([timesheetCompleted, user, originalTimesheet]) {
-      return Promise.all([
-        timesheetCompleted,
-        timesheetCompleted.setTimesheet(originalTimesheet),
-        timesheetCompleted.setShift(originalTimesheet.shift),
-        timesheetCompleted.setEvent(originalTimesheet.shift.event),
-        timesheetCompleted.setUser(user),
-        timesheetCompleted.setUserModified(user),
-      ])
-    }).then(function([timesheetCompleted, ...promises]) {
-      res.jsend({
-        completedID: timesheetCompleted.id
-      })
+        userId: user.id,
+        lastModifiedBy: user.id,
+        userTimesheetId: originalTimesheet.id,
+        eventShiftId: originalTimesheet.shift.id,
+        eventId: originalTimesheet.shift.event.id
+      });
+    }).then(function(timesheetCompleted) {
+      res.jsend(timesheetCompleted)
     }).catch(function(err) {
       next(err);
     })
