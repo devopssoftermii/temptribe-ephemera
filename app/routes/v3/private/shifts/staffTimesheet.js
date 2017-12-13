@@ -74,7 +74,7 @@ module.exports = function(router) {
       },
       include: [{
         model: models.userTimesheetsCompleted,
-        as: timesheetsCompleted,
+        as: 'timesheetsCompleted',
         include: [{
           model: models.users,
           as: 'user',
