@@ -74,7 +74,7 @@ module.exports = function(router) {
         id: req.user.id
       }
     }), models.userTimesheets.findOne({
-      attributes: ['id', 'status'],
+      attributes: ['id', 'status', 'startTime', 'endTime', 'breaks'],
       where: {
         id: timesheet.timesheetID
       },
