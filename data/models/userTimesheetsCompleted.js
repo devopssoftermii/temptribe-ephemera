@@ -68,7 +68,7 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'userId'
     });
     userTimesheets.belongsTo(models.users, {
-      as: 'lastModifiedBy',
+      as: 'userModified',
       foreignKey: 'lastModifiedBy'
     });
     userTimesheets.belongsTo(models.eventShifts, {
