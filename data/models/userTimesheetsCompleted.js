@@ -47,12 +47,12 @@ module.exports = function (sequelize, DataTypes) {
     FeedbackID: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: null
+      defaultValue: 1
     },
     FeedbackDescription: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: null
+      defaultValue: 'None Specified'
     },
     CommentVisible: {
       type: DataTypes.INTEGER,
