@@ -3,6 +3,7 @@ const ClientError = require('../../../../../lib/errors/ClientError');
 function checkFields(obj, fields) {
   var i;
   for (i = 0; i < fields.length; i++) {
+    var field = fields[i];
     if ('undefined' === typeof(obj[field]) || obj[field] === null) {
       return field;
     }
