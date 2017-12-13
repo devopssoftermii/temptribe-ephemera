@@ -1,3 +1,29 @@
+const ClientError = require('../../../../../lib/errors/ClientError');
+
+function checkFields(obj, fields) {
+  var i;
+  for (i = 0; i < fields.length; i++) {
+    if ('undefined' === typeof(obj[field]) || obj[field] === null) {
+      return field;
+    }
+  }
+  return true;
+}
+
+const workedFields = [
+  'staffStartTime',
+  'staffEndTime',
+  'staffBreaks',
+  'enjoyed',
+  'managerComments',
+  'venueComments',
+  'generalComments',
+];
+
+const noWorkedFields = [
+  'noWorkReason'
+]
+
 module.exports = function(router) {
   router.get('/staffTimesheet/:id', function(req, res, next) {
     var { sequelize } = req.app.locals;
@@ -31,5 +57,39 @@ module.exports = function(router) {
     });
   });
   router.post('/staffTimesheet/:id', function(req, res, next) {
+    var { models, sequelize } = req.app.locals;
+    var timesheet = req.body;
+    if (checkFields(timesheet, ['timesheetID', 'staffWorked']) !== true) {
+      throw new ClientError('no_timesheet', {message: 'Must supply a value for timesheetID and staffWorked'});
+    }
+    var checkFields = timesheet.staffWorked? workedFields: noWorkedFields;
+    var field = checkFields(timesheet, checkFields);
+    if (field !== true) {
+      throw new ClientError(`no_${field}`, {message: `If you did${timesheet.staffWorked? '': "n't"} work, you must supply a value for ${field}`});
+    }
+    models.userTimesheets.findOne({
+      where: {
+        id: timesheet.timesheetID
+      },
+      include: [{
+        model: models.userTimesheetsCompleted,
+        as: timesheetsCompleted,
+        include: [{
+          model: models.users,
+          as: 'user',
+          where: {
+            id: req.user.id
+          }
+        }],
+        required: false
+      }]
+    }).then(function(originalTimesheet) {
+      if (!originalTimesheet) {
+        throw new ClientError('no_timesheet', {message: 'No such timesheet'});
+      }
+      res.jsend(originalTimesheet.timesheetsCompleted)
+    }).catch(function(err) {
+      next(err);
+    })
   });
 }

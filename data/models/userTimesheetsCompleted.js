@@ -57,6 +57,22 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    staffEnjoyed: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    staffManagerComments: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    staffVenueComments: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    staffGeneralComments: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
   }, {
     tableName: 'userTimesheetsCompleted',
     timestamps: false,
