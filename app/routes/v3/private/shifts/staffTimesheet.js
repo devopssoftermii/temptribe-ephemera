@@ -104,17 +104,20 @@ module.exports = function(router) {
       if (originalTimesheet.timesheetsCompleted.length > 0) {
         throw new ClientError('already_completed', {message: 'You have already completed this timesheet'});
       }
+      var startTime = staffWorked? timesheet.staffStartTime: originalTimesheet.startTime;
+      var endTime = staffWorked? timesheet.staffEndTime: originalTimesheet.endTime;
+      var breaks = staffWorked? timesheet.staffBreaks: originalTimesheet.breaks;
       return models.userTimesheetsCompleted.create({
-        startTime: sequelize.literal(moment.utc(timesheet.staffStartTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
-        endTime: sequelize.literal(moment.utc(timesheet.staffEndTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
-        breaks: timesheet.staffBreaks,
+        startTime: sequelize.literal(moment.utc(startTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
+        endTime: sequelize.literal(moment.utc(endTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
+        breaks: breaks,
         worked: timesheet.staffWorked,
         comments: '',
         status: originalTimesheet.status,
-        staffEnjoyed: timesheet.enjoyed,
-        staffManagerComments: timesheet.managerComments,
-        staffVenueComments: timesheet.venueComments,
-        staffGeneralComments: timesheet.generalComments,
+        staffEnjoyed: timesheet.enjoyed || null,
+        staffManagerComments: timesheet.managerComments || null,
+        staffVenueComments: timesheet.venueComments || null,
+        staffGeneralComments: timesheet.generalComments || null,
         userId: user.id,
         lastModifiedBy: user.id,
         userTimesheetId: originalTimesheet.id,
