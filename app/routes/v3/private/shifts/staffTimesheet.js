@@ -91,6 +91,7 @@ module.exports = function(router) {
         required: false
       }, {
         model: models.eventShifts,
+        attributes: ['originalStartTime', 'originalEndTime'],
         as: 'shift',
         include: [{
           model: models.events,
@@ -104,8 +105,8 @@ module.exports = function(router) {
       if (originalTimesheet.timesheetsCompleted.length > 0) {
         throw new ClientError('already_completed', {message: 'You have already completed this timesheet'});
       }
-      var startTime = timesheet.staffWorked? timesheet.staffStartTime: originalTimesheet.startTime;
-      var endTime = timesheet.staffWorked? timesheet.staffEndTime: originalTimesheet.endTime;
+      var startTime = timesheet.staffWorked? timesheet.staffStartTime: originalTimesheet.shift.originalStartTime;
+      var endTime = timesheet.staffWorked? timesheet.staffEndTime: originalTimesheet.shift.originalEndTime;
       var breaks = timesheet.staffWorked? timesheet.staffBreaks: originalTimesheet.breaks;
       return models.userTimesheetsCompleted.create({
         startTime: sequelize.literal(moment.utc(startTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
