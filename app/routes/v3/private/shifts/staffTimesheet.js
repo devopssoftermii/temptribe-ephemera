@@ -105,7 +105,7 @@ module.exports = function(router) {
       }
       return Promise.all([models.userTimesheetsCompleted.create({
         startTime: sequelize.literal(moment.utc(timesheet.staffStartTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
-        endTime: sequelize.literal(moment.utc(timesheet.staffEndTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`),
+        endTime: sequelize.literal(moment.utc(timesheet.staffEndTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
         breaks: timesheet.staffBreaks,
         worked: timesheet.staffWorked,
         comments: '',
