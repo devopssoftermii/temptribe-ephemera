@@ -68,7 +68,7 @@ module.exports = function(router) {
     if (field !== true) {
       throw new ClientError(`no_${field}`, {message: `If you did${timesheet.staffWorked? '': "n't"} work, you must supply a value for ${field}`});
     }
-    return Promise.all([models.user.findOne({
+    return Promise.all([models.users.findOne({
       where: {
         id: req.user.id
       }
