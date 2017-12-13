@@ -1,4 +1,5 @@
 const ClientError = require('../../../../../lib/errors/ClientError');
+const moment = require('moment');
 
 function checkFields(obj, fields) {
   var i;
@@ -103,8 +104,8 @@ module.exports = function(router) {
         throw new ClientError('already_completed', {message: 'You have already completed this timesheet'});
       }
       return Promise.all([models.userTimesheetsCompleted.create({
-        startTime: timesheet.staffStartTime,
-        endTime: timesheet.staffEndTime,
+        startTime: moment.utc(timesheet.staffStartTime),
+        endTime: moment.utc(timesheet.staffEndTime),
         breaks: timesheet.staffBreaks,
         worked: timesheet.staffWorked,
         comments: '',
