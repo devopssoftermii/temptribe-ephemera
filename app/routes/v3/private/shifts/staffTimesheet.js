@@ -104,9 +104,9 @@ module.exports = function(router) {
       if (originalTimesheet.timesheetsCompleted.length > 0) {
         throw new ClientError('already_completed', {message: 'You have already completed this timesheet'});
       }
-      var startTime = staffWorked? timesheet.staffStartTime: originalTimesheet.startTime;
-      var endTime = staffWorked? timesheet.staffEndTime: originalTimesheet.endTime;
-      var breaks = staffWorked? timesheet.staffBreaks: originalTimesheet.breaks;
+      var startTime = timesheet.staffWorked? timesheet.staffStartTime: originalTimesheet.startTime;
+      var endTime = timesheet.staffWorked? timesheet.staffEndTime: originalTimesheet.endTime;
+      var breaks = timesheet.staffWorked? timesheet.staffBreaks: originalTimesheet.breaks;
       return models.userTimesheetsCompleted.create({
         startTime: sequelize.literal(moment.utc(startTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
         endTime: sequelize.literal(moment.utc(endTime).format(`'YYYY-MM-DDTHH:mm:ss.SSS'`)),
