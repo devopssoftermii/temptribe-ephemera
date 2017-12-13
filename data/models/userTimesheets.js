@@ -138,6 +138,10 @@ module.exports = function (sequelize, DataTypes) {
       as: 'shift',
       foreignKey: 'eventShiftId'
     });
+    userTimesheets.hasMany(models.userTimesheetsCompleted, {
+      as: 'timesheetsCompleted',
+      foreignKey: 'userTimesheetID'
+    });
     userTimesheets.addScope('byUser', function(id = null) {
       var returnScope = {
         attributes: ['id', 'status', 'dateStamp'],

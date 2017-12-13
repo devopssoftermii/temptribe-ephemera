@@ -8,7 +8,7 @@ module.exports = function(router) {
       user: req.user.id
     });
     return cache.getOrSet(key, function(result) {
-      return sequelize.query(`select paid, timesheetStatus,
+      return sequelize.query(`select paid, timesheetID, timesheetStatus,
         staffStartTime, staffEndTime, staffBreaks, staffWorked, shiftID,
         originalStartTime, originalEndTime, originalBreaks,
         hourlyRate, [date], eventID, eventTitle, eventSubtitle, jobRole, clientName, venueID, venueName,
@@ -29,5 +29,7 @@ module.exports = function(router) {
     }).catch(function(err) {
       next(err);
     });
+  });
+  router.post('/staffTimesheet/:id', function(req, res, next) {
   });
 }
