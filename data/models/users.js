@@ -316,7 +316,6 @@ module.exports = function (sequelize, DataTypes) {
       newRegistration: {
         attributes: [
           'dob',
-          'registrationDate',
           'registrationStatus',
           'invitedDate',
           'foundthrough',
