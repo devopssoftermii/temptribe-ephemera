@@ -35,7 +35,7 @@ module.exports = function(router) {
       shiftId,
       user: req.user.id
     });
-    return cache.getOrSet(key, function(result) {
+    return cache.getOrSet(key, function() {
       return sequelize.query(`select paid, timesheetID, timesheetStatus,
         staffStartTime, staffEndTime, staffBreaks, staffWorked, shiftID,
         originalStartTime, originalEndTime, originalBreaks,

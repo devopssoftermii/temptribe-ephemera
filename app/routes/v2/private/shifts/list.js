@@ -29,7 +29,7 @@ module.exports = function(router) {
     var userKey = JSON.stringify({
       userShifts: req.user.id
     });
-    return Promise.all([cache.getOrSet(key, function(result) {
+    return Promise.all([cache.getOrSet(key, function() {
       return models.eventShifts.scope({
         method: ['staff', detail, req.user.blacklistedBy, 'future', 'userBooked', filters.scope]
       }).findAll({
@@ -58,7 +58,7 @@ module.exports = function(router) {
       }).catch(function(err) {
         throw err;
       });
-    }), cache.getOrSet(userKey, function(result) {
+    }), cache.getOrSet(userKey, function() {
       return models.eventShifts.scope([{
         method: ['staff', 'metadata', req.user.blacklistedBy, 'future', req.user.id, 'active']
       }]).findAll({
