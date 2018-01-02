@@ -7,7 +7,7 @@ module.exports = function(router) {
       });
     }
     return staticCache.getOrSet({
-      key: `${type}FAQs`
+      key: `${req.params.type}FAQs`
     }, function() {
       return models.faqs.scope([req.params.type]).findAll();
     });
