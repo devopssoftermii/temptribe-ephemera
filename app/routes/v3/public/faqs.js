@@ -9,7 +9,7 @@ module.exports = function(router) {
     return staticCache.getOrSet({
       key: `${type}FAQs`
     }, function() {
-      return models.faqs.scope(['staff']).findAll();
+      return models.faqs.scope([req.params.type]).findAll();
     });
   });
 };
