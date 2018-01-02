@@ -6,9 +6,10 @@ module.exports = function(router) {
         message: `Unknown FAQ type ${req.params.type}`
       });
     }
-    return staticCache.getOrSet({
+    var key = JSON.stringify({
       key: `${req.params.type}FAQs`
-    }, function() {
+    });
+    return staticCache.getOrSet(key, function() {
       return models.faqs.scope([req.params.type]).findAll();
     });
   });
