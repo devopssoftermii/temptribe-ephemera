@@ -32,6 +32,7 @@ module.exports = function (sequelize, DataTypes) {
     },
   }, {
     tableName: 'faqs',
+    timestamps: false,
     scopes: {
       staff: {
         where: {
