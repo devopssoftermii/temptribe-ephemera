@@ -11,6 +11,8 @@ module.exports = function(router) {
     });
     return staticCache.getOrSet(key, function() {
       return models.faqs.scope([req.params.type]).findAll();
+    }).then(function(result) {
+      res.jsend(result);
     });
   });
 };
