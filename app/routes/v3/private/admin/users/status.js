@@ -14,7 +14,7 @@ const sendMail = (function() {
     return function(user) {
       return mailer.send('accountActiveUSA', user.email, {
         firstname: user.firstname,
-        domain: process.env.NODE_ENV === 'production'? 'app': 'test'
+        userguid: user.userGUID
       });
     }
   } else {
