@@ -10,6 +10,7 @@ module.exports = function(router) {
         },
         required: false
       }],
+      limit: 50
     }).then(function(result) {
       res.jsend(result);
     }).catch(function(err) {
