@@ -90,7 +90,8 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.VIRTUAL(DataTypes.STRING, ['id', 'updatedAt']),
       allowNull: false,
       get() {
-        return `/images/venuePhotos/${this.get('id')}.jpg?c=${moment.utc(this.get('updatedAt')).unix()}`;
+        //return `/images/venuePhotos/${this.get('id')}.jpg?c=${moment.utc(this.get('updatedAt')).unix()}`;
+        return `/images/venuePhotos/${this.get('id')}.jpg`;
       }
     }
   }, {

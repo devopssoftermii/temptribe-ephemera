@@ -47,8 +47,10 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, timeField, title, 
       },
       status: {
         $notIn: [0, 2, 7]
-      }
-    }
+      },
+      id: 208166
+    }, 
+    logging: console.log
   }).then(function(results) {
     if (!results.length) {
       return true;
@@ -94,32 +96,6 @@ function remindShifts(dateStart, dateEnd, timeStart, timeEnd, timeField, title, 
 }
 
 Promise.all([remindShifts(
-  sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
-  sequelize.fn('dateadd', sequelize.literal('DAY'), 2, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
-  sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), -1, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
-  sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate'))),
-  'originalStartTime',
-  'Shift Reminder 🔔',
-  function(startTime, client, venue) {
-    return `You’ve got a shift tomorrow at ${startTime} for ${client} at ${venue}! Make sure you read the shift notes carefully to help you to get ready!`
-  },
-  'ic_shift_reminder',
-  'EventDetails',
-  true
-), remindShifts(
-  sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')),
-  sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
-  sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), 4, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
-  sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), 5, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),
-  'originalStartTime',
-  'Time to Get Ready ⏱',
-  function(startTime, client, venue) {
-    return `Your shift today starts at ${startTime}! Make sure you know when to arrive, what to wear and where to meet your tribe!`
-  },
-  'ic_shift_reminder',
-  'EventDetails',
-  false
-), remindShifts(
   sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate')),
   sequelize.fn('dateadd', sequelize.literal('DAY'), 1, sequelize.fn('convert', sequelize.literal('DATE'), sequelize.fn('getdate'))),
   sequelize.fn('convert', sequelize.literal('DATETIMEOFFSET'), sequelize.fn('dateadd', sequelize.literal('HOUR'), -1, sequelize.fn('convert', sequelize.literal('TIME'), sequelize.fn('getdate')))),

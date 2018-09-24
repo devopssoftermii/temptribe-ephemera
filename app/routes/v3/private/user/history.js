@@ -27,7 +27,7 @@ module.exports = function(router) {
       staffStartTime, staffEndTime, staffBreaks, staffWorked, shiftID,
       originalStartTime, originalEndTime, originalBreaks,
       hourlyRate, [date], eventID, eventTitle, eventSubtitle, jobRole, clientName, venueID, venueName,
-      venueImage from dbo.udf_userWorkHistory(:userId, :status, :limit, :month, :year)`,
+      venueImage, unpaidBreaks from dbo.udf_userWorkHistory(:userId, :status, :limit, :month, :year)`,
     {
       replacements: {
         userId: req.user.id,
