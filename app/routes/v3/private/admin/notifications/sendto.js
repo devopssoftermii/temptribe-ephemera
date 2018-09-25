@@ -23,7 +23,12 @@ module.exports = function(router) {
     })) {
       throw new ClientError('invalid_notification', { message: 'Invalid to: data' });
     }
-    return notifications.send(req.app.locals.models, to, title, body, data, icon).then(function(result) {
+    // return notifications.send(req.app.locals.models, to, title, body, data, icon).then(function(result) {
+    //   res.jsend(formatResponse(result, format));
+    // }).catch(function(err) {
+    //   next(err);
+    // });
+    return notifications.sendWithoutSaving(req.app.locals.models, req.app.locals.sequelize, to, title, body, data, icon).then(function(result) {
       res.jsend(formatResponse(result, format));
     }).catch(function(err) {
       next(err);

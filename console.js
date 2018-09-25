@@ -4,6 +4,8 @@ var repl = require("repl");
 
 require('dotenv-safe').config();
 
+require("isomorphic-fetch");
+
 var app = {
   locals: {}
 };
@@ -16,40 +18,12 @@ var replServer = repl.start({
 
 replServer.context.db = app.locals;
 
- // models.eventShifts.findAll({
- //    attributes: ['id', timeField],
- //    include: [{
- //      attributes: ['eventDate'],
- //      model: models.events,
- //      as: 'event',
- //      where: {
- //        eventDate: {
- //          $gte: dateStart,
- //          $lt: dateEnd,
- //        },
- //        status: {
- //          $not: 5
- //        }
- //      },
- //      include: [{
- //        model: models.venues,
- //        as: 'venue',
- //        attributes: ['name'],
- //        required: true
- //      }, {
- //        model: models.clients,
- //        as: 'client',
- //        attributes: ['clientName'],
- //        required: true
- //      }],
- //    }],
- //    where: {
- //      [timeField]: {
- //        $gte: timeStart,
- //        $lt: timeEnd,
- //      },
- //      status: {
- //        $notIn: [0, 2, 7]
- //      }
- //    }
- //  }).then(function(results) { console.log(results)}
+// test db queries here:
+// run this file in node and it will give you a prompt with access to the db
+
+// example - compy this into the prompts 
+// db.sequelize.query('select TOP 1 * from users where id=:userId',
+//   { replacements: { userId: 1 }, type: db.sequelize.QueryTypes.SELECT }
+// ).then(results => {
+//   console.log(results)
+// });
