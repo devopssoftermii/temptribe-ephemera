@@ -25,14 +25,14 @@ module.exports = {
     var logDir = process.env.LOGDIR || 'log';
     fs.existsSync(logDir) || fs.mkdirSync(logDir);
 
-    // app.use(
-    //   morgan('combined', {
-    //     stream: rfs('access.log', {
-    //       interval: '1d',
-    //       path: logDir
-    //     })
-    //   })
-    // );
+    app.use(
+      morgan('combined', {
+        stream: rfs('access.log', {
+          interval: '1d',
+          path: logDir
+        })
+      })
+    );
     if (process.env.NODE_ENV === 'development') {
       app.use(morgan('dev'));
     }
