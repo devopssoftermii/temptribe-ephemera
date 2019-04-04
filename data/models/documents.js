@@ -51,14 +51,14 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.SMALLINT,
             allowNull: true
         },
-        IsTrainingVideos: {
+        /*IsTrainingVideos: {
             type: DataTypes.BOOLEAN,
             allowNull: true
         },
         IsLink: {
             type: DataTypes.BOOLEAN,
             allowNull: true
-        },
+        },*/
     }, {
         tableName: 'Documents',
         timestamps: false,
