@@ -26,6 +26,7 @@ module.exports = function (router) {
         return models.documents.findAll({
             where: {
                 cat_ID: id,
+                VisibleMobile: true
             },
         }).then(function (result) {
             var documents = [];
