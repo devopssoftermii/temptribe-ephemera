@@ -2,6 +2,9 @@ var Sequelize = require('sequelize'),
     fs = require('fs');
 
 module.exports = function(app) {
+    Sequelize.DATE.prototype._stringify = function _stringify(date, options) {
+        return this._applyTimezone(date, options).format('YYYY-MM-DD HH:mm:ss.SSS');
+    };
   var sequelize = new Sequelize({
     dialect: process.env.DB_DIALECT,
     database: process.env.DB_DATABASE,
