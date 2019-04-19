@@ -7,7 +7,6 @@ module.exports = function(router) {
         var models = req.app.locals.models;
         return models.users.scope([
             'profile',
-            'newRegistration'
         ]).findById(req.params.id).then(function (user) {
             if (!user) {
                 throw new ClientError('no_user', {message: 'No such user'});
