@@ -48,7 +48,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true
         },
         order: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         VisibleMobile: {

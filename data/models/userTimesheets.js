@@ -81,6 +81,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     tableName: 'userTimesheets',
+    hasTrigger: true,
     timestamps: false,
     freezeTableName: true,
     scopes: {
