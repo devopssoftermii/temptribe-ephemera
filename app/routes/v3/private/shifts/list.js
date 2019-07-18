@@ -23,6 +23,7 @@ module.exports = function(router) {
       filters.scope.favourite = req.user.favouritedBy;
     }
     var key = JSON.stringify({
+     user: req.user.id,
       filters: filters.key,
       detail
     });
