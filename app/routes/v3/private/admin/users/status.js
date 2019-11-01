@@ -46,6 +46,7 @@ module.exports = function(router) {
   });
   router.post('/status/:id', function(req, res, next) {
     var status = 'string' === typeof(req.body.status) && req.body.status.toLowerCase();
+    var userGuidId = 'string' === typeof(req.body.userGuidId) && req.body.userGuidId.toLowerCase();
     if (!status || !userStatuses.has(status)) {
       throw new ClientError('no_result', {message: 'Missing status'});
     }
@@ -66,6 +67,9 @@ module.exports = function(router) {
     }).then(function(user) {
       if (!user) {
         throw new ClientError('no_user', {message: 'No such user'});
+      }
+      if(userGuidId){
+        user.userGUID = userGuidId;
       }
       switch (status) {
         case 'active':
